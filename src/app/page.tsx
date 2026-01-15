@@ -29,7 +29,7 @@ export default function Home() {
       </AnimatePresence>
 
       <div className={`transition-opacity duration-1000 ${bootComplete ? "opacity-100" : "opacity-0"}`}>
-        <div id="work" className="snap-start w-full min-h-screen flex items-center">
+        <div id="work" className="snap-start w-full min-h-screen flex items-center justify-center">
            <Hero />
         </div>
         
