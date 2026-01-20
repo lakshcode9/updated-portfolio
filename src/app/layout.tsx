@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
 const disketMono = localFont({
   src: "./fonts/Disket-Mono-Bold.ttf",
   variable: "--font-disket-mono",
+});
+
+const bebasNeue = Bebas_Neue({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-bebas-neue",
 });
 
 import { Navbar } from "@/components/Navbar";
@@ -21,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`dark scroll-smooth ${disketMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`dark scroll-smooth ${disketMono.variable} ${bebasNeue.variable}`} suppressHydrationWarning>
       <body
         className={`font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-primary-foreground`}
         suppressHydrationWarning

@@ -9,7 +9,7 @@ export function Hero() {
   const triggers = ["180 DAYS", "MASTER", "AI", "FOUNDER", "DROPPED OUT", "SHIPPING", "GRIND"]
 
   return (
-    <section className="relative min-h-[100vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden bg-background font-sans">
+    <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-6 overflow-hidden bg-background font-sans py-20 md:py-0">
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-5%] left-[-5%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]" />
@@ -30,7 +30,7 @@ export function Hero() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="max-w-5xl w-full relative z-10 flex flex-col gap-8 md:gap-12 items-center justify-center min-h-[60vh] md:min-h-[80vh] px-4 pt-20"
+        className="max-w-5xl w-full relative z-10 flex flex-col gap-6 md:gap-12 items-center justify-center min-h-[60vh] md:min-h-[80vh] px-4"
       >
         {/* Header Pill */}
         <div className="flex justify-center">
@@ -49,11 +49,11 @@ export function Hero() {
           <HyperTextParagraph
             text={heroText}
             highlightWords={triggers}
-            className="text-3xl sm:text-4xl md:text-6xl font-black text-foreground leading-[1.1] md:leading-[1.1] uppercase tracking-tighter drop-shadow-2xl text-center max-w-4xl mx-auto"
+            className="text-2xl sm:text-4xl md:text-6xl font-black text-foreground leading-[1.2] md:leading-[1.1] uppercase tracking-tighter drop-shadow-2xl text-center max-w-4xl mx-auto"
           />
         </div>
 
-        <p className="text-base sm:text-l md:text-xl text-muted-foreground max-w-[90%] md:max-w-2xl font-medium italic mt-2 md:mt-4 text-center">
+        <p className="text-sm sm:text-l md:text-xl text-muted-foreground max-w-[90%] md:max-w-2xl font-medium italic mt-2 md:mt-4 text-center">
           Leaving school was the start. Building systems is the mission.
         </p>
         
