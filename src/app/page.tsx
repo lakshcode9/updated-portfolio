@@ -33,26 +33,26 @@ export default function Home() {
            <Hero />
         </div>
         
-        <div className="w-full min-h-[100dvh] flex items-center justify-center">
-          <FocusContainer className="w-full pt-32 pb-20 px-4 md:py-20 md:px-0">
+        <div className="w-full flex items-center justify-center">
+          <FocusContainer className="w-full pt-20 pb-16 px-4 md:py-20 md:px-0">
             <MyStory />
           </FocusContainer>
         </div>
         
-        <div className="w-full min-h-[100dvh] flex items-center justify-center">
-          <FocusContainer className="w-full pt-32 pb-20 px-4 md:py-20 md:px-0">
+        <div className="w-full flex items-center justify-center">
+          <FocusContainer className="w-full pt-20 pb-16 px-4 md:py-20 md:px-0">
             <WhatIDo />
           </FocusContainer>
         </div>
         
-        <div className="w-full min-h-[100dvh] flex items-center justify-center">
-          <FocusContainer className="w-full pt-32 pb-20 px-4 md:py-20 md:px-0">
+        <div className="w-full flex items-center justify-center">
+          <FocusContainer className="w-full pt-20 pb-16 px-4 md:py-20 md:px-0">
             <LiveProjects />
           </FocusContainer>
         </div>
         
-        <div className="w-full min-h-[100dvh] flex items-center justify-center">
-          <FocusContainer className="w-full pt-32 pb-20 px-4 md:py-20 md:px-0">
+        <div className="w-full flex items-center justify-center">
+          <FocusContainer className="w-full pt-20 pb-16 px-4 md:py-20 md:px-0">
             <Mission />
           </FocusContainer>
         </div>

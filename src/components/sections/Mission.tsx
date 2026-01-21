@@ -5,7 +5,7 @@ import { Target } from "lucide-react"
 
 export function Mission() {
   return (
-    <section className="py-24 px-6 md:py-32 overflow-hidden relative">
+    <section className="py-12 px-6 md:py-24 overflow-hidden relative">
       {/* Background decoration */}
       <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-primary/5 blur-[100px] -z-10" />
       
