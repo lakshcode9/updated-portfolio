@@ -93,6 +93,9 @@ const Word = ({
       `}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onTapStart={handleMouseEnter}
+      onTap={handleMouseLeave}
+      onTapCancel={handleMouseLeave}
       animate={{
         // Visual Logic:
         // 1. Hovered: Scale up, move up slightly

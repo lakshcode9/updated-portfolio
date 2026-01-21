@@ -23,35 +23,35 @@ export default function Home() {
   }, [bootComplete]);
 
   return (
-    <div className="h-[100dvh] w-full overflow-y-scroll snap-y md:snap-mandatory font-sans bg-background text-foreground scroll-smooth">
+    <div className="h-[100dvh] w-full overflow-y-scroll font-sans bg-background text-foreground scroll-smooth">
       <AnimatePresence>
         {!bootComplete && <SystemBoot onBootComplete={() => setBootComplete(true)} />}
       </AnimatePresence>
 
       <div className={`transition-opacity duration-1000 ${bootComplete ? "opacity-100" : "opacity-0"}`}>
-        <div id="work" className="snap-start w-full min-h-[100dvh] flex items-center justify-center">
+        <div id="work" className="w-full min-h-[100dvh] flex items-center justify-center">
            <Hero />
         </div>
         
-        <div className="snap-start w-full min-h-[100dvh] flex items-center justify-center">
+        <div className="w-full min-h-[100dvh] flex items-center justify-center">
           <FocusContainer className="w-full pt-32 pb-20 px-4 md:py-20 md:px-0">
             <MyStory />
           </FocusContainer>
         </div>
         
-        <div className="snap-start w-full min-h-[100dvh] flex items-center justify-center">
+        <div className="w-full min-h-[100dvh] flex items-center justify-center">
           <FocusContainer className="w-full pt-32 pb-20 px-4 md:py-20 md:px-0">
             <WhatIDo />
           </FocusContainer>
         </div>
         
-        <div className="snap-start w-full min-h-[100dvh] flex items-center justify-center">
+        <div className="w-full min-h-[100dvh] flex items-center justify-center">
           <FocusContainer className="w-full pt-32 pb-20 px-4 md:py-20 md:px-0">
             <LiveProjects />
           </FocusContainer>
         </div>
         
-        <div className="snap-start w-full min-h-[100dvh] flex items-center justify-center">
+        <div className="w-full min-h-[100dvh] flex items-center justify-center">
           <FocusContainer className="w-full pt-32 pb-20 px-4 md:py-20 md:px-0">
             <Mission />
           </FocusContainer>
