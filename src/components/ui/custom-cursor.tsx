@@ -69,7 +69,7 @@ export function CustomCursor() {
       >
         {/* We load both images but toggle visibility to prevent flicker during swap */}
         <img
-          src="/cursors/arrow.png"
+          src="/cursors/cursor.png"
           alt="Cursor"
           className={`w-8 h-auto transition-opacity duration-200 ${isHovering ? "opacity-0" : "opacity-100"}`}
           style={{ position: 'absolute', top: 0, left: 0 }}
