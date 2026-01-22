@@ -48,4 +48,10 @@
     color: var(--foreground);
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
+  @media (pointer: fine) {
+    body {
+      cursor: none;
+    }
+  }
 }
