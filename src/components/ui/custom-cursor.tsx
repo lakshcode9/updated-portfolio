@@ -67,17 +67,16 @@ export function CustomCursor() {
         }}
         transition={{ duration: 0.2 }}
       >
-        {/* We load both images but toggle visibility to prevent flicker during swap */}
         <img
           src="/cursors/cursor.png"
           alt="Cursor"
-          className={`w-8 h-auto transition-opacity duration-200 ${isHovering ? "opacity-0" : "opacity-100"}`}
+          className={`w-12 h-auto transition-opacity duration-200 drop-shadow-[0_0_2px_rgba(255,255,255,0.8)] ${isHovering ? "opacity-0" : "opacity-100"}`}
           style={{ position: 'absolute', top: 0, left: 0 }}
         />
         <img
           src="/cursors/pointer.png"
           alt="Pointer"
-          className={`w-8 h-auto transition-opacity duration-200 ${isHovering ? "opacity-100" : "opacity-0"}`}
+          className={`w-12 h-auto transition-opacity duration-200 drop-shadow-[0_0_2px_rgba(255,255,255,0.8)] ${isHovering ? "opacity-100" : "opacity-0"}`}
           style={{ position: 'absolute', top: 0, left: 0 }}
         />
       </motion.div>
