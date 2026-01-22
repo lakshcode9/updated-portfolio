@@ -15,19 +15,19 @@ const SYSTEMS: SystemItem[] = [
     id: '01',
     name: 'AutoIkigai',
     description: 'AI automation systems for real businesses',
-    image: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c',
+    image: '/projects/autoikigai.png',
   },
   {
     id: '02',
     name: 'SignalScope',
     description: 'Market intelligence for indie founders',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71',
+    image: '/projects/signalscope.png',
   },
   {
     id: '03',
     name: 'Web4',
     description: 'Natural language to software engine',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
+    image: '/projects/web4.png',
   },
   {
     id: '04',
