@@ -51,7 +51,11 @@
   
   @media (pointer: fine) {
     body {
-      cursor: none;
+      cursor: url('/cursors/cursor.png') 4 4, auto;
+    }
+    
+    a, button, [role="button"], input, select, textarea, .cursor-pointer {
+      cursor: url('/cursors/pointer.png') 10 0, pointer; 
     }
   }
 }

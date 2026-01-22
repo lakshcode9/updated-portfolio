@@ -16,7 +16,6 @@ const bebasNeue = Bebas_Neue({
 
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { CustomCursor } from "@/components/ui/custom-cursor";
 import { TouchEffect } from "@/components/ui/touch-effect";
 
 export const metadata: Metadata = {
@@ -35,7 +34,6 @@ export default function RootLayout({
         className={`font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-primary-foreground`}
         suppressHydrationWarning
       >
-        <CustomCursor />
         <TouchEffect />
         <Navbar />
         <main className="min-h-screen pt-20">
