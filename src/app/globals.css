@@ -54,8 +54,23 @@
       cursor: url('/cursors/cursor.png') 4 4, auto;
     }
     
-    a, button, [role="button"], input, select, textarea, .cursor-pointer {
-      cursor: url('/cursors/pointer.png') 10 0, pointer; 
+    /* Force custom pointer on all interactive elements */
+    a, 
+    button, 
+    [role="button"], 
+    [role="link"], 
+    [role="menuitem"],
+    [role="tab"],
+    input[type="submit"],
+    input[type="button"],
+    input[type="checkbox"],
+    input[type="radio"],
+    label,
+    select, 
+    textarea, 
+    .cursor-pointer,
+    [class*="cursor-pointer"] {
+      cursor: url('/cursors/pointer.png') 10 0, pointer !important; 
     }
   }
 }
