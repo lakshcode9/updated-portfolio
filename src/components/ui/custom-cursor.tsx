@@ -53,15 +53,16 @@ export function CustomCursor() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 pointer-events-none z-[9999]"
+      className="fixed top-0 left-0 pointer-events-none z-[9999] w-12 h-12"
       style={{
         x: cursorX,
         y: cursorY,
-        translateX: "-10%", // Adjust based on the cursor's hot spot (usually top-left)
-        translateY: "-10%", 
+        translateX: "-50%",
+        translateY: "-50%",
       }}
     >
       <motion.div
+        className="relative w-full h-full"
         animate={{
           scale: isHovering ? 1.1 : 1,
         }}
@@ -70,14 +71,12 @@ export function CustomCursor() {
         <img
           src="/cursors/cursor.png"
           alt="Cursor"
-          className={`w-12 h-auto transition-opacity duration-200 drop-shadow-[0_0_2px_rgba(255,255,255,0.8)] ${isHovering ? "opacity-0" : "opacity-100"}`}
-          style={{ position: 'absolute', top: 0, left: 0 }}
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-200 drop-shadow-[0_0_2px_rgba(255,255,255,0.8)] ${isHovering ? "opacity-0" : "opacity-100"}`}
         />
         <img
           src="/cursors/pointer.png"
           alt="Pointer"
-          className={`w-12 h-auto transition-opacity duration-200 drop-shadow-[0_0_2px_rgba(255,255,255,0.8)] ${isHovering ? "opacity-100" : "opacity-0"}`}
-          style={{ position: 'absolute', top: 0, left: 0 }}
+          className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-200 drop-shadow-[0_0_2px_rgba(255,255,255,0.8)] ${isHovering ? "opacity-100" : "opacity-0"}`}
         />
       </motion.div>
     </motion.div>
