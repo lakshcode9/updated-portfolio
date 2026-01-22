@@ -51,7 +51,7 @@
   
   @media (pointer: fine) {
     body {
-      cursor: url('/cursors/cursor.png') 4 4, auto;
+      cursor: url('/cursors/cursor.cur'), url('/cursors/cursor.png') 4 4, auto !important;
     }
     
     /* Force custom pointer on all interactive elements */
@@ -70,7 +70,7 @@
     textarea, 
     .cursor-pointer,
     [class*="cursor-pointer"] {
-      cursor: url('/cursors/pointer.png') 10 0, pointer !important; 
+      cursor: url('/cursors/pointer.cur'), url('/cursors/pointer.png') 10 0, pointer !important; 
     }
   }
 }
