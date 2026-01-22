@@ -52,34 +52,35 @@ export function CustomCursor() {
   if (!isVisible) return null;
 
   return (
-    <>
-      {/* Main Dot */}
+    <motion.div
+      className="fixed top-0 left-0 pointer-events-none z-[9999]"
+      style={{
+        x: cursorX,
+        y: cursorY,
+        translateX: "-10%", // Adjust based on the cursor's hot spot (usually top-left)
+        translateY: "-10%", 
+      }}
+    >
       <motion.div
-        className="fixed top-0 left-0 w-2.5 h-2.5 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference"
-        style={{
-          x: mouseX,
-          y: mouseY,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-      />
-      
-      {/* Trailing Ring */}
-      <motion.div
-        className="fixed top-0 left-0 w-8 h-8 border border-white rounded-full pointer-events-none z-[9998] mix-blend-difference"
-        style={{
-          x: cursorX,
-          y: cursorY,
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
         animate={{
-          scale: isHovering ? 1.5 : 1,
-          opacity: isHovering ? 1 : 0.5,
-          backgroundColor: isHovering ? "rgba(255, 255, 255, 0.1)" : "transparent",
+          scale: isHovering ? 1.1 : 1,
         }}
-        transition={{ duration: 0.15 }}
-      />
-    </>
+        transition={{ duration: 0.2 }}
+      >
+        {/* We load both images but toggle visibility to prevent flicker during swap */}
+        <img
+          src="/cursors/arrow.png"
+          alt="Cursor"
+          className={`w-8 h-auto transition-opacity duration-200 ${isHovering ? "opacity-0" : "opacity-100"}`}
+          style={{ position: 'absolute', top: 0, left: 0 }}
+        />
+        <img
+          src="/cursors/pointer.png"
+          alt="Pointer"
+          className={`w-8 h-auto transition-opacity duration-200 ${isHovering ? "opacity-100" : "opacity-0"}`}
+          style={{ position: 'absolute', top: 0, left: 0 }}
+        />
+      </motion.div>
+    </motion.div>
   );
 }

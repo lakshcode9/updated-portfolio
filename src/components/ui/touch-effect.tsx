@@ -46,16 +46,16 @@ export function TouchEffect() {
         {ripples.map((ripple) => (
           <motion.div
             key={ripple.id}
-            initial={{ opacity: 0.8, scale: 0 }}
-            animate={{ opacity: 0, scale: 2.5 }}
+            initial={{ opacity: 0.6, scale: 0, borderWidth: "2px" }}
+            animate={{ opacity: 0, scale: 1.5, borderWidth: "0px" }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="absolute rounded-full bg-white/30 border border-white/50 blur-[1px]"
+            transition={{ duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }} // Cubic bezier for "pop"
+            className="absolute rounded-full border-white bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.3)]"
             style={{
               left: ripple.x,
               top: ripple.y,
-              width: "40px",
-              height: "40px",
+              width: "50px",
+              height: "50px",
               x: "-50%",
               y: "-50%",
             }}
