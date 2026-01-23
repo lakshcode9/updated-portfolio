@@ -8,7 +8,8 @@ import { LiveProjects } from "@/components/sections/LiveProjects";
 import { Mission } from "@/components/sections/Mission";
 import { SystemBoot } from "@/components/intro/SystemBoot";
 import { FocusContainer } from "@/components/ui/focus-container";
-import { AnimatePresence, motion } from "framer-motion";
+import { DualCTAPopup } from "@/components/ui/dual-cta-popup";
+import { AnimatePresence } from "framer-motion";
 
 export default function Home() {
   const [bootComplete, setBootComplete] = useState(false);
@@ -29,6 +30,7 @@ export default function Home() {
       </AnimatePresence>
 
       <div className={`transition-opacity duration-1000 ${bootComplete ? "opacity-100" : "opacity-0"}`}>
+        <DualCTAPopup />
         <div id="work" className="w-full min-h-[100dvh] flex items-center justify-center">
            <Hero />
         </div>
