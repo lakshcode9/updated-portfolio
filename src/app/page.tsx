@@ -30,7 +30,7 @@ export default function Home() {
       </AnimatePresence>
 
       <div className={`transition-opacity duration-1000 ${bootComplete ? "opacity-100" : "opacity-0"}`}>
-        <DualCTAPopup />
+        <DualCTAPopup enabled={bootComplete} triggerAfterMs={5000} />
         <div id="work" className="w-full min-h-[100dvh] flex items-center justify-center">
            <Hero />
         </div>

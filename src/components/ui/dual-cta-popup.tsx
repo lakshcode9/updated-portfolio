@@ -5,30 +5,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, User, Building2, ArrowRight, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function DualCTAPopup() {
+interface DualCTAPopupProps {
+  triggerAfterMs?: number;
+  enabled?: boolean;
+}
+
+export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAPopupProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const [hasTriggered, setHasTriggered] = useState(false);
 
   useEffect(() => {
+    if (!enabled || hasTriggered) return;
+
     // Check if already shown this session
-    if (typeof window !== "undefined") {
-      const alreadyShown = sessionStorage.getItem("popup_shown");
-      if (alreadyShown) {
-        return;
-      }
+    const alreadyShown = sessionStorage.getItem("popup_shown");
+    if (alreadyShown === "true") {
+      setHasTriggered(true);
+      return;
     }
 
-    // Show popup after 8 seconds delay
+    // Guaranteed timer-based trigger
     const timer = setTimeout(() => {
       setIsVisible(true);
+      setHasTriggered(true);
       sessionStorage.setItem("popup_shown", "true");
-    }, 8000);
+    }, triggerAfterMs);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [enabled, hasTriggered, triggerAfterMs]);
 
   const handleClose = () => {
     setIsVisible(false);
   };
+
+  if (!isVisible) return null;
 
   return (
     <AnimatePresence>
