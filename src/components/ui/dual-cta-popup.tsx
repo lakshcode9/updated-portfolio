@@ -7,34 +7,24 @@ import { Button } from "@/components/ui/button";
 
 export function DualCTAPopup() {
   const [isVisible, setIsVisible] = useState(false);
-  const [hasBeenShown, setHasBeenShown] = useState(false);
 
   useEffect(() => {
     // Check if already shown this session
     if (typeof window !== "undefined") {
       const alreadyShown = sessionStorage.getItem("popup_shown");
       if (alreadyShown) {
-        setHasBeenShown(true);
         return;
       }
     }
 
-    const handleScroll = () => {
-      if (hasBeenShown) return;
-      
-      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-      
-      // Show popup after scrolling 30%
-      if (scrollPercent > 30 && !isVisible) {
-        setIsVisible(true);
-        setHasBeenShown(true);
-        sessionStorage.setItem("popup_shown", "true");
-      }
-    };
+    // Show popup after 8 seconds delay
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+      sessionStorage.setItem("popup_shown", "true");
+    }, 8000);
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isVisible, hasBeenShown]);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleClose = () => {
     setIsVisible(false);
@@ -61,11 +51,11 @@ export function DualCTAPopup() {
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-[201] max-w-3xl w-full max-h-[90vh] overflow-y-auto"
           >
-            <div className="bg-card border border-border/40 rounded-2xl p-6 md:p-8 shadow-2xl">
+            <div className="bg-card border border-border/40 rounded-2xl p-6 md:p-8 shadow-2xl relative">
               {/* Close Button */}
               <button
                 onClick={handleClose}
-                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors z-10"
               >
                 <X className="w-5 h-5" />
               </button>
