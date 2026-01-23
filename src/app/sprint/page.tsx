@@ -156,7 +156,7 @@ export default function SprintPage() {
           From Builder to Architect. A high-agency founder&apos;s transition into deep AI engineering.
         </p>
         <a 
-          href="/The_180-Day_AI_Engineer_Sprint_From_Builder_to_Architect.pdf" 
+          href="/The_180-Day_AI_Engineer_Sprint.pdf" 
           target="_blank"
           className="mt-4 flex items-center gap-2 text-sm text-primary hover:underline"
         >
