@@ -89,11 +89,11 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
                     <div className="p-2 rounded-lg bg-primary/10 text-primary">
                       <User className="w-5 h-5" />
                     </div>
-                    <h3 className="text-lg font-medium">Learn From Me</h3>
+                    <h3 className="text-lg font-medium">Build Your AI Agency</h3>
                   </div>
                   
                   <p className="text-sm text-muted-foreground flex-1">
-                    Get personalized guidance on your AI engineering journey. 1:1 coaching, roadmap reviews, and accountability.
+                    Learn how to start and scale an AI automation agency. From landing clients to delivering systems that actually work.
                   </p>
 
                   <div className="flex flex-col gap-3 mt-2">
@@ -113,7 +113,7 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
                     >
                       <a href="/The_180-Day_AI_Engineer_Sprint.pdf" target="_blank">
                         <Download className="w-4 h-4 mr-2" />
-                        Download Free Roadmap
+                        Download My Roadmap
                       </a>
                     </Button>
                   </div>
