@@ -50,7 +50,10 @@
   }
   
   @media (pointer: fine) {
-    body {
+    /* Force custom cursor on ALL elements */
+    *,
+    *::before,
+    *::after {
       cursor: url('/cursors/cursor.cur'), url('/cursors/cursor.png') 4 4, auto !important;
     }
     
