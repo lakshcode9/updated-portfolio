@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { BlockNoteEditor } from "@blocknote/core";
+import React, { useMemo } from "react";
+import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
@@ -12,28 +12,48 @@ interface NotionEditorProps {
   editable?: boolean;
 }
 
+// Convert plain text to BlockNote blocks format
+function textToBlocks(text: string): PartialBlock[] {
+  if (!text || text.trim() === "") {
+    return [{ type: "paragraph" }];
+  }
+  
+  return text.split("\n").map((line) => ({
+    type: "paragraph" as const,
+    content: line ? [{ type: "text" as const, text: line, styles: {} }] : [],
+  }));
+}
+
+// Check if content is valid BlockNote JSON
+function isValidBlockNoteJSON(content: string): boolean {
+  try {
+    const parsed = JSON.parse(content);
+    return Array.isArray(parsed) && parsed.length > 0 && parsed[0].type;
+  } catch {
+    return false;
+  }
+}
+
 export function NotionEditor({ initialContent, onChange, editable = true }: NotionEditorProps) {
-  // Safely parse initial content - handle both JSON and plain text
-  const parseInitialContent = () => {
+  // Parse initial content - handle both JSON and plain text
+  const parsedContent = useMemo(() => {
     if (!initialContent) return undefined;
     
-    try {
-      // Try to parse as JSON first
-      const parsed = JSON.parse(initialContent);
-      if (Array.isArray(parsed)) {
-        return parsed;
+    // If it's valid BlockNote JSON, use it directly
+    if (isValidBlockNoteJSON(initialContent)) {
+      try {
+        return JSON.parse(initialContent);
+      } catch {
+        return undefined;
       }
-      return undefined;
-    } catch {
-      // If not valid JSON, treat as plain text and convert to blocks
-      // Return undefined to let BlockNote create default content
-      // The plain text will be shown as-is when the editor loads
-      return undefined;
     }
-  };
+    
+    // Otherwise, convert plain text to blocks
+    return textToBlocks(initialContent);
+  }, [initialContent]);
 
   const editor: BlockNoteEditor = useCreateBlockNote({
-    initialContent: parseInitialContent(),
+    initialContent: parsedContent,
   });
 
   return (
@@ -64,13 +84,18 @@ export function NotionEditor({ initialContent, onChange, editable = true }: Noti
   );
 }
 
-// Helper to convert BlockNote JSON content to plain text for display
+// Helper to convert BlockNote JSON content to plain text for display/storage
 export function blocksToText(jsonContent: string): string {
   if (!jsonContent) return "";
   
+  // If it's already plain text (not JSON), return as-is
+  if (!isValidBlockNoteJSON(jsonContent)) {
+    return jsonContent;
+  }
+  
   try {
     const blocks = JSON.parse(jsonContent);
-    if (!Array.isArray(blocks)) return "";
+    if (!Array.isArray(blocks)) return jsonContent;
     
     return blocks
       .map((block: { content?: Array<{ text?: string } | string> }) => {
@@ -87,6 +112,6 @@ export function blocksToText(jsonContent: string): string {
       })
       .join("\n");
   } catch {
-    return jsonContent; // Return as-is if not valid JSON
+    return jsonContent;
   }
 }
