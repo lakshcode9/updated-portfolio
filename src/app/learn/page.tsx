@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase, SprintLog } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { NotionEditor, blocksToText } from "@/components/ui/notion-editor";
-import { Plus, Trash2, Eye, EyeOff, Save, X, LogOut, Calendar, Tag } from "lucide-react";
+import { Plus, Trash2, Eye, EyeOff, Save, X, LogOut, Calendar, Tag, Flame, Target, BookOpen, TrendingUp } from "lucide-react";
 
 export default function LearnDashboard() {
   const [logs, setLogs] = useState<SprintLog[]>([]);
@@ -147,6 +147,43 @@ export default function LearnDashboard() {
     setEditIsPublic(log.is_public);
   };
 
+  // Compute stats
+  const stats = useMemo(() => {
+    if (logs.length === 0) return { totalLogs: 0, streak: 0, daysInSprint: 0, currentPhase: 1 };
+    
+    const totalLogs = logs.length;
+    const currentPhase = Math.max(...logs.map(l => l.phase));
+    
+    // Calculate days since first log
+    const dates = logs.map(l => new Date(l.date).getTime());
+    const firstLogDate = new Date(Math.min(...dates));
+    const today = new Date();
+    const daysInSprint = Math.floor((today.getTime() - firstLogDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+    
+    // Calculate streak (consecutive days with logs)
+    const sortedDates = [...new Set(logs.map(l => l.date))].sort().reverse();
+    let streak = 0;
+    const todayStr = today.toISOString().split("T")[0];
+    const yesterdayStr = new Date(today.getTime() - 86400000).toISOString().split("T")[0];
+    
+    // Check if logged today or yesterday to start counting
+    if (sortedDates[0] === todayStr || sortedDates[0] === yesterdayStr) {
+      streak = 1;
+      for (let i = 1; i < sortedDates.length; i++) {
+        const prevDate = new Date(sortedDates[i - 1]);
+        const currDate = new Date(sortedDates[i]);
+        const diffDays = Math.floor((prevDate.getTime() - currDate.getTime()) / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
+          streak++;
+        } else {
+          break;
+        }
+      }
+    }
+    
+    return { totalLogs, streak, daysInSprint, currentPhase };
+  }, [logs]);
+
   // Login Screen
   if (!isAuthenticated) {
     return (
@@ -191,6 +228,42 @@ export default function LearnDashboard() {
           <Plus className="w-4 h-4 mr-2" />
           New Entry
         </Button>
+        
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 gap-2 mb-4">
+          <div className="p-3 rounded-xl bg-background/50 border border-border/20">
+            <div className="flex items-center gap-2 mb-1">
+              <Flame className="w-3 h-3 text-orange-400" />
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Streak</span>
+            </div>
+            <span className="text-2xl font-bold">{stats.streak}</span>
+            <span className="text-xs text-muted-foreground ml-1">days</span>
+          </div>
+          <div className="p-3 rounded-xl bg-background/50 border border-border/20">
+            <div className="flex items-center gap-2 mb-1">
+              <BookOpen className="w-3 h-3 text-blue-400" />
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Logs</span>
+            </div>
+            <span className="text-2xl font-bold">{stats.totalLogs}</span>
+            <span className="text-xs text-muted-foreground ml-1">total</span>
+          </div>
+          <div className="p-3 rounded-xl bg-background/50 border border-border/20">
+            <div className="flex items-center gap-2 mb-1">
+              <TrendingUp className="w-3 h-3 text-green-400" />
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Day</span>
+            </div>
+            <span className="text-2xl font-bold">{stats.daysInSprint}</span>
+            <span className="text-xs text-muted-foreground ml-1">/180</span>
+          </div>
+          <div className="p-3 rounded-xl bg-background/50 border border-border/20">
+            <div className="flex items-center gap-2 mb-1">
+              <Target className="w-3 h-3 text-purple-400" />
+              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Phase</span>
+            </div>
+            <span className="text-2xl font-bold">{stats.currentPhase}</span>
+            <span className="text-xs text-muted-foreground ml-1">/6</span>
+          </div>
+        </div>
         
         <div className="flex-1 overflow-y-auto">
           <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Recent Logs</div>
