@@ -13,8 +13,27 @@ interface NotionEditorProps {
 }
 
 export function NotionEditor({ initialContent, onChange, editable = true }: NotionEditorProps) {
+  // Safely parse initial content - handle both JSON and plain text
+  const parseInitialContent = () => {
+    if (!initialContent) return undefined;
+    
+    try {
+      // Try to parse as JSON first
+      const parsed = JSON.parse(initialContent);
+      if (Array.isArray(parsed)) {
+        return parsed;
+      }
+      return undefined;
+    } catch {
+      // If not valid JSON, treat as plain text and convert to blocks
+      // Return undefined to let BlockNote create default content
+      // The plain text will be shown as-is when the editor loads
+      return undefined;
+    }
+  };
+
   const editor: BlockNoteEditor = useCreateBlockNote({
-    initialContent: initialContent ? JSON.parse(initialContent) : undefined,
+    initialContent: parseInitialContent(),
   });
 
   return (
