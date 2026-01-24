@@ -101,7 +101,7 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
                       className="w-full rounded-full font-medium group"
                       asChild
                     >
-                      <a href="https://cal.com/lakshpujary" target="_blank" rel="noopener noreferrer">
+                      <a href="https://cal.com/ラクシュ-9q0fjl/intro-meeting-for-coaching" target="_blank" rel="noopener noreferrer">
                         Book a 1:1 Call
                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </a>
@@ -147,7 +147,7 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
                       className="w-full rounded-full font-medium"
                       asChild
                     >
-                      <a href="https://cal.com/lakshpujary/agency" target="_blank" rel="noopener noreferrer">
+                      <a href="https://cal.com/ラクシュ-9q0fjl/intro-meeting-for-businesses" target="_blank" rel="noopener noreferrer">
                         Book a Discovery Call
                       </a>
                     </Button>
