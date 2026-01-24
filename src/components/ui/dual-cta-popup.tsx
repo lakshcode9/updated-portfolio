@@ -89,11 +89,11 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
                     <div className="p-2 rounded-lg bg-primary/10 text-primary">
                       <User className="w-5 h-5" />
                     </div>
-                    <h3 className="text-lg font-medium">Build Your AI Agency</h3>
+                    <h3 className="text-lg font-medium">Learn AI With Me</h3>
                   </div>
                   
                   <p className="text-sm text-muted-foreground flex-1">
-                    Learn how to start and scale an AI automation agency. From landing clients to delivering systems that actually work.
+                    Whether you&apos;re starting an AI agency, a professional wanting to use AI at work, or just leveling up your skills—I&apos;ll help you get there faster.
                   </p>
 
                   <div className="flex flex-col gap-3 mt-2">
