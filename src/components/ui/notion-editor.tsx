@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
+import { supabase } from "@/lib/supabase";
 import "@blocknote/mantine/style.css";
 
 interface NotionEditorProps {
@@ -35,6 +36,28 @@ function isValidBlockNoteJSON(content: string): boolean {
 }
 
 export function NotionEditor({ initialContent, onChange, editable = true }: NotionEditorProps) {
+  // Custom image upload handler for Supabase
+  const uploadFile = async (file: File) => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random().toString(36).substring(2)}-${Date.now()}.${fileExt}`;
+    const filePath = `log-images/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from('sprint-images')
+      .upload(filePath, file);
+
+    if (error) {
+      console.error('Error uploading image:', error);
+      throw error;
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('sprint-images')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  };
+
   // Parse initial content - handle both JSON and plain text
   const parsedContent = useMemo(() => {
     if (!initialContent) return undefined;
@@ -54,6 +77,7 @@ export function NotionEditor({ initialContent, onChange, editable = true }: Noti
 
   const editor: BlockNoteEditor = useCreateBlockNote({
     initialContent: parsedContent,
+    uploadFile, // Register the custom upload handler
   });
 
   return (

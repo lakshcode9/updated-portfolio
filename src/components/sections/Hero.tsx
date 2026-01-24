@@ -3,10 +3,55 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import HyperTextParagraph from "@/components/ui/hyper-text-with-decryption"
+import { useEffect, useState, useMemo } from "react"
+import { supabase, SprintLog } from "@/lib/supabase"
+import { Flame, Rocket, ArrowRight } from "lucide-react"
+import Link from "next/link"
 
 export function Hero() {
+  const [logs, setLogs] = useState<Partial<SprintLog>[]>([])
   const heroText = "I'M TAKING 180 DAYS TO MASTER AI ENGINEERING AFTER 4 YEARS OF BUILDING AS A FOUNDER. DROPPED OUT IN 3 MONTHS TO LEARN BY SHIPPING. NO BULLSH*T. JUST THE GRIND."
   const triggers = ["180 DAYS", "MASTER", "AI", "FOUNDER", "DROPPED OUT", "SHIPPING", "GRIND"]
+
+  useEffect(() => {
+    const fetchLogs = async () => {
+      const { data } = await supabase
+        .from("sprint_logs")
+        .select("date")
+        .eq("is_public", true)
+        .order("date", { ascending: false });
+      setLogs(data || []);
+    };
+    fetchLogs();
+  }, []);
+
+  const stats = useMemo(() => {
+    if (logs.length === 0) return { streak: 0, day: 0 };
+    
+    // Calculate streak
+    const today = new Date();
+    const todayStr = today.toISOString().split("T")[0];
+    const yesterdayStr = new Date(today.getTime() - 86400000).toISOString().split("T")[0];
+    const sortedDates = [...new Set(logs.map(l => l.date).filter(Boolean) as string[])].sort().reverse();
+    
+    let streak = 0;
+    if (sortedDates[0] === todayStr || sortedDates[0] === yesterdayStr) {
+      streak = 1;
+      for (let i = 1; i < sortedDates.length; i++) {
+        const prev = new Date(sortedDates[i-1]).getTime();
+        const curr = new Date(sortedDates[i]).getTime();
+        if (Math.floor((prev - curr) / 86400000) === 1) streak++;
+        else break;
+      }
+    }
+
+    // Calculate current day of sprint (assuming day 1 is the first log ever)
+    // Actually, let's just use the count of logs as the "Day" for now or calculate from a fixed start date
+    // For now, let's use the count of unique log dates
+    const day = sortedDates.length;
+
+    return { streak, day };
+  }, [logs]);
 
   return (
     <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-6 overflow-hidden bg-background font-sans py-20 md:py-0">
@@ -30,20 +75,36 @@ export function Hero() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="max-w-5xl w-full relative z-10 flex flex-col gap-6 md:gap-12 items-center justify-center min-h-[60vh] md:min-h-[80vh] px-4"
+        className="max-w-5xl w-full relative z-10 flex flex-col gap-6 md:gap-10 items-center justify-center min-h-[60vh] md:min-h-[80vh] px-4"
       >
-        {/* Header Pill */}
-        <div className="flex justify-center">
-          <div className="bg-white/5 backdrop-blur-lg border border-white/10 px-4 py-1.5 md:px-6 md:py-2 rounded-full flex items-center gap-2 md:gap-3 shadow-[0_0_30px_rgba(59,130,246,0.15)]">
-            <span className="relative flex h-2 w-2 md:h-2.5 md:w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 md:h-2.5 md:w-2.5 bg-blue-500"></span>
-            </span>
-            <span className="text-[10px] md:text-xs font-bold tracking-[0.2em] md:tracking-[0.25em] text-white/80 uppercase">
-              The 180-Day AI Sprint
-            </span>
-          </div>
-        </div>
+        {/* Live Sprint Status Card */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <Link href="/sprint" className="group">
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-1 md:p-1.5 rounded-2xl flex items-center gap-4 pr-6 hover:bg-white/10 transition-all hover:border-blue-500/30">
+              <div className="flex -space-x-2">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
+                  <Flame className="w-5 h-5 md:w-6 md:h-6 text-orange-400" />
+                </div>
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] md:text-xs font-bold text-blue-400 uppercase tracking-widest">Live Sprint Status</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-lg md:text-xl font-bold text-white">Day {stats.day}</span>
+                  <div className="w-px h-3 bg-white/20" />
+                  <span className="text-sm md:text-md font-medium text-white/60">{stats.streak} Day Streak</span>
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-white/20 group-hover:text-white/60 group-hover:translate-x-1 transition-all ml-auto" />
+            </div>
+          </Link>
+        </motion.div>
 
         <div className="flex items-center justify-center w-full">
           <HyperTextParagraph
@@ -62,7 +123,7 @@ export function Hero() {
             <a href="#work">SHIP_HISTORY</a>
           </Button>
           <Button size="lg" variant="outline" className="rounded-full px-10 h-14 text-base font-bold border-white/10 transition-all hover:bg-white hover:text-black active:scale-95" asChild>
-            <a href="/sprint">DAILY_LOGS</a>
+            <Link href="/sprint">DAILY_LOGS</Link>
           </Button>
         </div>
       </motion.div>

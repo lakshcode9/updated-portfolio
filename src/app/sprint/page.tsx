@@ -150,6 +150,12 @@ export default function SprintPage() {
         </a>
       </motion.div>
 
+      {/* Engineering Log Section - MOVED TO TOP */}
+      <section className="flex flex-col gap-8">
+        <h2 className="text-2xl font-medium border-l-4 border-primary pl-4 uppercase tracking-tight">Daily Engineering Log</h2>
+        <LiveEngineeringLogs />
+      </section>
+
       {/* Full Roadmap Section */}
       <section className="flex flex-col gap-12">
         <h2 className="text-2xl font-medium border-l-4 border-primary pl-4 uppercase tracking-tight">The Complete Roadmap</h2>
@@ -243,12 +249,6 @@ export default function SprintPage() {
             </p>
           </div>
         </div>
-      </section>
-
-      {/* Engineering Log Section */}
-      <section className="flex flex-col gap-8">
-        <h2 className="text-2xl font-medium border-l-4 border-primary pl-4 uppercase tracking-tight">Daily Engineering Log</h2>
-        <LiveEngineeringLogs />
       </section>
     </div>
   )

@@ -28,6 +28,7 @@ export default function LearnDashboard() {
   const [editStatus, setEditStatus] = useState("");
   const [editPhase, setEditPhase] = useState(1);
   const [editIsPublic, setEditIsPublic] = useState(false);
+  const [editDailyGoal, setEditDailyGoal] = useState("");
   
   // New log state
   const [showNewForm, setShowNewForm] = useState(false);
@@ -36,6 +37,7 @@ export default function LearnDashboard() {
   const [newStatus, setNewStatus] = useState("");
   const [newPhase, setNewPhase] = useState(1);
   const [newIsPublic, setNewIsPublic] = useState(false);
+  const [newDailyGoal, setNewDailyGoal] = useState("");
 
   // Simple password auth
   const ADMIN_PASSWORD = "laksh180";
@@ -92,6 +94,7 @@ export default function LearnDashboard() {
       content: contentText,
       status: newStatus,
       phase: newPhase,
+      daily_goal: newDailyGoal,
       is_public: newIsPublic,
       date: new Date().toISOString().split("T")[0],
     }]);
@@ -101,6 +104,7 @@ export default function LearnDashboard() {
       setNewContent("");
       setNewStatus("");
       setNewPhase(1);
+      setNewDailyGoal("");
       setNewIsPublic(false);
       setShowNewForm(false);
       fetchLogs();
@@ -119,6 +123,7 @@ export default function LearnDashboard() {
         content: contentText,
         status: editStatus,
         phase: editPhase,
+        daily_goal: editDailyGoal,
         is_public: editIsPublic,
       })
       .eq("id", id);
@@ -151,6 +156,7 @@ export default function LearnDashboard() {
     setEditContent(log.content);
     setEditStatus(log.status);
     setEditPhase(log.phase);
+    setEditDailyGoal(log.daily_goal || "");
     setEditIsPublic(log.is_public);
   };
 
@@ -271,10 +277,10 @@ ${log.content}
         </Button>
         
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 gap-2 mb-4">
+        <div className="grid grid-cols-2 gap-2 mb-6">
           <div className="p-3 rounded-xl bg-background/50 border border-border/20">
             <div className="flex items-center gap-2 mb-1">
-              <Flame className="w-3 h-3 text-orange-400" />
+              <Flame className={`w-3 h-3 ${stats.streak > 0 ? "text-orange-400" : "text-muted-foreground"}`} />
               <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Streak</span>
             </div>
             <span className="text-2xl font-bold">{stats.streak}</span>
@@ -288,23 +294,27 @@ ${log.content}
             <span className="text-2xl font-bold">{stats.totalLogs}</span>
             <span className="text-xs text-muted-foreground ml-1">total</span>
           </div>
-          <div className="p-3 rounded-xl bg-background/50 border border-border/20">
-            <div className="flex items-center gap-2 mb-1">
-              <TrendingUp className="w-3 h-3 text-green-400" />
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Day</span>
-            </div>
-            <span className="text-2xl font-bold">{stats.daysInSprint}</span>
-            <span className="text-xs text-muted-foreground ml-1">/180</span>
-          </div>
-          <div className="p-3 rounded-xl bg-background/50 border border-border/20">
-            <div className="flex items-center gap-2 mb-1">
-              <Target className="w-3 h-3 text-purple-400" />
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Phase</span>
-            </div>
-            <span className="text-2xl font-bold">{stats.currentPhase}</span>
-            <span className="text-xs text-muted-foreground ml-1">/6</span>
-          </div>
         </div>
+
+        {/* Streak Reminder Alert */}
+        {logs[0]?.date !== new Date().toISOString().split("T")[0] && (
+          <div className="mb-6 p-4 rounded-xl bg-orange-500/10 border border-orange-500/20">
+            <div className="flex items-center gap-3">
+              <Flame className="w-4 h-4 text-orange-400 animate-pulse" />
+              <div>
+                <p className="text-xs font-medium text-orange-100 italic">No entry today!</p>
+                <p className="text-[10px] text-orange-200/60 mt-0.5">Don&apos;t break the streak.</p>
+              </div>
+            </div>
+            <Button 
+              size="sm" 
+              onClick={() => setShowNewForm(true)}
+              className="w-full mt-3 h-8 bg-orange-500 hover:bg-orange-600 text-[11px] rounded-lg"
+            >
+              Log Now
+            </Button>
+          </div>
+        )}
         
         <div className="flex-1 overflow-y-auto">
           <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Recent Logs</div>
@@ -395,6 +405,20 @@ ${log.content}
                   </div>
                   
                   <div className="border-t border-border/40 pt-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target className="w-4 h-4 text-purple-400" />
+                      <p className="text-xs text-muted-foreground uppercase tracking-wider">Today&apos;s Goal</p>
+                    </div>
+                    <input
+                      type="text"
+                      value={newDailyGoal}
+                      onChange={(e) => setNewDailyGoal(e.target.value)}
+                      placeholder="e.g., Master NumPy vectorization / Finish Project 1 CLI"
+                      className="w-full px-4 py-3 rounded-xl bg-background border border-border/40 text-sm italic"
+                    />
+                  </div>
+                  
+                  <div className="border-t border-border/40 pt-4">
                     <p className="text-xs text-muted-foreground mb-2">Content (use / for commands)</p>
                     <NotionEditor
                       onChange={setNewContent}
@@ -473,6 +497,16 @@ ${log.content}
             </div>
             
             <div className="mb-6">
+              <div className="flex items-center gap-2 mb-2">
+                <Target className="w-4 h-4 text-purple-400" />
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Today&apos;s Goal</p>
+              </div>
+              <input
+                type="text"
+                value={editDailyGoal}
+                onChange={(e) => setEditDailyGoal(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl bg-card border border-border/40 text-sm italic mb-4"
+              />
               <NotionEditor
                 initialContent={editContent}
                 onChange={setEditContent}
