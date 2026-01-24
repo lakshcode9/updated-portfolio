@@ -5,7 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase, SprintLog } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { NotionEditor, blocksToText } from "@/components/ui/notion-editor";
-import { Plus, Trash2, Eye, EyeOff, Save, X, LogOut, Calendar, Tag, Flame, Target, BookOpen, TrendingUp } from "lucide-react";
+import { 
+  Plus, Trash2, Eye, EyeOff, Save, X, LogOut, Calendar, Tag, 
+  Flame, Target, BookOpen, TrendingUp, Search, Download, Filter 
+} from "lucide-react";
 
 export default function LearnDashboard() {
   const [logs, setLogs] = useState<SprintLog[]>([]);
@@ -13,6 +16,10 @@ export default function LearnDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  
+  // Search and filter state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterPhase, setFilterPhase] = useState<number | null>(null);
   
   // Edit state
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -183,6 +190,40 @@ export default function LearnDashboard() {
     
     return { totalLogs, streak, daysInSprint, currentPhase };
   }, [logs]);
+
+  // Filter and search logs
+  const filteredLogs = useMemo(() => {
+    return logs.filter((log) => {
+      const matchesSearch = searchQuery === "" || 
+        log.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        log.content.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesPhase = filterPhase === null || log.phase === filterPhase;
+      return matchesSearch && matchesPhase;
+    });
+  }, [logs, searchQuery, filterPhase]);
+
+  // Export logs to Markdown
+  const exportToMarkdown = () => {
+    const markdown = logs.map((log) => {
+      return `## ${log.title}
+**Date:** ${new Date(log.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+**Phase:** ${log.phase}
+**Status:** ${log.status || "N/A"}
+
+${log.content}
+
+---
+`;
+    }).join("\n");
+
+    const blob = new Blob([`# 180-Day AI Engineer Sprint Logs\n\nTotal Entries: ${logs.length}\n\n---\n\n${markdown}`], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `sprint-logs-${new Date().toISOString().split("T")[0]}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   // Login Screen
   if (!isAuthenticated) {
@@ -454,8 +495,43 @@ export default function LearnDashboard() {
         ) : (
           /* List View */
           <div className="max-w-3xl">
-            <h1 className="text-3xl font-medium mb-2">All Entries</h1>
-            <p className="text-muted-foreground mb-8">Click an entry to edit</p>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h1 className="text-3xl font-medium mb-1">All Entries</h1>
+                <p className="text-muted-foreground text-sm">{filteredLogs.length} of {logs.length} entries</p>
+              </div>
+              <Button variant="outline" onClick={exportToMarkdown} className="rounded-xl">
+                <Download className="w-4 h-4 mr-2" />
+                Export
+              </Button>
+            </div>
+            
+            {/* Search and Filter Bar */}
+            <div className="flex gap-3 mb-6">
+              <div className="flex-1 relative">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search logs..."
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border/40 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+              <div className="relative">
+                <Filter className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                <select
+                  value={filterPhase ?? ""}
+                  onChange={(e) => setFilterPhase(e.target.value ? parseInt(e.target.value) : null)}
+                  className="pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border/40 text-sm focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+                >
+                  <option value="">All Phases</option>
+                  {[1, 2, 3, 4, 5, 6].map((p) => (
+                    <option key={p} value={p}>Phase {p}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
             
             {isLoading ? (
               <div className="text-center py-12 text-muted-foreground">Loading...</div>
@@ -467,9 +543,13 @@ export default function LearnDashboard() {
                   Create First Entry
                 </Button>
               </div>
+            ) : filteredLogs.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">No entries match your search.</p>
+              </div>
             ) : (
               <div className="flex flex-col gap-3">
-                {logs.map((log) => (
+                {filteredLogs.map((log) => (
                   <motion.div
                     key={log.id}
                     whileHover={{ x: 4 }}
@@ -478,7 +558,12 @@ export default function LearnDashboard() {
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h3 className="font-medium mb-1">{log.title}</h3>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-medium">{log.title}</h3>
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                            Phase {log.phase}
+                          </span>
+                        </div>
                         <p className="text-sm text-muted-foreground line-clamp-2">{log.content}</p>
                       </div>
                       <div className="flex items-center gap-2 ml-4">
