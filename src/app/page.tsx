@@ -9,6 +9,7 @@ import { Mission } from "@/components/sections/Mission";
 import { SystemBoot } from "@/components/intro/SystemBoot";
 import { FocusContainer } from "@/components/ui/focus-container";
 import { DualCTAPopup } from "@/components/ui/dual-cta-popup";
+import { Arsenal } from "@/components/sections/Arsenal";
 import { AnimatePresence } from "framer-motion";
 
 export default function Home() {
@@ -46,6 +47,8 @@ export default function Home() {
             <WhatIDo />
           </FocusContainer>
         </div>
+
+        <Arsenal />
         
         <div className="w-full flex items-center justify-center">
           <FocusContainer className="w-full pt-20 pb-16 px-4 md:py-20 md:px-0">
