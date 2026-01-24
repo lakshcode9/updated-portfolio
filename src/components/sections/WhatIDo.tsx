@@ -79,7 +79,7 @@ const GridItem = ({ area, icon, title, description }: GridItemProps) => {
 
 export function WhatIDo() {
   return (
-    <section className="py-16 px-4 md:py-24">
+    <section className="py-8 px-4 md:py-12">
       <div className="max-w-6xl mx-auto flex flex-col gap-12 md:gap-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

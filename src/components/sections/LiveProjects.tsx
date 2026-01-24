@@ -85,7 +85,7 @@ export function LiveProjects() {
   };
 
   return (
-    <section id="work" className="relative w-full cursor-default bg-background px-6 py-12 text-neutral-200 md:px-12 md:py-24">
+    <section id="work" className="relative w-full cursor-default bg-background px-6 py-8 text-neutral-200 md:px-12 md:py-12">
       <div
         ref={containerRef}
         onMouseMove={handleMouseMove}

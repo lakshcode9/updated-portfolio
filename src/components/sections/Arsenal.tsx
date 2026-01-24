@@ -26,7 +26,7 @@ export function Arsenal() {
   const duplicatedStack = [...techStack, ...techStack, ...techStack]
 
   return (
-    <section className="py-16 md:py-24 overflow-hidden bg-background relative border-y border-border/20">
+    <section className="py-8 md:py-12 overflow-hidden bg-background relative border-y border-border/20">
       <div className="absolute inset-0 pointer-events-none z-10">
         <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-background to-transparent" />
         <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-background to-transparent" />

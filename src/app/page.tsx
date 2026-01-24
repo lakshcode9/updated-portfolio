@@ -25,43 +25,46 @@ export default function Home() {
   }, [bootComplete]);
 
   return (
-    <div className="h-[100dvh] w-full overflow-y-scroll font-sans bg-background text-foreground scroll-smooth">
+    <>
       <AnimatePresence>
         {!bootComplete && <SystemBoot onBootComplete={() => setBootComplete(true)} />}
       </AnimatePresence>
 
       <div className={`transition-opacity duration-1000 ${bootComplete ? "opacity-100" : "opacity-0"}`}>
         <DualCTAPopup enabled={bootComplete} triggerAfterMs={5000} />
-        <div id="work" className="w-full min-h-[100dvh] flex items-center justify-center">
+        
+        <div id="work" className="w-full flex items-center justify-center">
            <Hero />
         </div>
         
         <div className="w-full flex items-center justify-center">
-          <FocusContainer className="w-full pt-20 pb-16 px-4 md:py-20 md:px-0">
+          <FocusContainer className="w-full">
             <MyStory />
           </FocusContainer>
         </div>
         
         <div className="w-full flex items-center justify-center">
-          <FocusContainer className="w-full pt-20 pb-16 px-4 md:py-20 md:px-0">
+          <FocusContainer className="w-full">
             <WhatIDo />
           </FocusContainer>
         </div>
 
-        <Arsenal />
+        <div className="w-full flex items-center justify-center">
+          <Arsenal />
+        </div>
         
         <div className="w-full flex items-center justify-center">
-          <FocusContainer className="w-full pt-20 pb-16 px-4 md:py-20 md:px-0">
+          <FocusContainer className="w-full">
             <LiveProjects />
           </FocusContainer>
         </div>
         
         <div className="w-full flex items-center justify-center">
-          <FocusContainer className="w-full pt-20 pb-16 px-4 md:py-20 md:px-0">
+          <FocusContainer className="w-full">
             <Mission />
           </FocusContainer>
         </div>
       </div>
-    </div>
+    </>
   );
 }

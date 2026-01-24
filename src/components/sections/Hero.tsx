@@ -54,7 +54,7 @@ export function Hero() {
   }, [logs]);
 
   return (
-    <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-4 overflow-hidden bg-background font-sans py-16 md:py-0">
+    <section className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-4 overflow-hidden bg-background font-sans py-8 md:py-0">
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-[-5%] left-[-5%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px]" />

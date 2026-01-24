@@ -18,7 +18,10 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between p-4 md:p-6 md:justify-center backdrop-blur-xl bg-background/80 border-b border-border/40">
+    <nav className={cn(
+      "fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between p-4 md:p-6 md:justify-center transition-all duration-300",
+      isOpen ? "bg-background" : "backdrop-blur-xl bg-background/80 border-b border-border/40"
+    )}>
       <div className="flex items-center gap-8 md:gap-12 w-full md:w-auto justify-between md:justify-start">
         <Link href="/" className="text-xl font-bold tracking-tighter hover:opacity-80 transition-opacity">
           LAKSH
@@ -42,7 +45,7 @@ export function Navbar() {
 
         {/* Mobile Hamburger */}
         <button 
-          className="md:hidden text-foreground p-2 -mr-2"
+          className="md:hidden text-foreground p-2 -mr-2 relative z-[1001]"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"
         >
@@ -57,26 +60,37 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute top-full left-0 right-0 bg-background border-b border-border/40 p-8 md:hidden flex flex-col items-center gap-8 shadow-2xl min-h-[40vh] justify-center"
-          >
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className={cn(
-                  "text-2xl font-bold tracking-tight transition-colors hover:text-primary",
-                  pathname === item.href ? "text-foreground" : "text-muted-foreground"
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
-          </motion.div>
+          <>
+            {/* Full Screen Backdrop - Solid to prevent overlap */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-background z-[998] md:hidden"
+            />
+            {/* Menu Content */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-full left-0 right-0 bg-background border-b border-border/40 p-12 md:hidden flex flex-col items-center gap-10 shadow-2xl z-[999] min-h-[70vh] justify-center"
+            >
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className={cn(
+                    "text-4xl font-bold tracking-tighter transition-colors hover:text-primary uppercase",
+                    pathname === item.href ? "text-foreground" : "text-muted-foreground"
+                  )}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </nav>
