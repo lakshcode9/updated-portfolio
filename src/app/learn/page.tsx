@@ -4,7 +4,9 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase, SprintLog } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2, Edit, Eye, EyeOff, Save, X, LogOut } from "lucide-react";
+import { NotionEditor, blocksToText } from "@/components/ui/notion-editor";
+import { PartialBlock } from "@blocknote/core";
+import { Plus, Trash2, Edit, Eye, EyeOff, Save, X, LogOut, Calendar, Tag } from "lucide-react";
 
 export default function LearnDashboard() {
   const [logs, setLogs] = useState<SprintLog[]>([]);
@@ -15,14 +17,22 @@ export default function LearnDashboard() {
   
   // Edit state
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState({ title: "", content: "", status: "", phase: 1, is_public: false });
+  const [editContent, setEditContent] = useState<PartialBlock[]>([]);
+  const [editTitle, setEditTitle] = useState("");
+  const [editStatus, setEditStatus] = useState("");
+  const [editPhase, setEditPhase] = useState(1);
+  const [editIsPublic, setEditIsPublic] = useState(false);
   
   // New log state
   const [showNewForm, setShowNewForm] = useState(false);
-  const [newLog, setNewLog] = useState({ title: "", content: "", status: "", phase: 1, is_public: false });
+  const [newTitle, setNewTitle] = useState("");
+  const [newContent, setNewContent] = useState<PartialBlock[]>([]);
+  const [newStatus, setNewStatus] = useState("");
+  const [newPhase, setNewPhase] = useState(1);
+  const [newIsPublic, setNewIsPublic] = useState(false);
 
-  // Simple password auth (for demo - you can replace with Supabase Auth later)
-  const ADMIN_PASSWORD = "laksh180"; // Change this!
+  // Simple password auth
+  const ADMIN_PASSWORD = "laksh180";
 
   useEffect(() => {
     const auth = sessionStorage.getItem("learn_auth");
@@ -67,31 +77,43 @@ export default function LearnDashboard() {
   };
 
   const createLog = async () => {
+    if (!newTitle.trim()) return;
+    
+    const contentText = blocksToText(newContent);
+    
     const { error } = await supabase.from("sprint_logs").insert([{
-      title: newLog.title,
-      content: newLog.content,
-      status: newLog.status,
-      phase: newLog.phase,
-      is_public: newLog.is_public,
+      title: newTitle,
+      content: contentText,
+      status: newStatus,
+      phase: newPhase,
+      is_public: newIsPublic,
       date: new Date().toISOString().split("T")[0],
     }]);
 
     if (!error) {
-      setNewLog({ title: "", content: "", status: "", phase: 1, is_public: false });
+      setNewTitle("");
+      setNewContent([]);
+      setNewStatus("");
+      setNewPhase(1);
+      setNewIsPublic(false);
       setShowNewForm(false);
       fetchLogs();
+    } else {
+      console.error("Error creating log:", error);
     }
   };
 
   const updateLog = async (id: string) => {
+    const contentText = blocksToText(editContent);
+    
     const { error } = await supabase
       .from("sprint_logs")
       .update({
-        title: editForm.title,
-        content: editForm.content,
-        status: editForm.status,
-        phase: editForm.phase,
-        is_public: editForm.is_public,
+        title: editTitle,
+        content: contentText,
+        status: editStatus,
+        phase: editPhase,
+        is_public: editIsPublic,
       })
       .eq("id", id);
 
@@ -119,13 +141,11 @@ export default function LearnDashboard() {
 
   const startEdit = (log: SprintLog) => {
     setEditingId(log.id);
-    setEditForm({
-      title: log.title,
-      content: log.content,
-      status: log.status,
-      phase: log.phase,
-      is_public: log.is_public,
-    });
+    setEditTitle(log.title);
+    setEditContent([{ type: "paragraph", content: [{ type: "text", text: log.content }] }]);
+    setEditStatus(log.status);
+    setEditPhase(log.phase);
+    setEditIsPublic(log.is_public);
   };
 
   // Login Screen
@@ -160,195 +180,251 @@ export default function LearnDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6 md:p-12">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-12">
-          <div>
-            <h1 className="text-3xl font-medium tracking-tight">Sprint Dashboard</h1>
-            <p className="text-muted-foreground">Manage your 180-day engineering logs</p>
-          </div>
-          <div className="flex gap-3">
-            <Button onClick={() => setShowNewForm(true)} className="rounded-full">
-              <Plus className="w-4 h-4 mr-2" />
-              New Log
-            </Button>
-            <Button variant="outline" onClick={handleLogout} className="rounded-full">
-              <LogOut className="w-4 h-4" />
-            </Button>
+    <div className="min-h-screen bg-background">
+      {/* Sidebar */}
+      <div className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border/40 p-4 flex flex-col">
+        <div className="mb-8">
+          <h1 className="text-xl font-medium tracking-tight">Sprint Logs</h1>
+          <p className="text-xs text-muted-foreground mt-1">180-Day AI Engineer Journey</p>
+        </div>
+        
+        <Button onClick={() => setShowNewForm(true)} className="w-full rounded-xl mb-4">
+          <Plus className="w-4 h-4 mr-2" />
+          New Entry
+        </Button>
+        
+        <div className="flex-1 overflow-y-auto">
+          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Recent Logs</div>
+          <div className="flex flex-col gap-1">
+            {logs.slice(0, 10).map((log) => (
+              <button
+                key={log.id}
+                onClick={() => startEdit(log)}
+                className={`text-left px-3 py-2 rounded-lg text-sm truncate transition-colors ${
+                  editingId === log.id ? "bg-primary/10 text-primary" : "hover:bg-muted"
+                }`}
+              >
+                {log.title}
+              </button>
+            ))}
           </div>
         </div>
+        
+        <Button variant="ghost" onClick={handleLogout} className="w-full rounded-xl mt-4">
+          <LogOut className="w-4 h-4 mr-2" />
+          Logout
+        </Button>
+      </div>
 
+      {/* Main Content */}
+      <div className="ml-64 min-h-screen p-8">
         {/* New Log Form */}
         <AnimatePresence>
           {showNewForm && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mb-8 overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+              onClick={() => setShowNewForm(false)}
             >
-              <div className="p-6 rounded-2xl bg-card border border-border/40">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium">New Log Entry</h3>
+              <motion.div
+                initial={{ scale: 0.95, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.95, y: 20 }}
+                className="w-full max-w-3xl bg-card rounded-2xl p-6 max-h-[90vh] overflow-y-auto"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-2xl font-medium">New Log Entry</h2>
                   <button onClick={() => setShowNewForm(false)}>
                     <X className="w-5 h-5 text-muted-foreground" />
                   </button>
                 </div>
-                <div className="flex flex-col gap-4">
+                
+                <div className="flex flex-col gap-6">
                   <input
                     type="text"
-                    value={newLog.title}
-                    onChange={(e) => setNewLog({ ...newLog, title: e.target.value })}
-                    placeholder="Title"
-                    className="w-full px-4 py-3 rounded-xl bg-background border border-border/40"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    placeholder="Untitled"
+                    className="text-3xl font-medium bg-transparent border-none focus:outline-none placeholder:text-muted-foreground/50"
                   />
-                  <textarea
-                    value={newLog.content}
-                    onChange={(e) => setNewLog({ ...newLog, content: e.target.value })}
-                    placeholder="What did you learn today?"
-                    rows={4}
-                    className="w-full px-4 py-3 rounded-xl bg-background border border-border/40 resize-none"
-                  />
-                  <input
-                    type="text"
-                    value={newLog.status}
-                    onChange={(e) => setNewLog({ ...newLog, status: e.target.value })}
-                    placeholder="Status (e.g., Learned: ..., Fixed: ...)"
-                    className="w-full px-4 py-3 rounded-xl bg-background border border-border/40"
-                  />
-                  <div className="flex gap-4">
-                    <select
-                      value={newLog.phase}
-                      onChange={(e) => setNewLog({ ...newLog, phase: parseInt(e.target.value) })}
-                      className="px-4 py-3 rounded-xl bg-background border border-border/40"
-                    >
-                      {[1, 2, 3, 4, 5, 6].map((p) => (
-                        <option key={p} value={p}>Phase {p}</option>
-                      ))}
-                    </select>
+                  
+                  <div className="flex gap-4 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">
+                        {new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Tag className="w-4 h-4 text-muted-foreground" />
+                      <select
+                        value={newPhase}
+                        onChange={(e) => setNewPhase(parseInt(e.target.value))}
+                        className="text-sm bg-transparent border-none focus:outline-none"
+                      >
+                        {[1, 2, 3, 4, 5, 6].map((p) => (
+                          <option key={p} value={p}>Phase {p}</option>
+                        ))}
+                      </select>
+                    </div>
                     <label className="flex items-center gap-2 text-sm">
                       <input
                         type="checkbox"
-                        checked={newLog.is_public}
-                        onChange={(e) => setNewLog({ ...newLog, is_public: e.target.checked })}
+                        checked={newIsPublic}
+                        onChange={(e) => setNewIsPublic(e.target.checked)}
+                        className="rounded"
                       />
-                      Make Public
+                      Public
                     </label>
                   </div>
-                  <Button onClick={createLog} className="w-full rounded-xl">
+                  
+                  <div className="border-t border-border/40 pt-4">
+                    <p className="text-xs text-muted-foreground mb-2">Content (use / for commands)</p>
+                    <NotionEditor
+                      initialContent={[{ type: "paragraph", content: [] }]}
+                      onChange={setNewContent}
+                    />
+                  </div>
+                  
+                  <input
+                    type="text"
+                    value={newStatus}
+                    onChange={(e) => setNewStatus(e.target.value)}
+                    placeholder="Status: Learned: ... / Fixed: ... / Built: ..."
+                    className="px-4 py-3 rounded-xl bg-background border border-border/40 text-sm"
+                  />
+                  
+                  <Button onClick={createLog} className="w-full rounded-xl h-12">
                     <Save className="w-4 h-4 mr-2" />
-                    Save Log
+                    Save Entry
                   </Button>
                 </div>
-              </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        {/* Logs List */}
-        {isLoading ? (
-          <div className="text-center py-12 text-muted-foreground">Loading...</div>
-        ) : logs.length === 0 ? (
-          <div className="text-center py-12 text-muted-foreground">
-            No logs yet. Start your journey!
+        {/* Edit View */}
+        {editingId ? (
+          <div className="max-w-3xl">
+            <div className="flex items-center justify-between mb-6">
+              <button
+                onClick={() => setEditingId(null)}
+                className="text-sm text-muted-foreground hover:text-foreground"
+              >
+                ← Back to list
+              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => togglePublic(editingId, editIsPublic)}
+                  className="p-2 hover:bg-muted rounded-lg transition-colors"
+                  title={editIsPublic ? "Make Private" : "Make Public"}
+                >
+                  {editIsPublic ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+                <button
+                  onClick={() => deleteLog(editingId)}
+                  className="p-2 hover:bg-red-500/10 text-red-400 rounded-lg transition-colors"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            
+            <input
+              type="text"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              placeholder="Untitled"
+              className="text-4xl font-medium bg-transparent border-none focus:outline-none w-full mb-4 placeholder:text-muted-foreground/50"
+            />
+            
+            <div className="flex gap-4 flex-wrap mb-6">
+              <div className="flex items-center gap-2">
+                <Tag className="w-4 h-4 text-muted-foreground" />
+                <select
+                  value={editPhase}
+                  onChange={(e) => setEditPhase(parseInt(e.target.value))}
+                  className="text-sm bg-transparent border-none focus:outline-none"
+                >
+                  {[1, 2, 3, 4, 5, 6].map((p) => (
+                    <option key={p} value={p}>Phase {p}</option>
+                  ))}
+                </select>
+              </div>
+              <span className={`text-xs px-2 py-1 rounded-full ${editIsPublic ? "bg-green-500/10 text-green-400" : "bg-yellow-500/10 text-yellow-400"}`}>
+                {editIsPublic ? "Public" : "Private"}
+              </span>
+            </div>
+            
+            <div className="mb-6">
+              <NotionEditor
+                initialContent={editContent}
+                onChange={setEditContent}
+              />
+            </div>
+            
+            <input
+              type="text"
+              value={editStatus}
+              onChange={(e) => setEditStatus(e.target.value)}
+              placeholder="Status: Learned: ... / Fixed: ... / Built: ..."
+              className="w-full px-4 py-3 rounded-xl bg-card border border-border/40 text-sm mb-6"
+            />
+            
+            <Button onClick={() => updateLog(editingId)} className="rounded-xl">
+              <Save className="w-4 h-4 mr-2" />
+              Save Changes
+            </Button>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
-            {logs.map((log) => (
-              <motion.div
-                key={log.id}
-                layout
-                className="p-6 rounded-2xl bg-card border border-border/40"
-              >
-                {editingId === log.id ? (
-                  // Edit Mode
-                  <div className="flex flex-col gap-4">
-                    <input
-                      type="text"
-                      value={editForm.title}
-                      onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                      className="w-full px-4 py-2 rounded-lg bg-background border border-border/40"
-                    />
-                    <textarea
-                      value={editForm.content}
-                      onChange={(e) => setEditForm({ ...editForm, content: e.target.value })}
-                      rows={3}
-                      className="w-full px-4 py-2 rounded-lg bg-background border border-border/40 resize-none"
-                    />
-                    <input
-                      type="text"
-                      value={editForm.status}
-                      onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
-                      className="w-full px-4 py-2 rounded-lg bg-background border border-border/40"
-                    />
-                    <div className="flex gap-3">
-                      <Button size="sm" onClick={() => updateLog(log.id)}>
-                        <Save className="w-4 h-4 mr-1" /> Save
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => setEditingId(null)}>
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  // View Mode
-                  <>
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs text-muted-foreground">
-                            {new Date(log.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                          </span>
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                            Phase {log.phase}
-                          </span>
-                          {log.is_public ? (
-                            <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/10 text-green-400">
-                              Public
-                            </span>
-                          ) : (
-                            <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-500/10 text-yellow-400">
-                              Private
-                            </span>
-                          )}
-                        </div>
-                        <h3 className="text-xl font-medium">{log.title}</h3>
+          /* List View */
+          <div className="max-w-3xl">
+            <h1 className="text-3xl font-medium mb-2">All Entries</h1>
+            <p className="text-muted-foreground mb-8">Click an entry to edit</p>
+            
+            {isLoading ? (
+              <div className="text-center py-12 text-muted-foreground">Loading...</div>
+            ) : logs.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground mb-4">No entries yet. Start your journey!</p>
+                <Button onClick={() => setShowNewForm(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create First Entry
+                </Button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {logs.map((log) => (
+                  <motion.div
+                    key={log.id}
+                    whileHover={{ x: 4 }}
+                    onClick={() => startEdit(log)}
+                    className="p-4 rounded-xl bg-card border border-border/40 cursor-pointer hover:border-primary/30 transition-colors"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="font-medium mb-1">{log.title}</h3>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{log.content}</p>
                       </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => togglePublic(log.id, log.is_public)}
-                          className="p-2 hover:bg-muted rounded-lg transition-colors"
-                          title={log.is_public ? "Make Private" : "Make Public"}
-                        >
-                          {log.is_public ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        </button>
-                        <button
-                          onClick={() => startEdit(log)}
-                          className="p-2 hover:bg-muted rounded-lg transition-colors"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => deleteLog(log.id)}
-                          className="p-2 hover:bg-red-500/10 text-red-400 rounded-lg transition-colors"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                      <div className="flex items-center gap-2 ml-4">
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(log.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                        </span>
+                        {log.is_public ? (
+                          <Eye className="w-3 h-3 text-green-400" />
+                        ) : (
+                          <EyeOff className="w-3 h-3 text-muted-foreground" />
+                        )}
                       </div>
                     </div>
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-3">
-                      {log.content}
-                    </p>
-                    {log.status && (
-                      <div className="px-4 py-2 rounded-lg bg-background/50 border border-border/20">
-                        <p className="text-xs font-mono text-foreground/80">{log.status}</p>
-                      </div>
-                    )}
-                  </>
-                )}
-              </motion.div>
-            ))}
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
