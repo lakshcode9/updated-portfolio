@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase, SprintLog } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { NotionEditor, blocksToText } from "@/components/ui/notion-editor";
-import { PartialBlock } from "@blocknote/core";
-import { Plus, Trash2, Edit, Eye, EyeOff, Save, X, LogOut, Calendar, Tag } from "lucide-react";
+import { Plus, Trash2, Eye, EyeOff, Save, X, LogOut, Calendar, Tag } from "lucide-react";
 
 export default function LearnDashboard() {
   const [logs, setLogs] = useState<SprintLog[]>([]);
@@ -17,7 +16,7 @@ export default function LearnDashboard() {
   
   // Edit state
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [editContent, setEditContent] = useState<PartialBlock[]>([]);
+  const [editContent, setEditContent] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editStatus, setEditStatus] = useState("");
   const [editPhase, setEditPhase] = useState(1);
@@ -26,7 +25,7 @@ export default function LearnDashboard() {
   // New log state
   const [showNewForm, setShowNewForm] = useState(false);
   const [newTitle, setNewTitle] = useState("");
-  const [newContent, setNewContent] = useState<PartialBlock[]>([]);
+  const [newContent, setNewContent] = useState("");
   const [newStatus, setNewStatus] = useState("");
   const [newPhase, setNewPhase] = useState(1);
   const [newIsPublic, setNewIsPublic] = useState(false);
@@ -92,7 +91,7 @@ export default function LearnDashboard() {
 
     if (!error) {
       setNewTitle("");
-      setNewContent([]);
+      setNewContent("");
       setNewStatus("");
       setNewPhase(1);
       setNewIsPublic(false);
@@ -142,7 +141,7 @@ export default function LearnDashboard() {
   const startEdit = (log: SprintLog) => {
     setEditingId(log.id);
     setEditTitle(log.title);
-    setEditContent([{ type: "paragraph", content: [{ type: "text", text: log.content }] }]);
+    setEditContent(log.content);
     setEditStatus(log.status);
     setEditPhase(log.phase);
     setEditIsPublic(log.is_public);
@@ -182,7 +181,7 @@ export default function LearnDashboard() {
   return (
     <div className="min-h-screen bg-background">
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border/40 p-4 flex flex-col">
+      <div className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border/40 p-4 flex flex-col z-10">
         <div className="mb-8">
           <h1 className="text-xl font-medium tracking-tight">Sprint Logs</h1>
           <p className="text-xs text-muted-foreground mt-1">180-Day AI Engineer Journey</p>
@@ -225,14 +224,14 @@ export default function LearnDashboard() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
               onClick={() => setShowNewForm(false)}
             >
               <motion.div
                 initial={{ scale: 0.95, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 20 }}
-                className="w-full max-w-3xl bg-card rounded-2xl p-6 max-h-[90vh] overflow-y-auto"
+                className="w-full max-w-3xl bg-card rounded-2xl p-6 max-h-[90vh] overflow-y-auto border border-border/40 shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between mb-6">
@@ -284,7 +283,6 @@ export default function LearnDashboard() {
                   <div className="border-t border-border/40 pt-4">
                     <p className="text-xs text-muted-foreground mb-2">Content (use / for commands)</p>
                     <NotionEditor
-                      initialContent={[{ type: "paragraph", content: [] }]}
                       onChange={setNewContent}
                     />
                   </div>
