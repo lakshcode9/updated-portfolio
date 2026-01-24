@@ -129,21 +129,21 @@ const phases: Phase[] = [
 
 export default function SprintPage() {
   return (
-    <div className="max-w-7xl mx-auto py-12 px-6 flex flex-col gap-16">
+    <div className="max-w-7xl mx-auto py-16 md:py-24 px-4 md:px-6 flex flex-col gap-12 md:gap-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col gap-4 text-center items-center"
       >
-        <span className="text-xs uppercase tracking-widest text-primary font-bold">The Core Asset</span>
-        <h1 className="text-4xl md:text-6xl font-medium tracking-tight">THE 180-DAY AI ENGINEER SPRINT</h1>
-        <p className="text-muted-foreground max-w-2xl text-lg italic">
+        <span className="text-[10px] uppercase tracking-[0.4em] text-primary font-bold">The Core Asset</span>
+        <h1 className="text-3xl md:text-6xl font-medium tracking-tight uppercase px-4">THE 180-DAY AI ENGINEER SPRINT</h1>
+        <p className="text-muted-foreground max-w-2xl text-base md:text-lg italic px-4">
           From Builder to Architect. A high-agency founder&apos;s transition into deep AI engineering.
         </p>
         <a 
           href="/The_180-Day_AI_Engineer_Sprint.pdf" 
           target="_blank"
-          className="mt-4 flex items-center gap-2 text-sm text-primary hover:underline"
+          className="mt-4 flex items-center gap-2 text-xs text-primary hover:underline font-bold uppercase tracking-widest"
         >
           <ExternalLink className="w-4 h-4" />
           Download Full PDF Roadmap
@@ -151,14 +151,14 @@ export default function SprintPage() {
       </motion.div>
 
       {/* Engineering Log Section - MOVED TO TOP */}
-      <section className="flex flex-col gap-8">
-        <h2 className="text-2xl font-medium border-l-4 border-primary pl-4 uppercase tracking-tight">Daily Engineering Log</h2>
+      <section className="flex flex-col gap-6 md:gap-8">
+        <h2 className="text-xl md:text-2xl font-medium border-l-4 border-primary pl-4 uppercase tracking-tight">Daily Engineering Log</h2>
         <LiveEngineeringLogs />
       </section>
 
       {/* Full Roadmap Section */}
-      <section className="flex flex-col gap-12">
-        <h2 className="text-2xl font-medium border-l-4 border-primary pl-4 uppercase tracking-tight">The Complete Roadmap</h2>
+      <section className="flex flex-col gap-10 md:gap-12">
+        <h2 className="text-xl md:text-2xl font-medium border-l-4 border-primary pl-4 uppercase tracking-tight">The Complete Roadmap</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
           {phases.map((phase, phaseIndex) => (

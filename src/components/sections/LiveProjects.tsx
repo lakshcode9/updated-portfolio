@@ -100,7 +100,7 @@ export function LiveProjects() {
           >
           <div>
             <span className="text-xs uppercase tracking-widest text-primary font-bold mb-2 block">Portfolio</span>
-            <h2 className="text-4xl font-black tracking-tighter text-white sm:text-6xl md:text-8xl uppercase">
+            <h2 className="text-3xl sm:text-6xl md:text-8xl font-black tracking-tighter text-white uppercase">
               Selected <span className="text-neutral-600">Works</span>
             </h2>
           </div>

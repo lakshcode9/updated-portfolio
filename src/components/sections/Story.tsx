@@ -4,8 +4,8 @@ import { motion } from "framer-motion"
 
 export function MyStory() {
   return (
-    <section id="story" className="py-12 px-6 md:py-24 bg-card/10">
-      <div className="max-w-3xl mx-auto flex flex-col gap-12">
+    <section id="story" className="py-16 px-4 md:py-24 bg-card/10">
+      <div className="max-w-3xl mx-auto flex flex-col gap-10 md:gap-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -13,8 +13,8 @@ export function MyStory() {
           transition={{ duration: 0.6 }}
           className="flex flex-col gap-4"
         >
-          <span className="text-xs uppercase tracking-widest text-muted-foreground font-semibold">My Story</span>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">DROP OUT. BUILD. SURVIVE.</h2>
+          <span className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground font-black">My Story</span>
+          <h2 className="text-2xl md:text-5xl font-medium tracking-tight italic uppercase">DROP OUT. BUILD. SURVIVE.</h2>
         </motion.div>
         
         <motion.div
@@ -22,7 +22,7 @@ export function MyStory() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-col gap-8 text-lg md:text-xl text-muted-foreground leading-relaxed font-medium"
+          className="flex flex-col gap-6 md:gap-8 text-base md:text-xl text-muted-foreground leading-relaxed font-medium"
         >
           <p>
             I officially left engineering school just 3 months into my first year. 
@@ -36,9 +36,9 @@ export function MyStory() {
           <p>
             Now, I&apos;m rebuilding. But this time, I&apos;m doing it the right way. 
             I&apos;m using this sprint to master the deep engineering I skipped over, rebuild my agencies from scratch, and finally focus on 
-            <span className="text-foreground font-bold"> contribution</span>—giving back to the ecosystem that made all this possible.
+            <span className="text-foreground font-bold underline decoration-primary/30 decoration-2 underline-offset-4"> contribution</span>—giving back to the ecosystem that made all this possible.
           </p>
-          <p className="text-foreground border-l-4 border-primary pl-8 py-4 bg-primary/5 italic text-xl md:text-2xl font-bold tracking-tight">
+          <p className="text-foreground border-l-2 md:border-l-4 border-primary pl-6 md:pl-8 py-4 bg-primary/5 italic text-lg md:text-2xl font-bold tracking-tight leading-snug">
             &quot;No more shortcuts. No more 'easy routes.' Just 180 days of deep work to become the engineer I was always meant to be.&quot;
           </p>
         </motion.div>

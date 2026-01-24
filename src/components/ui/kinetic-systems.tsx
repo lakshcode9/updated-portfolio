@@ -67,28 +67,42 @@ export default function KineticSystems() {
   };
 
   return (
-    <div onMouseMove={onMove} className="min-h-screen bg-neutral-950 px-8 py-24 text-white">
+    <div onMouseMove={onMove} className="min-h-screen bg-neutral-950 px-4 md:px-8 py-16 md:py-24 text-white">
       <div className="mx-auto max-w-6xl">
-        <h1 className="mb-16 text-6xl font-light tracking-tight">
+        <h1 className="mb-12 md:mb-16 text-3xl md:text-6xl font-light tracking-tight">
           Active <span className="text-neutral-500">Systems</span>
         </h1>
 
-        {SYSTEMS.map((s, i) => (
-          <motion.div
-            key={s.id}
-            onMouseEnter={() => setActiveId(s.id)}
-            onMouseLeave={() => setActiveId(null)}
-            className="border-t border-neutral-800 py-10 flex justify-between items-center"
-          >
-            <div className="flex gap-6 items-baseline">
-              <span className="text-neutral-600">0{i + 1}</span>
-              <h2 className="text-4xl">{s.name}</h2>
-            </div>
-            <span className="text-sm uppercase tracking-widest text-neutral-500">
-              {s.description}
-            </span>
-          </motion.div>
-        ))}
+        <div className="flex flex-col">
+          {SYSTEMS.map((s, i) => (
+            <motion.div
+              key={s.id}
+              onMouseEnter={() => setActiveId(s.id)}
+              onMouseLeave={() => setActiveId(null)}
+              className="border-t border-neutral-800 py-8 md:py-10 flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-0"
+            >
+              <div className="flex gap-4 md:gap-6 items-baseline">
+                <span className="text-neutral-600 font-mono text-sm">0{i + 1}</span>
+                <h2 className="text-2xl md:text-4xl font-bold tracking-tight">{s.name}</h2>
+              </div>
+              <span className="text-[10px] md:text-sm uppercase tracking-widest text-neutral-500 font-medium">
+                {s.description}
+              </span>
+              
+              {/* Mobile Image Preview */}
+              {isMobile && (
+                <div className="mt-4 relative aspect-video w-full overflow-hidden rounded-xl border border-white/5">
+                  <Image
+                    src={s.image}
+                    alt={s.name}
+                    fill
+                    className="object-cover opacity-60"
+                  />
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {!isMobile && activeId && (
