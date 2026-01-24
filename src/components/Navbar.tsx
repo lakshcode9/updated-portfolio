@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { X } from "lucide-react"
 
 const navItems = [
   { name: "Work", href: "/#work" },
@@ -60,37 +61,36 @@ export function Navbar() {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            {/* Full Screen Backdrop - Solid to prevent overlap */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-[#030303] z-[2000] md:hidden flex flex-col items-center justify-center p-6"
+          >
+            {/* Close button inside full screen menu */}
+            <button 
+              className="absolute top-6 right-6 p-2 text-white hover:opacity-70 transition-opacity"
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-background z-[998] md:hidden"
-            />
-            {/* Menu Content */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="absolute top-full left-0 right-0 bg-background border-b border-border/40 p-12 md:hidden flex flex-col items-center gap-10 shadow-2xl z-[999] min-h-[70vh] justify-center"
             >
+              <X className="w-8 h-8" />
+            </button>
+
+            <div className="flex flex-col items-center gap-12">
               {navItems.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "text-4xl font-bold tracking-tighter transition-colors hover:text-primary uppercase",
-                    pathname === item.href ? "text-foreground" : "text-muted-foreground"
+                    "text-5xl font-bold tracking-tighter transition-all hover:scale-110 uppercase",
+                    pathname === item.href ? "text-white" : "text-white/40"
                   )}
                 >
                   {item.name}
                 </Link>
               ))}
-            </motion.div>
-          </>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </nav>
