@@ -2,21 +2,48 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Mail, Send, CheckCircle2, Terminal } from "lucide-react"
+import { Mail, Send, CheckCircle2, Terminal, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { supabase } from "@/lib/supabase"
 
 export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSent, setIsSent] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // Simulated submission
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setIsSubmitting(false)
-    setIsSent(true)
+    setError(null)
+    
+    try {
+      const { error: submitError } = await supabase
+        .from('contact_requests')
+        .insert([
+          { 
+            name: formData.name, 
+            email: formData.email, 
+            message: formData.message 
+          }
+        ])
+
+      if (submitError) throw submitError
+
+      setIsSent(true)
+      setFormData({ name: "", email: "", message: "" })
+    } catch (err: any) {
+      console.error("Submission error:", err)
+      setError(err.message || "Failed to establish connection. System offline.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -83,14 +110,22 @@ export function Contact() {
           >
             {!isSent ? (
               <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                {error && (
+                  <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs">
+                    <AlertCircle className="w-4 h-4 shrink-0" />
+                    <p>{error}</p>
+                  </div>
+                )}
                 <div className="flex flex-col gap-2">
                   <label htmlFor="name" className="text-[10px] uppercase tracking-[0.2em] text-white/40 font-bold px-1">Source Name</label>
                   <input
                     type="text"
                     id="name"
                     required
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Identify yourself..."
-                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/10"
+                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/10 text-white"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -99,8 +134,10 @@ export function Contact() {
                     type="email"
                     id="email"
                     required
+                    value={formData.email}
+                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     placeholder="email@example.com"
-                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/10"
+                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/10 text-white"
                   />
                 </div>
                 <div className="flex flex-col gap-2">
@@ -109,8 +146,10 @@ export function Contact() {
                     id="message"
                     required
                     rows={4}
+                    value={formData.message}
+                    onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                     placeholder="What are we building?"
-                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/10 resize-none"
+                    className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/10 resize-none text-white"
                   />
                 </div>
                 <Button 
