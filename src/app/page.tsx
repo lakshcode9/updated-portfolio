@@ -11,6 +11,7 @@ import { SystemBoot } from "@/components/intro/SystemBoot";
 import { FocusContainer } from "@/components/ui/focus-container";
 import { DualCTAPopup } from "@/components/ui/dual-cta-popup";
 import { Arsenal } from "@/components/sections/Arsenal";
+import { Contact } from "@/components/sections/Contact";
 import { AnimatePresence } from "framer-motion";
 
 export default function Home() {
@@ -68,6 +69,10 @@ export default function Home() {
           <FocusContainer className="w-full">
             <Mission />
           </FocusContainer>
+        </div>
+
+        <div className="w-full flex items-center justify-center">
+          <Contact />
         </div>
       </div>
     </>

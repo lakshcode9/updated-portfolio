@@ -10,7 +10,7 @@ export function Footer() {
   if (pathname?.startsWith("/learn")) return null
 
   return (
-    <footer id="contact" className="border-t border-border/40 py-16 px-6 bg-card/10">
+    <footer className="border-t border-border/40 py-16 px-6 bg-card/10">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 md:gap-8 text-center md:text-left">
         <div className="flex flex-col gap-3">
           <h3 className="text-xl font-bold tracking-tighter">LAKSH</h3>
