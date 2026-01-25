@@ -11,7 +11,7 @@ import {
   Flame, Target, BookOpen, TrendingUp, Search, Download, Filter,
   Sparkles, BrainCircuit, RefreshCw, Terminal, Cpu, Activity
 } from "lucide-react";
-import { generateAISprintInsight } from "./actions";
+import { generateAISprintInsight, queryArchiveVault, generateSocialBriefAction } from "./actions";
 import ReactMarkdown from "react-markdown";
 
 export default function LearnDashboard() {
@@ -46,6 +46,30 @@ export default function LearnDashboard() {
   // AI Insight State
   const [aiInsight, setAiInsight] = useState<string | null>(null);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  
+  // Feature 2 & 3 States
+  const [archiveQuery, setArchiveQuery] = useState("");
+  const [archiveResponse, setArchiveResponse] = useState<string | null>(null);
+  const [isQueryingArchive, setIsQueryingArchive] = useState(false);
+  const [isGeneratingBrief, setIsGeneratingBrief] = useState<string | null>(null); // ID of the log being processed
+  const [socialBrief, setSocialBrief] = useState<{ id: string, content: string } | null>(null);
+
+  // Momentum Grid Logic
+  const momentumData = useMemo(() => {
+    const today = new Date();
+    const weeks = 14;
+    const days = weeks * 7;
+    const grid = [];
+    
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(today.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      const count = logs.filter(l => l.date === dateStr).length;
+      grid.push({ date: dateStr, count });
+    }
+    return grid;
+  }, [logs]);
 
   // Simple password auth
   const ADMIN_PASSWORD = "laksh180";
@@ -178,6 +202,33 @@ export default function LearnDashboard() {
       setAiInsight("Failed to summon the AI Architect. Check your connection or API key.");
     } finally {
       setIsGeneratingAI(false);
+    }
+  };
+
+  const handleArchiveQuery = async () => {
+    if (!archiveQuery.trim()) return;
+    setIsQueryingArchive(true);
+    try {
+      const response = await queryArchiveVault(archiveQuery);
+      setArchiveResponse(response);
+    } catch (e) {
+      console.error(e);
+      setArchiveResponse("The Librarian is busy. Try again later.");
+    } finally {
+      setIsQueryingArchive(false);
+    }
+  };
+
+  const handleGenerateSocialBrief = async (log: SprintLog) => {
+    setIsGeneratingBrief(log.id);
+    try {
+      const brief = await generateSocialBriefAction(log);
+      setSocialBrief({ id: log.id, content: brief });
+    } catch (e) {
+      console.error(e);
+      alert("Failed to generate social brief.");
+    } finally {
+      setIsGeneratingBrief(null);
     }
   };
 
@@ -344,6 +395,30 @@ ${log.content}
               <span className="text-4xl font-light tracking-tighter text-white">{stats.totalLogs}</span>
               <span className="text-xs text-white/20 uppercase tracking-widest font-light">Logs</span>
             </div>
+          </div>
+        </div>
+
+        {/* Momentum Grid (Feature 1) */}
+        <div className="mb-10 px-2">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-[9px] uppercase tracking-[0.3em] text-white/30 font-medium">Momentum_Grid</span>
+            <span className="text-[8px] text-white/10 font-mono">14W_STRETCH</span>
+          </div>
+          <div className="flex gap-[3px] flex-wrap">
+            {momentumData.map((day: { date: string, count: number }, i: number) => (
+              <motion.div
+                key={day.date}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.002 }}
+                className={`w-[10px] h-[10px] rounded-[2px] border-[0.5px] transition-all hover:scale-125 hover:z-20 ${
+                  day.count > 0 
+                    ? "bg-gradient-to-br from-blue-400/40 via-purple-400/40 to-coral-400/40 border-white/20 shadow-[0_0_8px_rgba(155,114,203,0.2)]" 
+                    : "bg-white/[0.02] border-white/5"
+                }`}
+                title={`${day.date}: ${day.count} logs`}
+              />
+            ))}
           </div>
         </div>
 
@@ -682,6 +757,59 @@ ${log.content}
               </div>
             </div>
 
+            {/* Ask My Archive (Feature 2) */}
+            <div className="mb-20 max-w-4xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-400" />
+                <span className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-medium">Librarian_Query</span>
+              </div>
+              <div className="relative group">
+                <Terminal className="w-4 h-4 absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-white/60 transition-colors" />
+                <input
+                  type="text"
+                  value={archiveQuery}
+                  onChange={(e) => setArchiveQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleArchiveQuery()}
+                  placeholder="Ask your archive (e.g., 'What did I learn about vector databases last month?')"
+                  className="w-full pl-14 pr-32 py-5 rounded-[2rem] bg-white/[0.02] border border-white/5 text-sm font-light focus:outline-none focus:border-white/10 transition-all placeholder:text-white/10"
+                />
+                <Button 
+                  onClick={handleArchiveQuery}
+                  disabled={isQueryingArchive}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full h-10 px-6 bg-white/5 border border-white/5 hover:bg-white/10 text-white/60 text-[10px] tracking-widest uppercase"
+                >
+                  {isQueryingArchive ? <RefreshCw className="w-3 h-3 animate-spin" /> : "Query"}
+                </Button>
+              </div>
+
+              <AnimatePresence>
+                {archiveResponse && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-6 gemini-glass p-8 rounded-[2rem] border border-white/5 relative group"
+                  >
+                    <button 
+                      onClick={() => setArchiveResponse(null)}
+                      className="absolute top-6 right-6 text-white/10 hover:text-white/40 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                    <div className="flex items-start gap-4">
+                      <div className="w-8 h-8 rounded-xl bg-blue-500/10 flex items-center justify-center shrink-0">
+                        <BookOpen className="w-4 h-4 text-blue-400" />
+                      </div>
+                      <div className="prose prose-invert prose-sm max-w-none">
+                        <div className="text-[13px] text-white/60 leading-relaxed font-light">
+                          <ReactMarkdown>{archiveResponse}</ReactMarkdown>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {/* List View */}
             <div className="max-w-4xl">
               <div className="flex items-center justify-between mb-12">
@@ -757,9 +885,51 @@ ${log.content}
                           
                           <h3 className="text-2xl font-light text-white group-hover:text-blue-200 transition-colors tracking-tight mb-4">{log.title}</h3>
                           
-                          <p className="text-sm text-white/40 line-clamp-2 leading-relaxed font-light italic pr-12">
+                          <p className="text-sm text-white/40 line-clamp-2 leading-relaxed font-light italic pr-12 mb-6">
                             {log.content}
                           </p>
+
+                          {/* Social Brief Section */}
+                          <div className="flex items-center gap-4">
+                            <Button 
+                              size="sm"
+                              variant="ghost"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleGenerateSocialBrief(log);
+                              }}
+                              className="h-8 rounded-full bg-white/5 border border-white/5 text-[9px] tracking-[0.2em] uppercase text-white/40 hover:text-white hover:bg-white/10 transition-all font-light"
+                            >
+                              {isGeneratingBrief === log.id ? <RefreshCw className="w-3 h-3 animate-spin mr-2" /> : <Sparkles className="w-3 h-3 mr-2 opacity-40" />}
+                              Draft_Social
+                            </Button>
+                          </div>
+
+                          <AnimatePresence>
+                            {socialBrief?.id === log.id && (
+                              <motion.div 
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="mt-6 p-6 rounded-2xl bg-blue-500/[0.03] border border-blue-500/10 relative overflow-hidden"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className="scanline" />
+                                <div className="relative z-10">
+                                  <div className="flex items-center justify-between mb-4">
+                                    <span className="text-[8px] text-blue-400 font-mono tracking-widest uppercase font-bold">Generated_Draft // [X/LinkeIn]</span>
+                                    <button onClick={() => setSocialBrief(null)} className="text-white/10 hover:text-white/40 transition-colors">
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                  <p className="text-[11px] text-white/50 leading-relaxed font-light select-all italic cursor-copy hover:text-white/70 transition-colors">
+                                    {socialBrief.content}
+                                  </p>
+                                  <div className="mt-4 text-[8px] text-blue-500/30 font-mono italic">Click text to select for clipboard</div>
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
                         </div>
                         
                         <div className="flex flex-col items-end gap-6 ml-6 min-w-fit mt-1">

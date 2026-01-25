@@ -55,3 +55,80 @@ export async function getDailyInsight(logs: SprintLog[]) {
     throw error;
   }
 }
+
+export async function queryArchive(logs: SprintLog[], userQuery: string) {
+  if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+    throw new Error("Missing Gemini API Key");
+  }
+
+  // Use all logs for archive querying (limited by token counts, but for ~180 logs it should be fine)
+  const archiveContext = logs.map(log => ({
+    date: log.date,
+    title: log.title,
+    content: log.content,
+    phase: log.phase,
+    goal: log.daily_goal,
+    status: log.status
+  }));
+
+  const ARCHIVE_PROMPT = `
+  You are an "Engineering Archive Librarian". You have access to a user's entire history of engineering logs for a 180-day AI Engineer sprint.
+  The user will ask you a question about their past work, decisions, or learning journey.
+  Using ONLY the provided context, answer their question accurately.
+  If the information is not in the logs, state that clearly.
+  
+  Tone: Professional, helpful, librarian-like.
+  `;
+
+  const prompt = `
+  The user asks: "${userQuery}"
+  
+  Archive Context:
+  ${JSON.stringify(archiveContext, null, 2)}
+  `;
+
+  try {
+    const result = await model.generateContent([ARCHIVE_PROMPT, prompt]);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Gemini Archive Query Error:", error);
+    throw error;
+  }
+}
+
+export async function generateSocialBrief(log: SprintLog) {
+  if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+    throw new Error("Missing Gemini API Key");
+  }
+
+  const SOCIAL_PROMPT = `
+  You are a "Technical Content Strategist" for a high-growth AI Engineer.
+  Your goal is to take a raw engineering log and transform it into a "High-Signal" Build-in-Public social post (LinkedIn/X style).
+  
+  Guidelines:
+  - Keep it punchy and professional.
+  - Focus on the "Aha!" moment or the technical hurdle overcome.
+  - Use a minimal, sophisticated tone (no emojis unless necessary, no corporate speak).
+  - Include relevant hashtags like #AI #BuildingInPublic #Engineering.
+  `;
+
+  const prompt = `
+  Transform this engineering log into a social media post:
+  Date: ${log.date}
+  Title: ${log.title}
+  Goal: ${log.daily_goal}
+  Content: ${log.content}
+  Status: ${log.status}
+  Phase: ${log.phase}
+  `;
+
+  try {
+    const result = await model.generateContent([SOCIAL_PROMPT, prompt]);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error("Gemini Social Brief Error:", error);
+    throw error;
+  }
+}
