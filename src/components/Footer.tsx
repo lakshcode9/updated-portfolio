@@ -1,6 +1,14 @@
+"use client"
+
 import { Github, Instagram, Mail } from "lucide-react"
+import { usePathname } from "next/navigation"
 
 export function Footer() {
+  const pathname = usePathname()
+  
+  // Hide footer on the learn dashboard to prevent sidebar overlap
+  if (pathname?.startsWith("/learn")) return null
+
   return (
     <footer id="contact" className="border-t border-border/40 py-16 px-6 bg-card/10">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 md:gap-8 text-center md:text-left">

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { supabase, SprintLog } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { NotionEditor, blocksToText } from "@/components/ui/notion-editor";
+import Link from "next/link";
 import { 
   Plus, Trash2, Eye, EyeOff, Save, X, LogOut, Calendar, Tag, 
   Flame, Target, BookOpen, TrendingUp, Search, Download, Filter,
@@ -303,6 +304,10 @@ ${log.content}
       {/* Sidebar */}
       <div className="fixed left-0 top-0 h-full w-72 bg-[#080808]/40 backdrop-blur-3xl border-r border-white-[0.03] p-8 pt-32 flex flex-col z-10">
         <div className="mb-12 px-2">
+          <Link href="/systems" className="flex items-center gap-2 group mb-6 -ml-1">
+            <X className="w-3 h-3 text-white/20 group-hover:text-red-400 transition-colors" />
+            <span className="text-[9px] tracking-[0.3em] text-white/20 group-hover:text-white transition-colors uppercase font-light">Exit Vault</span>
+          </Link>
           <div className="flex items-center gap-2 mb-3">
             <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
             <span className="text-[10px] tracking-[0.4em] text-white/30 font-medium uppercase">Protocol 180</span>

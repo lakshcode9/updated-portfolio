@@ -18,6 +18,8 @@ export function Navbar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
 
+  if (pathname?.startsWith("/learn")) return null
+
   return (
     <nav className={cn(
       "fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between p-4 md:p-6 md:justify-center transition-all duration-300",
