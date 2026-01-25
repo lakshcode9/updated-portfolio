@@ -393,7 +393,7 @@ ${log.content}
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 min-h-screen p-8 pt-24">
+      <div className="ml-72 min-h-screen px-12 pt-40 pb-40 relative z-0">
         {/* New Log Form */}
         <AnimatePresence>
           {showNewForm && (
@@ -582,7 +582,7 @@ ${log.content}
         ) : (
           <>
             {/* Gemini Overhaul */}
-            <div className="mb-16 relative">
+            <div className="mb-24 relative">
               <div className="gemini-glass gemini-border rounded-[2.5rem] p-1 overflow-hidden">
                 <div className="absolute inset-0 mesh-gradient opacity-30" />
                 <div className="relative z-10 flex flex-col p-10">
