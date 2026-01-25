@@ -43,28 +43,28 @@ export function PixelStory() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, duration: 0.8 }}
-              className="max-w-md bg-black/40 backdrop-blur-md p-6 rounded-2xl border border-white/5 relative overflow-hidden"
+              className="max-w-md bg-black/60 backdrop-blur-lg p-8 rounded-2xl border border-white/10 relative overflow-hidden shadow-2xl"
             >
-              <div className="absolute top-0 left-0 w-1 h-full bg-blue-500/50" />
-              <div className="flex items-center gap-3 mb-2">
-                <span className="text-[8px] font-bold text-blue-400 uppercase tracking-[0.4em]">Artifact_01 // 180_Days</span>
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500" />
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-[10px] font-bold text-blue-400 uppercase tracking-[0.4em]">Artifact_01 // 180_Days</span>
               </div>
-              <h2 className="text-xl md:text-3xl font-medium tracking-tighter text-white mb-2 uppercase italic">The Hermit Phase</h2>
-              <p className="text-[10px] md:text-xs text-white/50 font-medium leading-relaxed italic">
+              <h2 className="text-2xl md:text-4xl font-medium tracking-tighter text-white mb-3 uppercase italic">The Hermit Phase</h2>
+              <p className="text-xs md:text-base text-white/80 font-medium leading-relaxed italic">
                 Leaving college was the shift. Rebuilding the stack from the binary up is the mission. 
               </p>
             </motion.div>
           </div>
 
           {/* Top Label Detail */}
-          <div className="absolute top-6 right-6 flex flex-col items-end z-20">
-              <span className="text-[7px] font-mono text-white/10 uppercase tracking-widest leading-none mb-1">Archive_Status</span>
-              <span className="text-[9px] font-mono text-blue-400 uppercase tracking-widest font-bold animate-pulse">Synchronizing...</span>
+          <div className="absolute top-8 right-8 flex flex-col items-end z-20">
+              <span className="text-[8px] font-mono text-white/20 uppercase tracking-[0.5em] leading-none mb-1">Archive_Status</span>
+              <span className="text-[11px] font-mono text-blue-400 uppercase tracking-widest font-bold animate-pulse">Synchronizing_Core...</span>
           </div>
 
           {/* Bottom Label Detail */}
-          <div className="absolute bottom-6 right-8 z-20">
-              <span className="text-[7px] font-mono text-white/5 uppercase tracking-[0.5em] font-black italic">MEM_LOG: LAKSH_VAULT</span>
+          <div className="absolute bottom-8 right-10 z-20">
+              <span className="text-[9px] font-mono text-white/10 uppercase tracking-[0.8em] font-black italic">MEM_LOG: LAKSH_VAULT</span>
           </div>
         </motion.div>
         

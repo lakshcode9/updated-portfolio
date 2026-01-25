@@ -49,7 +49,7 @@ export function Arsenal() {
           className="flex flex-col gap-4 mb-20"
         >
           <span className="text-[10px] uppercase tracking-[0.4em] text-blue-500 font-black">Strategic Infrastructure</span>
-          <h2 className="text-3xl md:text-6xl font-medium tracking-tight italic uppercase">Agentic <span className="text-white/20">Arsenal</span></h2>
+          <h2 className="text-3xl md:text-6xl font-medium tracking-tight italic uppercase">Agentic <span className="text-white/40">Arsenal</span></h2>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -63,8 +63,8 @@ export function Arsenal() {
               className="flex flex-col gap-8 group"
             >
               <div>
-                <h3 className="text-xl font-bold text-white mb-2 uppercase tracking-tighter group-hover:text-blue-400 transition-colors">{cat.title}</h3>
-                <p className="text-xs text-white/40 font-light leading-relaxed">{cat.description}</p>
+                <h3 className="text-xl font-bold text-white mb-3 uppercase tracking-tighter group-hover:text-blue-400 transition-colors">{cat.title}</h3>
+                <p className="text-xs md:text-sm text-white/60 font-light leading-relaxed">{cat.description}</p>
               </div>
 
               <div className="relative overflow-hidden w-full h-12">
@@ -79,20 +79,20 @@ export function Arsenal() {
                     repeat: Infinity
                   }}
                 >
-                  {[...cat.tools, ...cat.tools, ...cat.tools, ...cat.tools].map((tool, idx) => (
+                  {[...cat.tools, ...cat.tools, ...cat.tools, ...cat.tools, ...cat.tools].map((tool, idx) => (
                     <div 
                       key={`${tool.slug}-${idx}`}
-                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all group/tool shadow-sm"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/10 hover:bg-white/20 hover:border-white/20 transition-all group/tool shadow-xl"
                     >
                       <img 
                         src={`https://cdn.simpleicons.org/${tool.slug}/white`} 
                         alt={tool.name}
-                        className="w-3.5 h-3.5 opacity-40 group-hover/tool:opacity-100 transition-opacity"
+                        className="w-4 h-4 opacity-70 group-hover/tool:opacity-100 transition-opacity"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = `https://cdn.simpleicons.org/speedtest/white`;
                         }}
                       />
-                      <span className="text-[10px] font-medium text-white/30 group-hover/tool:text-white transition-colors uppercase tracking-widest">{tool.name}</span>
+                      <span className="text-[11px] font-bold text-white/80 group-hover/tool:text-white transition-colors uppercase tracking-widest">{tool.name}</span>
                     </div>
                   ))}
                 </motion.div>

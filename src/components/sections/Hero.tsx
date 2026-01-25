@@ -112,25 +112,25 @@ export function Hero() {
                 </div>
               </div>
 
-              <div className="pt-2.5 border-t border-white/5">
-                <span className="text-[8px] uppercase tracking-[0.2em] text-white/20 font-bold block mb-1 uppercase">Objective</span>
-                <p className="text-[10px] text-white/80 font-medium italic line-clamp-1 leading-none">
+              <div className="pt-3 border-t border-white/10">
+                <span className="text-[10px] uppercase tracking-[0.2em] text-blue-400 font-bold block mb-1.5 uppercase">Objective</span>
+                <p className="text-xs md:text-sm text-white font-medium italic line-clamp-1 leading-relaxed">
                   {stats.latestObjective || "Initializing 180-Day Engineering Sprint Architecture..."}
                 </p>
               </div>
 
-              <div className="pt-2.5 border-t border-white/5">
-                 <span className="text-[8px] uppercase tracking-[0.2em] text-white/20 font-bold block mb-1.5 uppercase">Shipments</span>
-                 <div className="flex flex-col gap-1.5">
+              <div className="pt-3 border-t border-white/10">
+                 <span className="text-[10px] uppercase tracking-[0.2em] text-blue-400 font-bold block mb-2 uppercase">Shipments</span>
+                 <div className="flex flex-col gap-2">
                    {stats.latestShipments.length > 0 ? stats.latestShipments.slice(0, 2).map((title, i) => (
-                     <div key={i} className="flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
-                       <div className="w-1 h-1 rounded-full bg-blue-400/50" />
-                       <span className="text-[9px] text-white/70 truncate">{title}</span>
+                     <div key={i} className="flex items-center gap-3 opacity-90 group-hover:opacity-100 transition-opacity">
+                       <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                       <span className="text-xs md:text-[13px] text-white/90 truncate font-medium">{title}</span>
                      </div>
                    )) : (
-                     <div className="flex items-center gap-2 opacity-30 italic">
+                     <div className="flex items-center gap-2 opacity-40 italic">
                         <div className="w-1 h-1 rounded-full bg-white/20" />
-                        <span className="text-[9px] text-white/70">Awaiting engineering logs...</span>
+                        <span className="text-xs text-white/70">Awaiting engineering logs...</span>
                      </div>
                    )}
                  </div>
