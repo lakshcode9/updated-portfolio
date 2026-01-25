@@ -19,7 +19,7 @@ export function Arsenal() {
       title: "Memory",
       description: "Vector Databases, RAG Pipelines, and Semantic Retrieval.",
       tools: [
-        { name: "Pinecone", slug: "pinecone" },
+        { name: "Weaviate", slug: "weaviate" },
         { name: "PostgreSQL", slug: "postgresql" },
         { name: "Redis", slug: "redis" },
         { name: "Supabase", slug: "supabase" }
@@ -67,20 +67,37 @@ export function Arsenal() {
                 <p className="text-xs text-white/40 font-light leading-relaxed">{cat.description}</p>
               </div>
 
-              <div className="flex flex-wrap gap-4">
-                {cat.tools.map((tool) => (
-                  <div 
-                    key={tool.slug}
-                    className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all group/tool"
-                  >
-                    <img 
-                      src={`https://cdn.simpleicons.org/${tool.slug}/white`} 
-                      alt={tool.name}
-                      className="w-3.5 h-3.5 opacity-40 group-hover/tool:opacity-100 transition-opacity"
-                    />
-                    <span className="text-[10px] font-medium text-white/30 group-hover/tool:text-white transition-colors uppercase tracking-widest">{tool.name}</span>
-                  </div>
-                ))}
+              <div className="relative overflow-hidden w-full h-12">
+                <motion.div 
+                  className="flex gap-4 absolute whitespace-nowrap"
+                  animate={{
+                    x: [0, -1000]
+                  }}
+                  transition={{
+                    duration: 20 + (i * 5),
+                    ease: "linear",
+                    repeat: Infinity
+                  }}
+                >
+                  {[...cat.tools, ...cat.tools, ...cat.tools, ...cat.tools].map((tool, idx) => (
+                    <div 
+                      key={`${tool.slug}-${idx}`}
+                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 transition-all group/tool shadow-sm"
+                    >
+                      <img 
+                        src={`https://cdn.simpleicons.org/${tool.slug}/white`} 
+                        alt={tool.name}
+                        className="w-3.5 h-3.5 opacity-40 group-hover/tool:opacity-100 transition-opacity"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = `https://cdn.simpleicons.org/speedtest/white`;
+                        }}
+                      />
+                      <span className="text-[10px] font-medium text-white/30 group-hover/tool:text-white transition-colors uppercase tracking-widest">{tool.name}</span>
+                    </div>
+                  ))}
+                </motion.div>
+                <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-background to-transparent z-10" />
+                <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent z-10" />
               </div>
             </motion.div>
           ))}
