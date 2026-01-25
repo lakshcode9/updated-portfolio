@@ -8,7 +8,7 @@ import { NotionEditor, blocksToText } from "@/components/ui/notion-editor";
 import { 
   Plus, Trash2, Eye, EyeOff, Save, X, LogOut, Calendar, Tag, 
   Flame, Target, BookOpen, TrendingUp, Search, Download, Filter,
-  Sparkles, BrainCircuit, RefreshCw
+  Sparkles, BrainCircuit, RefreshCw, Terminal, Cpu, Activity
 } from "lucide-react";
 import { generateAISprintInsight } from "./actions";
 import ReactMarkdown from "react-markdown";
@@ -254,29 +254,45 @@ ${log.content}
   // Login Screen
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 relative overflow-hidden mesh-gradient">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] animate-pulse-aurora" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-purple-500/10 rounded-full blur-[120px] animate-pulse-aurora" style={{ animationDelay: '2s' }} />
+        
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full max-w-sm"
+          className="w-full max-w-sm z-20"
         >
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-medium tracking-tight">Sprint Dashboard</h1>
-            <p className="text-muted-foreground mt-2">Enter password to continue</p>
+          <div className="gemini-glass gemini-border rounded-[2rem] p-10 relative overflow-hidden">
+            <div className="scanline" />
+            
+            <div className="flex flex-col items-center mb-10">
+              <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-blue-500/20 via-purple-500/20 to-coral-500/20 flex items-center justify-center mb-6 relative">
+                <div className="absolute inset-0 bg-white/5 rounded-3xl backdrop-blur-sm" />
+                <Sparkles className="w-8 h-8 text-white relative z-10" />
+              </div>
+              <h1 className="text-3xl font-medium tracking-tight text-white mb-2">Welcome Back</h1>
+              <p className="text-sm text-white/40 font-light text-center">Enter your access key to enter the repository.</p>
+            </div>
+
+            <form onSubmit={handleLogin} className="flex flex-col gap-5 relative z-20">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Access Key"
+                className="w-full px-6 py-4 rounded-2xl bg-white/[0.03] border border-white/5 focus:outline-none focus:border-white/20 text-white text-center tracking-[0.4em] placeholder:tracking-normal placeholder:text-white/10 transition-all font-light"
+              />
+              {error && (
+                <p className="text-red-400 text-xs text-center font-light mt-1">
+                  The access key provided is incorrect.
+                </p>
+              )}
+              <Button type="submit" className="w-full rounded-2xl h-14 bg-white text-black hover:bg-white/90 font-medium text-sm transition-all active:scale-[0.98] shadow-2xl shadow-white/5">
+                Authentication
+              </Button>
+            </form>
           </div>
-          <form onSubmit={handleLogin} className="flex flex-col gap-4">
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              className="w-full px-4 py-3 rounded-xl bg-card border border-border/40 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full rounded-xl h-12">
-              Enter Dashboard
-            </Button>
-          </form>
         </motion.div>
       </div>
     );
@@ -285,66 +301,79 @@ ${log.content}
   return (
     <div className="min-h-screen bg-background">
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border/40 p-4 pt-24 flex flex-col z-10">
-        <div className="mb-8">
-          <h1 className="text-xl font-medium tracking-tight">Sprint Logs</h1>
-          <p className="text-xs text-muted-foreground mt-1">180-Day AI Engineer Journey</p>
+      <div className="fixed left-0 top-0 h-full w-72 bg-[#080808]/40 backdrop-blur-3xl border-r border-white-[0.03] p-8 pt-32 flex flex-col z-10">
+        <div className="mb-12 px-2">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 animate-pulse" />
+            <span className="text-[10px] tracking-[0.4em] text-white/30 font-medium uppercase">Protocol 180</span>
+          </div>
+          <h1 className="text-4xl font-light tracking-tighter text-white leading-none">V A U L T</h1>
+          <p className="text-[10px] text-white/20 font-light mt-4 uppercase tracking-[0.2em] leading-relaxed">Engineering Archive</p>
         </div>
         
-        <Button onClick={() => setShowNewForm(true)} className="w-full rounded-xl mb-4">
-          <Plus className="w-4 h-4 mr-2" />
-          New Entry
+        <Button onClick={() => setShowNewForm(true)} className="w-full rounded-full bg-white/5 border border-white/5 text-white/80 hover:bg-white/10 hover:text-white transition-all mb-10 h-14 group">
+          <Plus className="w-4 h-4 mr-2 opacity-40 group-hover:opacity-100 transition-opacity" />
+          <span className="text-xs font-light tracking-widest uppercase">New Entry</span>
         </Button>
         
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 gap-2 mb-6">
-          <div className="p-3 rounded-xl bg-background/50 border border-border/20">
-            <div className="flex items-center gap-2 mb-1">
-              <Flame className={`w-3 h-3 ${stats.streak > 0 ? "text-orange-400" : "text-muted-foreground"}`} />
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Streak</span>
+        <div className="grid grid-cols-2 gap-4 mb-10">
+          <div className="p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="flex items-center gap-3 mb-3">
+              <Flame className={`w-4 h-4 ${stats.streak > 0 ? "text-orange-400" : "text-white/20"}`} />
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-medium">Cycle Streak</span>
             </div>
-            <span className="text-2xl font-bold">{stats.streak}</span>
-            <span className="text-xs text-muted-foreground ml-1">days</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-light tracking-tighter text-white">{stats.streak}</span>
+              <span className="text-xs text-white/20 uppercase tracking-widest font-light">Days</span>
+            </div>
           </div>
-          <div className="p-3 rounded-xl bg-background/50 border border-border/20">
-            <div className="flex items-center gap-2 mb-1">
-              <BookOpen className="w-3 h-3 text-blue-400" />
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground">Logs</span>
+          <div className="p-6 rounded-[2rem] bg-white/[0.02] border border-white/5 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="flex items-center gap-3 mb-3">
+              <Activity className="w-4 h-4 text-blue-400" />
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-medium">Total Volume</span>
             </div>
-            <span className="text-2xl font-bold">{stats.totalLogs}</span>
-            <span className="text-xs text-muted-foreground ml-1">total</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-4xl font-light tracking-tighter text-white">{stats.totalLogs}</span>
+              <span className="text-xs text-white/20 uppercase tracking-widest font-light">Logs</span>
+            </div>
           </div>
         </div>
 
         {/* Streak Reminder Alert */}
         {logs[0]?.date !== new Date().toISOString().split("T")[0] && (
-          <div className="mb-6 p-4 rounded-xl bg-orange-500/10 border border-orange-500/20">
-            <div className="flex items-center gap-3">
-              <Flame className="w-4 h-4 text-orange-400 animate-pulse" />
-              <div>
-                <p className="text-xs font-medium text-orange-100 italic">No entry today!</p>
-                <p className="text-[10px] text-orange-200/60 mt-0.5">Don&apos;t break the streak.</p>
+          <div className="mb-10 p-8 rounded-[2rem] bg-orange-500/[0.03] border border-white/5 relative group overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-400/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                <span className="text-[10px] font-medium text-orange-400 uppercase tracking-[0.3em]">Cycle Inactive</span>
               </div>
+              <p className="text-[11px] text-white/30 font-light leading-relaxed uppercase tracking-wider">No output synchronized for current rotation.</p>
+              <Button 
+                size="sm" 
+                onClick={() => setShowNewForm(true)}
+                className="w-full mt-6 h-10 bg-white/5 hover:bg-white/10 text-white/60 hover:text-white border border-white/5 rounded-full text-[10px] tracking-widest uppercase transition-all"
+              >
+                Log Sync
+              </Button>
             </div>
-            <Button 
-              size="sm" 
-              onClick={() => setShowNewForm(true)}
-              className="w-full mt-3 h-8 bg-orange-500 hover:bg-orange-600 text-[11px] rounded-lg"
-            >
-              Log Now
-            </Button>
           </div>
         )}
         
-        <div className="flex-1 overflow-y-auto">
-          <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">Recent Logs</div>
-          <div className="flex flex-col gap-1">
+        <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+          <div className="text-[9px] text-white/10 font-medium uppercase tracking-[0.4em] mb-6">Archive Index</div>
+          <div className="flex flex-col gap-3">
             {logs.slice(0, 10).map((log) => (
               <button
                 key={log.id}
                 onClick={() => startEdit(log)}
-                className={`text-left px-3 py-2 rounded-lg text-sm truncate transition-colors ${
-                  editingId === log.id ? "bg-primary/10 text-primary" : "hover:bg-muted"
+                className={`text-left px-4 py-3 rounded-2xl text-[11px] font-light transition-all ${
+                  editingId === log.id 
+                    ? "bg-white/5 text-white" 
+                    : "text-white/20 hover:text-white/60 hover:bg-white/[0.02]"
                 }`}
               >
                 {log.title}
@@ -353,10 +382,14 @@ ${log.content}
           </div>
         </div>
         
-        <Button variant="ghost" onClick={handleLogout} className="w-full rounded-xl mt-4">
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
-        </Button>
+        <div className="mt-8 pt-6 border-t border-white/5">
+          <button 
+            onClick={handleLogout} 
+            className="w-full text-center text-[10px] text-white/20 hover:text-red-400/60 uppercase tracking-[0.4em] transition-colors py-2"
+          >
+            Terminal.End
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
@@ -548,126 +581,135 @@ ${log.content}
           </div>
         ) : (
           <>
-            {/* AI Strategist Card */}
-            <div className="mb-10 relative group">
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative p-6 bg-card border border-border/40 rounded-2xl overflow-hidden">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
-                      <BrainCircuit className="w-5 h-5" />
+            {/* Gemini Overhaul */}
+            <div className="mb-16 relative">
+              <div className="gemini-glass gemini-border rounded-[2.5rem] p-1 overflow-hidden">
+                <div className="absolute inset-0 mesh-gradient opacity-30" />
+                <div className="relative z-10 flex flex-col p-10">
+                  <div className="flex items-center justify-between mb-10">
+                    <div className="flex items-center gap-5">
+                      <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center relative group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-coral-500/10 rounded-2xl blur-md opacity-50 group-hover:opacity-100 transition-opacity" />
+                        <BrainCircuit className="w-7 h-7 text-white/70 relative z-10" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-medium tracking-tight text-white mb-0.5">Strategist</h2>
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-green-500/50 animate-pulse" />
+                          <p className="text-[10px] text-white/30 uppercase tracking-[0.3em] font-light">Neural Core 1.5</p>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="text-xl font-medium tracking-tight">AI Strategist</h2>
-                      <p className="text-xs text-muted-foreground uppercase tracking-widest">Growth Mentorship & Insights</p>
-                    </div>
+                    <Button 
+                      onClick={handleGenerateInsight}
+                      disabled={isGeneratingAI}
+                      className="rounded-full px-8 bg-white/5 border border-white/5 hover:bg-white/10 text-white/80 transition-all h-12"
+                    >
+                      {isGeneratingAI ? (
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin opacity-40" />
+                      ) : (
+                        <Sparkles className="w-4 h-4 mr-2 opacity-40" />
+                      )}
+                      <span className="text-xs font-light tracking-widest uppercase">Consult</span>
+                    </Button>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={handleGenerateInsight}
-                    disabled={isGeneratingAI}
-                    className="rounded-xl border-blue-500/30 hover:bg-blue-500/5 text-blue-400"
-                  >
-                    {isGeneratingAI ? (
-                      <RefreshCw className="w-3.5 h-3.5 mr-2 animate-spin" />
-                    ) : (
-                      <Sparkles className="w-3.5 h-3.5 mr-2" />
-                    )}
-                    {aiInsight ? "Refresh" : "Analyze Logs"}
-                  </Button>
-                </div>
 
-                <AnimatePresence mode="wait">
-                  {isGeneratingAI ? (
-                    <motion.div
-                      key="loading"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="py-12 flex flex-col items-center justify-center gap-4"
-                    >
-                      <div className="relative">
-                        <div className="w-12 h-12 rounded-full border-t-2 border-blue-500 animate-spin"></div>
-                        <Sparkles className="w-5 h-5 text-blue-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+                  <AnimatePresence mode="wait">
+                    {isGeneratingAI ? (
+                      <motion.div
+                        key="loading"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="py-16 flex flex-col items-center justify-center gap-6"
+                      >
+                         <div className="relative w-20 h-20">
+                            <motion.div 
+                              animate={{ scale: [1, 1.2, 1], rotate: [0, 180, 360], opacity: [0.3, 0.6, 0.3] }}
+                              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                              className="absolute inset-0 rounded-[2rem] border border-white/10"
+                            />
+                            <motion.div 
+                              animate={{ scale: [1.2, 1, 1.2], rotate: [180, 0, -180], opacity: [0.1, 0.3, 0.1] }}
+                              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                              className="absolute inset-[-10px] rounded-[2.5rem] border border-white/5"
+                            />
+                            <Sparkles className="w-8 h-8 text-white/20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+                         </div>
+                         <p className="text-xs font-light text-white/30 tracking-[0.5em] uppercase animate-pulse">Synthesizing</p>
+                      </motion.div>
+                    ) : aiInsight ? (
+                      <motion.div
+                        key="insight"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="prose prose-invert prose-sm max-w-none"
+                      >
+                        <div className="text-[13px] text-white/70 leading-[1.8] font-light space-y-6">
+                          <ReactMarkdown 
+                            components={{
+                              h1: ({...props}) => <h3 className="text-lg font-medium text-white mt-10 mb-4 first:mt-0" {...props} />,
+                              h2: ({...props}) => <h4 className="text-md font-medium text-white/90 mt-8 mb-3" {...props} />,
+                              ul: ({...props}) => <ul className="space-y-4 mb-6 list-none pl-0" {...props} />,
+                              li: ({...props}) => (
+                                <li className="flex gap-4 group" {...props}>
+                                  <div className="w-1.5 h-1.5 rounded-full bg-white/10 group-hover:bg-blue-400/50 transition-colors mt-[7px] shrink-0" />
+                                  <span>{props.children}</span>
+                                </li>
+                              ),
+                              p: ({...props}) => <p className="mb-6" {...props} />,
+                              strong: ({...props}) => <strong className="text-white font-medium" {...props} />,
+                              code: ({...props}) => <code className="bg-white/5 rounded-lg px-2 py-1 font-mono text-blue-300 text-[11px] border border-white/5" {...props} />
+                            }}
+                          >
+                            {aiInsight}
+                          </ReactMarkdown>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <div className="py-20 flex flex-col items-center justify-center text-center">
+                        <p className="text-sm font-light text-white/30 tracking-widest max-w-xs leading-loose">
+                          Neural patterns idle. Awaiting engineering logs for strategic synchronization.
+                        </p>
                       </div>
-                      <p className="text-sm text-muted-foreground italic animate-pulse">Consulting the Architect...</p>
-                    </motion.div>
-                  ) : aiInsight ? (
-                    <motion.div
-                      key="insight"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="prose prose-invert prose-sm max-w-none"
-                    >
-                      <div className="text-sm text-foreground/80 leading-relaxed space-y-4">
-                        <ReactMarkdown 
-                          components={{
-                            h1: ({...props}) => <h3 className="text-lg font-bold text-blue-400 mt-4 mb-2" {...props} />,
-                            h2: ({...props}) => <h4 className="text-md font-bold text-blue-300 mt-4 mb-2" {...props} />,
-                            h3: ({...props}) => <h5 className="text-sm font-bold text-foreground mt-3 mb-1" {...props} />,
-                            ul: ({...props}) => <ul className="list-disc pl-4 space-y-1 mb-4" {...props} />,
-                            li: ({...props}) => <li className="text-foreground/70" {...props} />,
-                            p: ({...props}) => <p className="mb-3" {...props} />,
-                            strong: ({...props}) => <strong className="text-blue-200 font-bold" {...props} />,
-                            code: ({...props}) => <code className="bg-white/5 rounded px-1.5 py-0.5 font-mono text-blue-300 text-[11px]" {...props} />
-                          }}
-                        >
-                          {aiInsight}
-                        </ReactMarkdown>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="empty"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="py-10 text-center border border-dashed border-border/60 rounded-xl"
-                    >
-                      <p className="text-sm text-muted-foreground px-8">
-                        Ready to level up? I&apos;ll analyze your last 10 logs to find blind spots and suggest the next move.
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </div>
 
             {/* List View */}
-            <div className="max-w-3xl">
-              <div className="flex items-center justify-between mb-6">
+            <div className="max-w-4xl">
+              <div className="flex items-center justify-between mb-12">
                 <div>
-                  <h1 className="text-3xl font-medium mb-1">All Entries</h1>
-                  <p className="text-muted-foreground text-sm">{filteredLogs.length} of {logs.length} entries</p>
+                  <h1 className="text-4xl font-light tracking-tighter text-white uppercase italic">Archive</h1>
+                  <p className="text-[10px] text-white/20 font-light mt-3 uppercase tracking-[0.4em]">{filteredLogs.length} Records Index</p>
                 </div>
-                <Button variant="outline" onClick={exportToMarkdown} className="rounded-xl">
-                  <Download className="w-4 h-4 mr-2" />
+                <Button variant="outline" onClick={exportToMarkdown} className="rounded-full border-white/5 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 transition-all h-10 px-8 text-xs font-light tracking-widest uppercase">
                   Export
                 </Button>
               </div>
               
               {/* Search and Filter Bar */}
-              <div className="flex gap-3 mb-6">
-                <div className="flex-1 relative">
-                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <div className="flex gap-4 mb-16">
+                <div className="flex-1 relative group">
+                  <Search className="w-4 h-4 absolute left-6 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-white/60 transition-colors" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search logs..."
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border/40 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="w-full pl-14 pr-6 py-4 rounded-3xl bg-white/[0.02] border border-white/5 text-sm font-light focus:outline-none focus:border-white/10 transition-all placeholder:text-white/10"
                   />
                 </div>
                 <div className="relative">
-                  <Filter className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   <select
                     value={filterPhase ?? ""}
                     onChange={(e) => setFilterPhase(e.target.value ? parseInt(e.target.value) : null)}
-                    className="pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border/40 text-sm focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
+                    className="pl-8 pr-12 py-4 rounded-3xl bg-white/[0.02] border border-white/5 text-sm font-light focus:outline-none focus:border-white/10 appearance-none cursor-pointer text-white/40 hover:text-white/80 transition-all"
                   >
                     <option value="">All Phases</option>
                     {[1, 2, 3, 4, 5, 6].map((p) => (
-                      <option key={p} value={p}>Phase {p}</option>
+                      <option key={p} value={p}>Phase 0{p}</option>
                     ))}
                   </select>
                 </div>
@@ -688,32 +730,47 @@ ${log.content}
                   <p className="text-muted-foreground">No entries match your search.</p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-3">
-                  {filteredLogs.map((log) => (
+                <div className="flex flex-col gap-6">
+                  {filteredLogs.map((log, index) => (
                     <motion.div
                       key={log.id}
-                      whileHover={{ x: 4 }}
+                      whileHover={{ y: -4 }}
                       onClick={() => startEdit(log)}
-                      className="p-4 rounded-xl bg-card border border-border/40 cursor-pointer hover:border-primary/30 transition-colors"
+                      className="gemini-glass p-8 rounded-[2.5rem] border border-white/5 cursor-pointer hover:border-white/10 transition-all group relative overflow-hidden"
                     >
-                      <div className="flex items-start justify-between">
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/[0.01] to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                      
+                      <div className="relative z-10 flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="font-medium">{log.title}</h3>
-                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                              Phase {log.phase}
+                          <div className="flex items-center gap-4 mb-4">
+                            <span className="text-[10px] text-white/10 font-light tracking-[0.3em]">RECORD_{String(filteredLogs.length - index).padStart(3, '0')}</span>
+                            <div className="h-px bg-white/5 flex-1" />
+                            <span className="text-[10px] px-3 py-1 rounded-full bg-white/5 text-white/40 font-light tracking-widest border border-white/5">
+                              PHASE 0{log.phase}
                             </span>
                           </div>
-                          <p className="text-sm text-muted-foreground line-clamp-2">{log.content}</p>
+                          
+                          <h3 className="text-2xl font-light text-white group-hover:text-blue-200 transition-colors tracking-tight mb-4">{log.title}</h3>
+                          
+                          <p className="text-sm text-white/40 line-clamp-2 leading-relaxed font-light italic pr-12">
+                            {log.content}
+                          </p>
                         </div>
-                        <div className="flex items-center gap-2 ml-4">
-                          <span className="text-xs text-muted-foreground">
-                            {new Date(log.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                        
+                        <div className="flex flex-col items-end gap-6 ml-6 min-w-fit mt-1">
+                           <span className="text-[10px] text-white/20 font-light uppercase tracking-[0.2em]">
+                            {new Date(log.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toUpperCase()}
                           </span>
+                          
                           {log.is_public ? (
-                            <Eye className="w-3 h-3 text-green-400" />
+                            <div className="flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/5 rounded-full">
+                              <div className="w-1 h-1 rounded-full bg-blue-400 animate-pulse" />
+                              <span className="text-[8px] font-medium text-white/50 uppercase tracking-[0.2em]">Live</span>
+                            </div>
                           ) : (
-                            <EyeOff className="w-3 h-3 text-muted-foreground" />
+                            <div className="w-8 h-8 rounded-full border border-white/5 flex items-center justify-center">
+                              <EyeOff className="w-3.5 h-3.5 text-white/10" />
+                            </div>
                           )}
                         </div>
                       </div>
