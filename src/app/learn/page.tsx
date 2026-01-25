@@ -265,7 +265,7 @@ ${log.content}
   return (
     <div className="min-h-screen bg-background">
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border/40 p-4 flex flex-col z-10">
+      <div className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border/40 p-4 pt-24 flex flex-col z-10">
         <div className="mb-8">
           <h1 className="text-xl font-medium tracking-tight">Sprint Logs</h1>
           <p className="text-xs text-muted-foreground mt-1">180-Day AI Engineer Journey</p>
@@ -340,7 +340,7 @@ ${log.content}
       </div>
 
       {/* Main Content */}
-      <div className="ml-64 min-h-screen p-8">
+      <div className="ml-64 min-h-screen p-8 pt-24">
         {/* New Log Form */}
         <AnimatePresence>
           {showNewForm && (
@@ -348,7 +348,7 @@ ${log.content}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[1100] flex items-center justify-center p-4"
               onClick={() => setShowNewForm(false)}
             >
               <motion.div
