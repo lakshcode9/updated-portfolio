@@ -17,7 +17,7 @@ export function Hero() {
     const fetchLogs = async () => {
       const { data } = await supabase
         .from("sprint_logs")
-        .select("date")
+        .select("date, title, daily_goal")
         .eq("is_public", true)
         .order("date", { ascending: false });
       setLogs(data || []);
@@ -26,7 +26,7 @@ export function Hero() {
   }, []);
 
   const stats = useMemo(() => {
-    if (logs.length === 0) return { streak: 0, day: 0 };
+    if (logs.length === 0) return { streak: 0, day: 0, latestObjective: null, latestShipments: [] };
     
     // Calculate streak
     const today = new Date();
@@ -45,12 +45,10 @@ export function Hero() {
       }
     }
 
-    // Calculate current day of sprint (assuming day 1 is the first log ever)
-    // Actually, let's just use the count of logs as the "Day" for now or calculate from a fixed start date
-    // For now, let's use the count of unique log dates
-    const day = sortedDates.length;
+    const latestObjective = logs[0]?.daily_goal || null;
+    const latestShipments = logs.slice(0, 3).map(l => l.title);
 
-    return { streak, day };
+    return { streak, day: sortedDates.length, latestObjective, latestShipments };
   }, [logs]);
 
   return (
@@ -82,27 +80,53 @@ export function Hero() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="w-full max-w-[320px] md:max-w-none px-4"
+          className="w-full max-w-[450px] px-4"
         >
           <Link href="/sprint" className="group">
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-2 md:p-1.5 rounded-2xl flex items-center gap-3 md:gap-4 pr-4 md:pr-6 hover:bg-white/10 transition-all hover:border-blue-500/30">
-              <div className="flex shrink-0">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-orange-500/10 flex items-center justify-center border border-orange-500/20">
-                  <Flame className="w-5 h-5 md:w-6 md:h-6 text-orange-400" />
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-3xl flex flex-col gap-4 hover:bg-white/10 transition-all hover:border-blue-500/30 text-left relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                 <Rocket className="w-12 h-12" />
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                  <Flame className="w-5 h-5 text-blue-400" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Live Sprint Status</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xl font-bold text-white leading-none">Day {stats.day}</span>
+                    <div className="w-px h-3 bg-white/20" />
+                    <span className="text-sm font-medium text-white/40">{stats.streak} Day Streak</span>
+                  </div>
                 </div>
               </div>
-              <div className="text-left min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-[9px] md:text-xs font-bold text-blue-400 uppercase tracking-widest truncate">Live Sprint Status</span>
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse shrink-0" />
+
+              {stats.latestObjective && (
+                <div className="pt-2 border-t border-white/5">
+                  <span className="text-[9px] uppercase tracking-[0.2em] text-white/20 font-bold block mb-1">Current Objective</span>
+                  <p className="text-xs text-white/80 font-medium italic line-clamp-1">
+                    {stats.latestObjective}
+                  </p>
                 </div>
-                <div className="flex items-center gap-2 md:gap-3">
-                  <span className="text-base md:text-xl font-bold text-white">Day {stats.day}</span>
-                  <div className="w-px h-3 bg-white/20" />
-                  <span className="text-xs md:text-md font-medium text-white/60 truncate">{stats.streak} Day Streak</span>
+              )}
+
+              {stats.latestShipments.length > 0 && (
+                <div className="pt-3 border-t border-white/5">
+                   <span className="text-[9px] uppercase tracking-[0.2em] text-white/20 font-bold block mb-2">Latest Shipments</span>
+                   <div className="flex flex-col gap-1.5">
+                     {stats.latestShipments.map((title, i) => (
+                       <div key={i} className="flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                         <div className="w-1 h-1 rounded-full bg-blue-400/50" />
+                         <span className="text-[10px] text-white/70 truncate">{title}</span>
+                       </div>
+                     ))}
+                   </div>
                 </div>
-              </div>
-              <ArrowRight className="w-4 h-4 text-white/20 group-hover:text-white/60 group-hover:translate-x-1 transition-all ml-auto shrink-0" />
+              )}
             </div>
           </Link>
         </motion.div>
