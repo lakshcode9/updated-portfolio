@@ -73,56 +73,56 @@ export function Hero() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: "easeOut" }}
-        className="max-w-5xl w-full relative z-10 flex flex-col gap-12 md:gap-20 items-center justify-center py-32 md:py-40 px-2"
+        className="max-w-5xl w-full relative z-10 flex flex-col gap-8 md:gap-12 items-center justify-center py-20 md:py-32 px-2"
       >
         {/* Live Sprint Status Card */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="w-full max-w-[420px] px-4"
+          className="w-full max-w-[400px] px-4"
         >
           <Link href="/sprint" className="group">
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-5 rounded-[2rem] flex flex-col gap-4 hover:bg-white/10 transition-all hover:border-blue-500/30 text-left relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4 opacity-5">
-                 <Cpu className="w-16 h-16" />
+            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-[1.5rem] flex flex-col gap-3 hover:bg-white/10 transition-all hover:border-blue-500/30 text-left relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-3 opacity-5">
+                 <Cpu className="w-12 h-12" />
               </div>
               
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-2xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                    <Flame className="w-5 h-5 text-blue-400" />
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
+                    <Flame className="w-4 h-4 text-blue-400" />
                   </div>
                   <div>
-                    <div className="flex items-center gap-1 mb-0.5">
-                      <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest leading-none">Live Sprint Status</span>
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className="text-[9px] font-bold text-blue-400 uppercase tracking-widest leading-none">Live Sprint Status</span>
                       <span className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xl font-bold text-white leading-none">Day {stats.day || 0}</span>
-                      <div className="w-px h-3 bg-white/20" />
-                      <span className="text-[10px] font-medium text-white/40 uppercase tracking-widest">{stats.streak || 0} Day Streak</span>
+                      <span className="text-lg font-bold text-white leading-none">Day {stats.day || 0}</span>
+                      <div className="w-px h-2 bg-white/20" />
+                      <span className="text-[9px] font-medium text-white/40 uppercase tracking-widest">{stats.streak || 0} Day Streak</span>
                     </div>
                   </div>
                 </div>
                 
-                <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">
+                <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">
                   <div className="w-1 h-1 rounded-full bg-blue-400 animate-ping" />
-                  <span className="text-[8px] font-bold text-blue-400 uppercase tracking-widest leading-none">System_Live</span>
+                  <span className="text-[7px] font-bold text-blue-400 uppercase tracking-widest leading-none">Active</span>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-white/5">
-                <span className="text-[9px] uppercase tracking-[0.2em] text-white/20 font-bold block mb-1">Current Objective</span>
-                <p className="text-[11px] text-white/80 font-medium italic line-clamp-1 leading-relaxed">
+              <div className="pt-2.5 border-t border-white/5">
+                <span className="text-[8px] uppercase tracking-[0.2em] text-white/20 font-bold block mb-1 uppercase">Objective</span>
+                <p className="text-[10px] text-white/80 font-medium italic line-clamp-1 leading-none">
                   {stats.latestObjective || "Initializing 180-Day Engineering Sprint Architecture..."}
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-white/5">
-                 <span className="text-[9px] uppercase tracking-[0.2em] text-white/20 font-bold block mb-2">Latest Shipments</span>
+              <div className="pt-2.5 border-t border-white/5">
+                 <span className="text-[8px] uppercase tracking-[0.2em] text-white/20 font-bold block mb-1.5 uppercase">Shipments</span>
                  <div className="flex flex-col gap-1.5">
-                   {stats.latestShipments.length > 0 ? stats.latestShipments.map((title, i) => (
+                   {stats.latestShipments.length > 0 ? stats.latestShipments.slice(0, 2).map((title, i) => (
                      <div key={i} className="flex items-center gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
                        <div className="w-1 h-1 rounded-full bg-blue-400/50" />
                        <span className="text-[9px] text-white/70 truncate">{title}</span>
@@ -130,7 +130,7 @@ export function Hero() {
                    )) : (
                      <div className="flex items-center gap-2 opacity-30 italic">
                         <div className="w-1 h-1 rounded-full bg-white/20" />
-                        <span className="text-[10px] text-white/70">Awaiting engineering logs...</span>
+                        <span className="text-[9px] text-white/70">Awaiting engineering logs...</span>
                      </div>
                    )}
                  </div>
@@ -143,12 +143,12 @@ export function Hero() {
           <HyperTextParagraph
             text={heroText}
             highlightWords={triggers}
-            className="text-xl sm:text-3xl md:text-6xl font-normal text-foreground leading-[1.3] md:leading-snug uppercase tracking-wide drop-shadow-2xl text-center max-w-4xl mx-auto"
+            className="text-xl sm:text-2xl md:text-5xl font-normal text-foreground leading-[1.2] md:leading-tight uppercase tracking-wide drop-shadow-2xl text-center max-w-4xl mx-auto"
           />
         </div>
 
-        <p className="text-xs sm:text-base md:text-xl text-muted-foreground max-w-[85%] md:max-w-2xl font-medium italic mt-2 md:mt-4 text-center">
-          Leaving school was the start. Building systems is the mission.
+        <p className="text-xs sm:text-sm md:text-lg text-muted-foreground max-w-[85%] md:max-w-xl font-medium italic mt-1 md:mt-2 text-center">
+          Leaving college was the start. Building systems is the mission.
         </p>
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 mt-4 w-full px-6">
