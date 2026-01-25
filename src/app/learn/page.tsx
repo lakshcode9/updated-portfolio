@@ -7,8 +7,11 @@ import { Button } from "@/components/ui/button";
 import { NotionEditor, blocksToText } from "@/components/ui/notion-editor";
 import { 
   Plus, Trash2, Eye, EyeOff, Save, X, LogOut, Calendar, Tag, 
-  Flame, Target, BookOpen, TrendingUp, Search, Download, Filter 
+  Flame, Target, BookOpen, TrendingUp, Search, Download, Filter,
+  Sparkles, BrainCircuit, RefreshCw
 } from "lucide-react";
+import { generateAISprintInsight } from "./actions";
+import ReactMarkdown from "react-markdown";
 
 export default function LearnDashboard() {
   const [logs, setLogs] = useState<SprintLog[]>([]);
@@ -38,6 +41,10 @@ export default function LearnDashboard() {
   const [newPhase, setNewPhase] = useState(1);
   const [newIsPublic, setNewIsPublic] = useState(false);
   const [newDailyGoal, setNewDailyGoal] = useState("");
+
+  // AI Insight State
+  const [aiInsight, setAiInsight] = useState<string | null>(null);
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   // Simple password auth
   const ADMIN_PASSWORD = "laksh180";
@@ -158,6 +165,19 @@ export default function LearnDashboard() {
     setEditPhase(log.phase);
     setEditDailyGoal(log.daily_goal || "");
     setEditIsPublic(log.is_public);
+  };
+
+  const handleGenerateInsight = async () => {
+    setIsGeneratingAI(true);
+    try {
+      const insight = await generateAISprintInsight();
+      setAiInsight(insight);
+    } catch (e) {
+      console.error(e);
+      setAiInsight("Failed to summon the AI Architect. Check your connection or API key.");
+    } finally {
+      setIsGeneratingAI(false);
+    }
   };
 
   // Compute stats
@@ -527,95 +547,182 @@ ${log.content}
             </Button>
           </div>
         ) : (
-          /* List View */
-          <div className="max-w-3xl">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-medium mb-1">All Entries</h1>
-                <p className="text-muted-foreground text-sm">{filteredLogs.length} of {logs.length} entries</p>
+          <>
+            {/* AI Strategist Card */}
+            <div className="mb-10 relative group">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+              <div className="relative p-6 bg-card border border-border/40 rounded-2xl overflow-hidden">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
+                      <BrainCircuit className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-medium tracking-tight">AI Strategist</h2>
+                      <p className="text-xs text-muted-foreground uppercase tracking-widest">Growth Mentorship & Insights</p>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleGenerateInsight}
+                    disabled={isGeneratingAI}
+                    className="rounded-xl border-blue-500/30 hover:bg-blue-500/5 text-blue-400"
+                  >
+                    {isGeneratingAI ? (
+                      <RefreshCw className="w-3.5 h-3.5 mr-2 animate-spin" />
+                    ) : (
+                      <Sparkles className="w-3.5 h-3.5 mr-2" />
+                    )}
+                    {aiInsight ? "Refresh" : "Analyze Logs"}
+                  </Button>
+                </div>
+
+                <AnimatePresence mode="wait">
+                  {isGeneratingAI ? (
+                    <motion.div
+                      key="loading"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="py-12 flex flex-col items-center justify-center gap-4"
+                    >
+                      <div className="relative">
+                        <div className="w-12 h-12 rounded-full border-t-2 border-blue-500 animate-spin"></div>
+                        <Sparkles className="w-5 h-5 text-blue-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+                      </div>
+                      <p className="text-sm text-muted-foreground italic animate-pulse">Consulting the Architect...</p>
+                    </motion.div>
+                  ) : aiInsight ? (
+                    <motion.div
+                      key="insight"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="prose prose-invert prose-sm max-w-none"
+                    >
+                      <div className="text-sm text-foreground/80 leading-relaxed space-y-4">
+                        <ReactMarkdown 
+                          components={{
+                            h1: ({...props}) => <h3 className="text-lg font-bold text-blue-400 mt-4 mb-2" {...props} />,
+                            h2: ({...props}) => <h4 className="text-md font-bold text-blue-300 mt-4 mb-2" {...props} />,
+                            h3: ({...props}) => <h5 className="text-sm font-bold text-foreground mt-3 mb-1" {...props} />,
+                            ul: ({...props}) => <ul className="list-disc pl-4 space-y-1 mb-4" {...props} />,
+                            li: ({...props}) => <li className="text-foreground/70" {...props} />,
+                            p: ({...props}) => <p className="mb-3" {...props} />,
+                            strong: ({...props}) => <strong className="text-blue-200 font-bold" {...props} />,
+                            code: ({...props}) => <code className="bg-white/5 rounded px-1.5 py-0.5 font-mono text-blue-300 text-[11px]" {...props} />
+                          }}
+                        >
+                          {aiInsight}
+                        </ReactMarkdown>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="empty"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="py-10 text-center border border-dashed border-border/60 rounded-xl"
+                    >
+                      <p className="text-sm text-muted-foreground px-8">
+                        Ready to level up? I&apos;ll analyze your last 10 logs to find blind spots and suggest the next move.
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-              <Button variant="outline" onClick={exportToMarkdown} className="rounded-xl">
-                <Download className="w-4 h-4 mr-2" />
-                Export
-              </Button>
             </div>
-            
-            {/* Search and Filter Bar */}
-            <div className="flex gap-3 mb-6">
-              <div className="flex-1 relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search logs..."
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border/40 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-              <div className="relative">
-                <Filter className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
-                <select
-                  value={filterPhase ?? ""}
-                  onChange={(e) => setFilterPhase(e.target.value ? parseInt(e.target.value) : null)}
-                  className="pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border/40 text-sm focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-                >
-                  <option value="">All Phases</option>
-                  {[1, 2, 3, 4, 5, 6].map((p) => (
-                    <option key={p} value={p}>Phase {p}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            
-            {isLoading ? (
-              <div className="text-center py-12 text-muted-foreground">Loading...</div>
-            ) : logs.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground mb-4">No entries yet. Start your journey!</p>
-                <Button onClick={() => setShowNewForm(true)}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create First Entry
+
+            {/* List View */}
+            <div className="max-w-3xl">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h1 className="text-3xl font-medium mb-1">All Entries</h1>
+                  <p className="text-muted-foreground text-sm">{filteredLogs.length} of {logs.length} entries</p>
+                </div>
+                <Button variant="outline" onClick={exportToMarkdown} className="rounded-xl">
+                  <Download className="w-4 h-4 mr-2" />
+                  Export
                 </Button>
               </div>
-            ) : filteredLogs.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">No entries match your search.</p>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {filteredLogs.map((log) => (
-                  <motion.div
-                    key={log.id}
-                    whileHover={{ x: 4 }}
-                    onClick={() => startEdit(log)}
-                    className="p-4 rounded-xl bg-card border border-border/40 cursor-pointer hover:border-primary/30 transition-colors"
+              
+              {/* Search and Filter Bar */}
+              <div className="flex gap-3 mb-6">
+                <div className="flex-1 relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search logs..."
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border/40 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div className="relative">
+                  <Filter className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                  <select
+                    value={filterPhase ?? ""}
+                    onChange={(e) => setFilterPhase(e.target.value ? parseInt(e.target.value) : null)}
+                    className="pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border/40 text-sm focus:outline-none focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-medium">{log.title}</h3>
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                            Phase {log.phase}
-                          </span>
-                        </div>
-                        <p className="text-sm text-muted-foreground line-clamp-2">{log.content}</p>
-                      </div>
-                      <div className="flex items-center gap-2 ml-4">
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(log.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                        </span>
-                        {log.is_public ? (
-                          <Eye className="w-3 h-3 text-green-400" />
-                        ) : (
-                          <EyeOff className="w-3 h-3 text-muted-foreground" />
-                        )}
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    <option value="">All Phases</option>
+                    {[1, 2, 3, 4, 5, 6].map((p) => (
+                      <option key={p} value={p}>Phase {p}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            )}
-          </div>
+              
+              {isLoading ? (
+                <div className="text-center py-12 text-muted-foreground">Loading...</div>
+              ) : logs.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground mb-4">No entries yet. Start your journey!</p>
+                  <Button onClick={() => setShowNewForm(true)}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create First Entry
+                  </Button>
+                </div>
+              ) : filteredLogs.length === 0 ? (
+                <div className="text-center py-12">
+                  <p className="text-muted-foreground">No entries match your search.</p>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  {filteredLogs.map((log) => (
+                    <motion.div
+                      key={log.id}
+                      whileHover={{ x: 4 }}
+                      onClick={() => startEdit(log)}
+                      className="p-4 rounded-xl bg-card border border-border/40 cursor-pointer hover:border-primary/30 transition-colors"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-medium">{log.title}</h3>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                              Phase {log.phase}
+                            </span>
+                          </div>
+                          <p className="text-sm text-muted-foreground line-clamp-2">{log.content}</p>
+                        </div>
+                        <div className="flex items-center gap-2 ml-4">
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(log.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                          </span>
+                          {log.is_public ? (
+                            <Eye className="w-3 h-3 text-green-400" />
+                          ) : (
+                            <EyeOff className="w-3 h-3 text-muted-foreground" />
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>
