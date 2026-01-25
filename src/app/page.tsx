@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Hero } from "@/components/sections/Hero";
 import { MyStory } from "@/components/sections/Story";
+import { PixelStory } from "@/components/sections/PixelStory";
 import { WhatIDo } from "@/components/sections/WhatIDo";
 import { LiveProjects } from "@/components/sections/LiveProjects";
 import { Mission } from "@/components/sections/Mission";
@@ -41,6 +42,10 @@ export default function Home() {
           <FocusContainer className="w-full">
             <MyStory />
           </FocusContainer>
+        </div>
+
+        <div className="w-full flex items-center justify-center">
+            <PixelStory />
         </div>
         
         <div className="w-full flex items-center justify-center">
