@@ -49,7 +49,7 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200]"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[3000]"
             onClick={handleClose}
           />
 
@@ -59,13 +59,13 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-[201] max-w-3xl w-full flex flex-col items-center justify-center pointer-events-none"
+            className="fixed inset-4 md:inset-auto md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-[3001] max-w-3xl w-full flex flex-col items-center justify-center pointer-events-none"
           >
             <div className="bg-card border border-border/40 rounded-2xl shadow-2xl relative w-full flex flex-col max-h-[90vh] pointer-events-auto overflow-hidden">
               {/* Close Button - Outside scrollable area */}
               <button
                 onClick={handleClose}
-                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors z-[210] p-2 bg-background/50 backdrop-blur-md rounded-full border border-border/40 md:bg-transparent md:border-none"
+                className="absolute top-4 right-4 text-foreground/80 hover:text-foreground transition-colors z-[3010] p-2 bg-black/20 backdrop-blur-md rounded-full border border-white/10 md:bg-transparent md:border-none"
                 aria-label="Close popup"
               >
                 <X className="w-6 h-6 md:w-5 md:h-5" />
