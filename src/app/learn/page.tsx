@@ -116,20 +116,29 @@ export default function LearnDashboard() {
     setIsLoading(false);
   };
 
+  const [isSaving, setIsSaving] = useState(false);
+
   const createLog = async () => {
-    if (!newTitle.trim()) return;
+    if (!newTitle.trim()) {
+      alert("Please enter a title for your log.");
+      return;
+    }
     
-    const contentText = blocksToText(newContent);
+    setIsSaving(true);
+    // Use newContent directly to preserve BlockNote JSON structure
+    const contentToSave = newContent;
     
     const { error } = await supabase.from("sprint_logs").insert([{
       title: newTitle,
-      content: contentText,
+      content: contentToSave,
       status: newStatus,
       phase: newPhase,
       daily_goal: newDailyGoal,
       is_public: newIsPublic,
       date: new Date().toISOString().split("T")[0],
     }]);
+
+    setIsSaving(false);
 
     if (!error) {
       setNewTitle("");
@@ -142,17 +151,25 @@ export default function LearnDashboard() {
       fetchLogs();
     } else {
       console.error("Error creating log:", error);
+      alert("Failed to save log. Please try again.");
     }
   };
 
   const updateLog = async (id: string) => {
-    const contentText = blocksToText(editContent);
+    if (!editTitle.trim()) {
+      alert("Title cannot be empty.");
+      return;
+    }
+
+    setIsSaving(true);
+    // Use editContent directly to preserve BlockNote JSON structure
+    const contentToSave = editContent;
     
     const { error } = await supabase
       .from("sprint_logs")
       .update({
         title: editTitle,
-        content: contentText,
+        content: contentToSave,
         status: editStatus,
         phase: editPhase,
         daily_goal: editDailyGoal,
@@ -160,9 +177,14 @@ export default function LearnDashboard() {
       })
       .eq("id", id);
 
+    setIsSaving(false);
+
     if (!error) {
       setEditingId(null);
       fetchLogs();
+    } else {
+      console.error("Error updating log:", error);
+      alert("Failed to update log.");
     }
   };
 
@@ -566,9 +588,9 @@ ${log.content}
                     className="px-4 py-3 rounded-xl bg-background border border-border/40 text-sm"
                   />
                   
-                  <Button onClick={createLog} className="w-full rounded-xl h-12">
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Entry
+                  <Button onClick={createLog} disabled={isSaving} className="w-full rounded-xl h-12">
+                    {isSaving ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+                    {isSaving ? "Saving..." : "Save Entry"}
                   </Button>
                 </div>
               </motion.div>
@@ -654,9 +676,9 @@ ${log.content}
               className="w-full px-4 py-3 rounded-xl bg-card border border-border/40 text-sm mb-6"
             />
             
-            <Button onClick={() => updateLog(editingId)} className="rounded-xl">
-              <Save className="w-4 h-4 mr-2" />
-              Save Changes
+            <Button onClick={() => updateLog(editingId)} disabled={isSaving} className="rounded-xl">
+              {isSaving ? <RefreshCw className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
+              {isSaving ? "Saving..." : "Save Changes"}
             </Button>
           </div>
         ) : (
