@@ -20,7 +20,30 @@ import { TouchEffect } from "@/components/ui/touch-effect";
 
 export const metadata: Metadata = {
   title: "Laksh | AI Engineer",
-  description: "I build AI systems that turn chaos into working products.",
+  description: "I build AI systems that turn chaos into working products. 180 days to master the stack.",
+  openGraph: {
+    title: "Laksh | AI Engineer",
+    description: "I build AI systems that turn chaos into working products. 180 days to master the stack.",
+    url: "https://lakshpujary.me",
+    siteName: "Laksh | AI Engineer",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Laksh Portfolio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Laksh | AI Engineer",
+    description: "I build AI systems that turn chaos into working products. 180 days to master the stack.",
+    creator: "@laksh_builds",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({
