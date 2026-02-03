@@ -908,7 +908,7 @@ ${log.content}
                           <h3 className="text-2xl font-light text-white group-hover:text-blue-200 transition-colors tracking-tight mb-4">{log.title}</h3>
                           
                           <p className="text-sm text-white/40 line-clamp-2 leading-relaxed font-light italic pr-12 mb-6">
-                            {log.content}
+                            {blocksToText(log.content)}
                           </p>
 
                           {/* Social Brief Section */}
