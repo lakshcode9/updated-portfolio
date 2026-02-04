@@ -138,7 +138,7 @@ export default function SprintPage() {
         <span className="text-[10px] uppercase tracking-[0.4em] text-primary font-bold">The Core Asset</span>
         <h1 className="text-3xl md:text-6xl font-medium tracking-tight uppercase px-4">THE 180-DAY AI ENGINEER SPRINT</h1>
         <p className="text-muted-foreground max-w-2xl text-base md:text-lg italic px-4">
-          From Builder to Architect. A high-agency founder&apos;s transition into deep AI engineering.
+          From Founder to Technical Architect. Building the deep technical bedrock to scale AI businesses.
         </p>
         <a 
           href="/The_180-Day_AI_Engineer_Sprint.pdf" 

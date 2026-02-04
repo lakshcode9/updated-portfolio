@@ -10,8 +10,8 @@ import Link from "next/link"
 
 export function Hero() {
   const [logs, setLogs] = useState<Partial<SprintLog>[]>([])
-  const heroText = "I'M TAKING 180 DAYS TO MASTER AI ENGINEERING AFTER 4 YEARS OF BUILDING AS A FOUNDER. DROPPED OUT IN 3 MONTHS TO LEARN BY SHIPPING. NO BULLSH*T. JUST THE GRIND."
-  const triggers = ["180 DAYS", "MASTER", "AI", "FOUNDER", "DROPPED OUT", "SHIPPING", "GRIND"]
+  const heroText = "EVOLVING FROM FOUNDER TO TECHNICAL ARCHITECT. LEVERAGING 4 YEARS OF BUSINESS EXPERIENCE TO BUILD HIGH-IMPACT AI SYSTEMS. MASTERING THE STACK TO SHIP PRODUCTS THAT MATTER."
+  const triggers = ["FOUNDER", "TECHNICAL ARCHITECT", "BUSINESS EXPERIENCE", "AI SYSTEMS", "MASTERING", "SHIP PRODUCTS"]
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -149,7 +149,7 @@ export function Hero() {
           </div>
 
           <p className="text-[10px] sm:text-xs md:text-sm text-muted-foreground max-w-[85%] md:max-w-xl font-medium italic text-center uppercase tracking-widest">
-            Leaving college was the start. Building systems is the mission.
+            Leaving college was the start. Mastering the stack to build better businesses is the mission.
           </p>
         </div>
         

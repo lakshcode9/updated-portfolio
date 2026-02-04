@@ -19,13 +19,13 @@ import { Footer } from "@/components/Footer";
 import { TouchEffect } from "@/components/ui/touch-effect";
 
 export const metadata: Metadata = {
-  title: "Laksh | AI Engineer",
-  description: "I build AI systems that turn chaos into working products. 180 days to master the stack.",
+  title: "Laksh | AI Strategy & Engineering",
+  description: "Building intelligent systems that drive business value. From technical depth to strategic execution.",
   openGraph: {
-    title: "Laksh | AI Engineer",
-    description: "I build AI systems that turn chaos into working products. 180 days to master the stack.",
+    title: "Laksh | AI Strategy & Engineering",
+    description: "Building intelligent systems that drive business value. From technical depth to strategic execution.",
     url: "https://lakshpujary.me",
-    siteName: "Laksh | AI Engineer",
+    siteName: "Laksh | AI Strategy & Engineering",
     images: [
       {
         url: "/og.png",
@@ -39,8 +39,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Laksh | AI Engineer",
-    description: "I build AI systems that turn chaos into working products. 180 days to master the stack.",
+    title: "Laksh | AI Strategy & Engineering",
+    description: "Building intelligent systems that drive business value. From technical depth to strategic execution.",
     creator: "@laksh_builds",
     images: ["/og.png"],
   },
