@@ -12,15 +12,15 @@ export default function MentorshipPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* HEADER / NAV */}
-      <nav className="fixed top-0 left-0 w-full z-50 p-6 flex justify-between items-center pointer-events-none">
+      <nav className="fixed top-0 left-0 w-full z-50 p-4 md:p-6 flex justify-between items-center pointer-events-none">
         <Link 
           href="/" 
-          className="pointer-events-auto flex items-center gap-2 text-white/50 hover:text-white transition-colors bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/5"
+          className="pointer-events-auto flex items-center gap-2 text-white/50 hover:text-white transition-colors bg-black/50 backdrop-blur-md px-3 md:px-4 py-2 rounded-full border border-white/5"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span className="text-xs font-mono uppercase tracking-widest">Back to Gateway</span>
+          <span className="hidden sm:inline text-xs font-mono uppercase tracking-widest">Back to Gateway</span>
         </Link>
-        <div className="pointer-events-auto px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full">
+        <div className="hidden sm:block pointer-events-auto px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full">
            <span className="text-xs font-bold text-green-400 uppercase tracking-widest">Limited Spots</span>
         </div>
       </nav>
