@@ -3,53 +3,11 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import HyperTextParagraph from "@/components/ui/hyper-text-with-decryption"
-import { useEffect, useState, useMemo } from "react"
-import { supabase, SprintLog } from "@/lib/supabase"
-import { Flame, Rocket, ArrowRight, Cpu } from "lucide-react"
 import Link from "next/link"
 
 export function Hero() {
-  const [logs, setLogs] = useState<Partial<SprintLog>[]>([])
-  const heroText = "EVOLVING FROM FOUNDER TO TECHNICAL ARCHITECT. LEVERAGING 4 YEARS OF BUSINESS EXPERIENCE TO BUILD HIGH-IMPACT AI SYSTEMS. MASTERING THE STACK TO SHIP PRODUCTS THAT MATTER."
-  const triggers = ["FOUNDER", "TECHNICAL ARCHITECT", "BUSINESS EXPERIENCE", "AI SYSTEMS", "MASTERING", "SHIP PRODUCTS"]
-
-  useEffect(() => {
-    const fetchLogs = async () => {
-      const { data } = await supabase
-        .from("sprint_logs")
-        .select("date, title, daily_goal")
-        .eq("is_public", true)
-        .order("date", { ascending: false });
-      setLogs(data || []);
-    };
-    fetchLogs();
-  }, []);
-
-  const stats = useMemo(() => {
-    if (logs.length === 0) return { streak: 0, day: 0, latestObjective: null, latestShipments: [] };
-    
-    // Calculate streak
-    const today = new Date();
-    const todayStr = today.toISOString().split("T")[0];
-    const yesterdayStr = new Date(today.getTime() - 86400000).toISOString().split("T")[0];
-    const sortedDates = [...new Set(logs.map(l => l.date).filter(Boolean) as string[])].sort().reverse();
-    
-    let streak = 0;
-    if (sortedDates[0] === todayStr || sortedDates[0] === yesterdayStr) {
-      streak = 1;
-      for (let i = 1; i < sortedDates.length; i++) {
-        const prev = new Date(sortedDates[i-1]).getTime();
-        const curr = new Date(sortedDates[i]).getTime();
-        if (Math.floor((prev - curr) / 86400000) === 1) streak++;
-        else break;
-      }
-    }
-
-    const latestObjective = logs[0]?.daily_goal || null;
-    const latestShipments = logs.slice(0, 3).map(l => l.title);
-
-    return { streak, day: sortedDates.length, latestObjective, latestShipments };
-  }, [logs]);
+  const heroText = "BRIDGING THE GAP BETWEEN BUSINESS STRATEGY AND AI IMPLEMENTATION. 4 YEARS BUILDING COMPANIES. NOW HELPING OTHERS LEVERAGE AI TO BUILD THEIRS."
+  const triggers = ["BUSINESS STRATEGY", "AI IMPLEMENTATION", "BUILDING COMPANIES", "LEVERAGE AI"]
 
   return (
     <section className="relative min-h-[100dvh] flex flex-col items-center bg-background font-sans pt-24 md:pt-32 pb-12 overflow-hidden">
@@ -75,68 +33,15 @@ export function Hero() {
         transition={{ duration: 1, ease: "easeOut" }}
         className="max-w-5xl w-full relative z-10 flex flex-col gap-8 md:gap-14 items-center px-4"
       >
-        {/* Live Sprint Status Card */}
+        {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="w-full max-w-[400px]"
+          transition={{ delay: 0.3 }}
         >
-          <Link href="/sprint" className="group">
-            <div className="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-[1.5rem] flex flex-col gap-3 hover:bg-white/10 transition-all hover:border-blue-500/30 text-left relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-3 opacity-5">
-                 <Cpu className="w-12 h-12" />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-blue-500/10 flex items-center justify-center border border-blue-500/20">
-                    <Flame className="w-4 h-4 text-blue-400" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5 mb-0.5">
-                      <span className="text-[9px] font-bold text-blue-400 uppercase tracking-widest leading-none">Live Sprint Status</span>
-                      <span className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold text-white leading-none">Day {stats.day || 0}</span>
-                      <div className="w-px h-2 bg-white/20" />
-                      <span className="text-[9px] font-medium text-white/40 uppercase tracking-widest">{stats.streak || 0} Day Streak</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">
-                  <div className="w-1 h-1 rounded-full bg-blue-400 animate-ping" />
-                  <span className="text-[7px] font-bold text-blue-400 uppercase tracking-widest leading-none">Active</span>
-                </div>
-              </div>
-
-              <div className="pt-3 border-t border-white/10">
-                <span className="text-[10px] uppercase tracking-[0.2em] text-blue-400 font-bold block mb-1.5 uppercase">Objective</span>
-                <p className="text-xs md:text-sm text-white font-medium italic line-clamp-1 leading-relaxed">
-                  {stats.latestObjective || "Initializing 180-Day Engineering Sprint Architecture..."}
-                </p>
-              </div>
-
-              <div className="pt-3 border-t border-white/10">
-                 <span className="text-[10px] uppercase tracking-[0.2em] text-blue-400 font-bold block mb-2 uppercase">Shipments</span>
-                 <div className="flex flex-col gap-2">
-                   {stats.latestShipments.length > 0 ? stats.latestShipments.slice(0, 2).map((title, i) => (
-                     <div key={i} className="flex items-center gap-3 opacity-90 group-hover:opacity-100 transition-opacity">
-                       <div className="w-1.5 h-1.5 rounded-full bg-blue-500" />
-                       <span className="text-xs md:text-[13px] text-white/90 truncate font-medium">{title}</span>
-                     </div>
-                   )) : (
-                     <div className="flex items-center gap-2 opacity-40 italic">
-                        <div className="w-1 h-1 rounded-full bg-white/20" />
-                        <span className="text-xs text-white/70">Awaiting engineering logs...</span>
-                     </div>
-                   )}
-                 </div>
-              </div>
-            </div>
-          </Link>
+          <span className="inline-block px-4 py-2 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono uppercase tracking-[0.3em] text-white/60">
+            AI Strategist & Builder
+          </span>
         </motion.div>
 
         <div className="flex flex-col gap-6 w-full items-center">
@@ -149,16 +54,16 @@ export function Hero() {
           </div>
 
           <p className="text-[10px] sm:text-xs md:text-sm text-muted-foreground max-w-[85%] md:max-w-xl font-medium italic text-center uppercase tracking-widest">
-            Leaving college was the start. Mastering the stack to build better businesses is the mission.
+            From college dropout to AI systems architect. Now helping professionals and businesses harness AI.
           </p>
         </div>
         
         <div className="flex flex-row items-center justify-center gap-4 sm:gap-6 w-full">
           <Button size="lg" className="rounded-full px-8 h-12 text-xs font-bold transition-all hover:scale-105 active:scale-95" asChild>
-            <a href="#work">SHIP_HISTORY</a>
+            <Link href="/mentorship">LEARN AI</Link>
           </Button>
           <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-xs font-bold border-white/10 transition-all hover:bg-white hover:text-black active:scale-95" asChild>
-            <Link href="/sprint">DAILY_LOGS</Link>
+            <a href="https://autoikigai.systems" target="_blank" rel="noopener noreferrer">FOR BUSINESSES</a>
           </Button>
         </div>
 
@@ -175,3 +80,4 @@ export function Hero() {
     </section>
   )
 }
+

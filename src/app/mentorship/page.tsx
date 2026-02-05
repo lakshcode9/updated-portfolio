@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Play, Shield, Brain, TrendingUp, Sparkles, Zap, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MyStory } from "@/components/sections/Story";
 import { PixelStory } from "@/components/sections/PixelStory";
-import SprintPage from "../sprint/page"; // We reuse the sprint page component as the curriculum view
+import { FocusContainer } from "@/components/ui/focus-container";
 
 export default function MentorshipPage() {
   return (
@@ -21,7 +21,7 @@ export default function MentorshipPage() {
           <span className="text-xs font-mono uppercase tracking-widest">Back to Gateway</span>
         </Link>
         <div className="pointer-events-auto px-4 py-2 bg-green-500/10 border border-green-500/20 rounded-full">
-           <span className="text-xs font-bold text-green-400 uppercase tracking-widest">Cohort Applications: Open</span>
+           <span className="text-xs font-bold text-green-400 uppercase tracking-widest">Limited Spots</span>
         </div>
       </nav>
 
@@ -39,15 +39,15 @@ export default function MentorshipPage() {
                className="space-y-8 text-left"
              >
                 <span className="inline-block px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono uppercase tracking-[0.3em] text-white/60">
-                    System: 180_Day_Protocol
+                    1-on-1 AI Mentorship
                 </span>
                 <h1 className="text-5xl md:text-7xl font-medium tracking-tighter uppercase leading-[0.9]">
-                    From Founder<br/>
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">to Architect</span>
+                    Learn AI.<br/>
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">Don't Get Left Behind.</span>
                 </h1>
                 <p className="text-lg md:text-xl text-white/50 font-light leading-relaxed">
-                    The exact blueprint I used to go from "business guy who hires devs" to building production AI systems myself. 
-                    <span className="block mt-4 text-white font-medium italic">180 Days. Zero shortcuts. Full Technical Mastery.</span>
+                    AI is changing everything. You can either watch from the sidelines or become the person everyone turns to.
+                    <span className="block mt-4 text-white font-medium italic">No fluff. No hype. Just practical, hands-on AI skills you can use today.</span>
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
@@ -55,7 +55,7 @@ export default function MentorshipPage() {
                         Apply for Mentorship
                     </Button>
                     <Button variant="outline" className="rounded-full h-14 px-8 border-white/10 hover:bg-white text-white hover:text-black font-bold uppercase tracking-widest text-xs transition-all w-full sm:w-auto">
-                        View The Curriculum
+                        Learn More
                     </Button>
                 </div>
              </motion.div>
@@ -91,14 +91,14 @@ export default function MentorshipPage() {
                         {/* Video Mockup Content */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-gradient-to-br from-zinc-800 to-black">
                              <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center mb-6 group-hover:scale-110 transition-transform cursor-pointer border border-white/10">
-                                <CheckCircle2 className="w-6 h-6 text-green-400 ml-1" />
+                                <Play className="w-6 h-6 text-green-400 ml-1" />
                              </div>
-                             <span className="text-xs font-mono text-green-400 tracking-widest uppercase mb-2">Mentorship VSL</span>
+                             <span className="text-xs font-mono text-green-400 tracking-widest uppercase mb-2">Watch First</span>
                              <h3 className="text-xl font-medium text-white max-w-[200px] leading-tight mb-4">
-                                 Why Most Founders Fail at Tech
+                                 Why Most People Fail at Learning AI
                              </h3>
                              <p className="text-xs text-white/40 max-w-[200px]">
-                                 [ Placeholder: Vertical Video for Mentorship Page ]
+                                 [ VSL Coming Soon ]
                              </p>
                         </div>
                     </div>
@@ -106,6 +106,111 @@ export default function MentorshipPage() {
             </motion.div>
 
          </div>
+      </div>
+
+      {/* THE PROBLEM */}
+      <div className="py-20 px-6 border-t border-white/5 bg-red-500/[0.02]">
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="inline-block px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-[10px] font-mono uppercase tracking-[0.3em] text-red-400 mb-6">
+            The Reality
+          </span>
+          <h2 className="text-3xl md:text-5xl font-medium tracking-tighter uppercase mb-8">
+            AI Is Moving Fast.<br/>
+            <span className="text-white/40">Are You Keeping Up?</span>
+          </h2>
+          <div className="space-y-6 text-left max-w-2xl mx-auto">
+            {[
+              'Your company is talking about "AI transformation" but nobody knows what that actually means',
+              "You've watched 50 YouTube tutorials but still don't know how to actually USE AI at work",
+              'Junior employees who "get AI" are getting promoted over experienced people',
+              "You're overwhelmed by ChatGPT, Claude, Gemini, Copilot... where do you even start?",
+              "You're scared that in 2 years, your skills won't matter anymore"
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                viewport={{ once: true }}
+                className="flex items-start gap-4 p-4 bg-red-500/[0.03] border border-red-500/10 rounded-xl"
+              >
+                <div className="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-red-400 text-sm">✕</span>
+                </div>
+                <p className="text-white/60">{item}</p>
+              </motion.div>
+            ))}
+          </div>
+          <p className="mt-12 text-xl text-white/40 italic">
+            Sound familiar? You're not alone. And it's not your fault.
+          </p>
+        </div>
+      </div>
+
+      {/* WHAT YOU'LL LEARN */}
+      <div className="py-20 px-6 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="inline-block px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] font-mono uppercase tracking-[0.3em] text-green-400 mb-6">
+              What You'll Learn
+            </span>
+            <h2 className="text-3xl md:text-5xl font-medium tracking-tighter uppercase mb-4">
+              Practical AI Skills<br/>
+              <span className="text-white/40">That Actually Matter</span>
+            </h2>
+            <p className="text-lg text-white/40 max-w-2xl mx-auto">
+              Forget theory. This is hands-on, real-world AI training for working professionals.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Brain,
+                title: "Master AI Fundamentals",
+                description: "Understand how AI actually works—no PhD required. Get the mental models that let you learn any new AI tool in minutes."
+              },
+              {
+                icon: Sparkles,
+                title: "Prompt Engineering",
+                description: "Learn how to talk to AI. Get 10x better outputs by understanding how to structure your prompts and think like the AI."
+              },
+              {
+                icon: Zap,
+                title: "AI for Your Job",
+                description: "Custom workflows for YOUR role. Whether you're in sales, marketing, ops, or management—I'll show you exactly how to use AI."
+              },
+              {
+                icon: TrendingUp,
+                title: "10x Your Productivity",
+                description: "Automate the boring stuff. Learn to use AI to write, research, analyze data, and make decisions faster than ever."
+              },
+              {
+                icon: Target,
+                title: "Build AI Projects",
+                description: "Don't just learn—build. Create real AI-powered tools and automations you can show off at work (or on LinkedIn)."
+              },
+              {
+                icon: Shield,
+                title: "Future-Proof Your Career",
+                description: 'Become the "AI person" at your company. The one everyone asks for help. The one who\'s indispensable.'
+              }
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                viewport={{ once: true }}
+                className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl hover:border-green-500/20 hover:bg-green-500/[0.02] transition-all duration-300"
+              >
+                <item.icon className="w-8 h-8 text-green-400 mb-4" />
+                <h3 className="text-lg font-medium mb-2">{item.title}</h3>
+                <p className="text-sm text-white/40 leading-relaxed">{item.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* STORY SECTION */}
@@ -120,25 +225,50 @@ export default function MentorshipPage() {
         </div>
       </div>
 
-      {/* CURRICULUM (Using Sprint Page) */}
-      <div className="py-20 border-t border-white/5">
-        <div className="text-center mb-12">
-            <h2 className="text-3xl font-medium uppercase tracking-tight mb-4">The Protocol</h2>
-            <p className="text-white/40">The exact roadmap we will follow together.</p>
+      {/* WHO IS THIS FOR */}
+      <div className="py-20 px-6 border-t border-white/5">
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="inline-block px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-[10px] font-mono uppercase tracking-[0.3em] text-green-400 mb-6">
+            Is This For You?
+          </span>
+          <h2 className="text-3xl md:text-5xl font-medium tracking-tighter uppercase mb-8">
+            This Mentorship is For You If...
+          </h2>
+          <div className="space-y-4 text-left max-w-2xl mx-auto">
+            {[
+              "You're a working professional who wants to actually understand and use AI",
+              "You're tired of feeling left behind while everyone talks about ChatGPT",
+              "You want personalized guidance, not another generic online course",
+              "You're ready to become the go-to AI person at your company",
+              "You want to future-proof your career before it's too late"
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                viewport={{ once: true }}
+                className="flex items-start gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-xl"
+              >
+                <div className="w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <span className="text-green-400 text-sm">✓</span>
+                </div>
+                <p className="text-white/70">{item}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
-        <SprintPage />
       </div>
 
       {/* FINAL CTA */}
       <div className="py-32 px-6 bg-green-500/5 border-t border-green-500/10 text-center">
          <div className="max-w-2xl mx-auto space-y-8">
-             <h2 className="text-4xl md:text-6xl font-medium tracking-tighter uppercase">Ready to Build?</h2>
+             <h2 className="text-4xl md:text-6xl font-medium tracking-tighter uppercase">Ready to Level Up?</h2>
              <p className="text-lg text-white/50">
-                I only take 5 students per cohort to ensure deep technical mentorship.
-                If you are a founder who is tired of being "non-technical," this is for you.
+                I only work with a handful of people at a time. If you're serious about mastering AI and future-proofing your career, let's chat.
              </p>
              <Button className="rounded-full h-16 px-12 bg-white text-black font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform">
-                Start Your 180 Days
+                Apply for Mentorship
              </Button>
          </div>
       </div>
@@ -146,6 +276,3 @@ export default function MentorshipPage() {
     </div>
   );
 }
-
-// Wrapper for FocusContainer since it wasn't exported from the page originally
-import { FocusContainer } from "@/components/ui/focus-container";
