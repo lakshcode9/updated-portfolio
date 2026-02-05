@@ -51,8 +51,10 @@ export default function MentorshipPage() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
-                    <Button className="rounded-full h-14 px-8 bg-green-500 hover:bg-green-400 text-black font-bold uppercase tracking-widest text-xs transition-all w-full sm:w-auto">
-                        Apply for Mentorship
+                    <Button className="rounded-full h-14 px-8 bg-green-500 hover:bg-green-400 text-black font-bold uppercase tracking-widest text-xs transition-all w-full sm:w-auto" asChild>
+                        <a href="https://cal.com/ラクシュ-9q0fjl/intro-meeting-for-coaching" target="_blank" rel="noopener noreferrer">
+                            Apply for Mentorship
+                        </a>
                     </Button>
                     <Button variant="outline" className="rounded-full h-14 px-8 border-white/10 hover:bg-white text-white hover:text-black font-bold uppercase tracking-widest text-xs transition-all w-full sm:w-auto">
                         Learn More
@@ -267,8 +269,10 @@ export default function MentorshipPage() {
              <p className="text-lg text-white/50">
                 I only work with a handful of people at a time. If you're serious about mastering AI and future-proofing your career, let's chat.
              </p>
-             <Button className="rounded-full h-16 px-12 bg-white text-black font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform">
-                Apply for Mentorship
+             <Button className="rounded-full h-16 px-12 bg-white text-black font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform" asChild>
+                <a href="https://cal.com/ラクシュ-9q0fjl/intro-meeting-for-coaching" target="_blank" rel="noopener noreferrer">
+                    Apply for Mentorship
+                </a>
              </Button>
          </div>
       </div>
