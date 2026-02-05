@@ -7,7 +7,7 @@ import Link from "next/link"
 
 export function Hero() {
   const heroText = "BRIDGING THE GAP BETWEEN BUSINESS STRATEGY AND AI IMPLEMENTATION. 4 YEARS BUILDING COMPANIES. NOW HELPING OTHERS LEVERAGE AI TO BUILD THEIRS."
-  const triggers = ["BUSINESS STRATEGY", "AI IMPLEMENTATION", "BUILDING COMPANIES", "LEVERAGE AI"]
+  const triggers = ["BUSINESS", "STRATEGY", "AI", "IMPLEMENTATION", "BUILDING", "COMPANIES", "LEVERAGE"]
 
   return (
     <section className="relative min-h-[100dvh] flex flex-col items-center bg-background font-sans pt-24 md:pt-32 pb-12 overflow-hidden">
