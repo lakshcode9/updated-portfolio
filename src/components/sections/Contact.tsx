@@ -22,15 +22,15 @@ export function Contact() {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
-    
+
     try {
       const { error: submitError } = await supabase
         .from('contact_requests')
         .insert([
-          { 
-            name: formData.name, 
-            email: formData.email, 
-            message: formData.message 
+          {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message
           }
         ])
 
@@ -64,7 +64,7 @@ export function Contact() {
           </div>
           <h2 className="text-3xl md:text-6xl font-medium tracking-tight italic uppercase">Establish <span className="text-white/20 text-transparent bg-clip-text bg-gradient-to-r from-white to-white/20">Connection</span></h2>
           <p className="text-sm md:text-lg text-muted-foreground max-w-xl">
-            Currently open for high-signal AI automations, engineering collaborations, or strategic system architecture. 
+            Currently open for high-signal AI automations, engineering collaborations, or strategic system architecture.
           </p>
         </motion.div>
 
@@ -86,8 +86,8 @@ export function Contact() {
               <div className="flex flex-col gap-2">
                 <span className="text-[10px] uppercase tracking-[0.4em] text-white/20 font-black">Social Uplinks</span>
                 <div className="flex gap-6">
-                   <a href="https://github.com/lakshcode9" target="_blank" className="text-sm font-bold uppercase tracking-widest hover:text-blue-400 transition-colors">Github</a>
-                   <a href="https://instagram.com/lakshbuilds" target="_blank" className="text-sm font-bold uppercase tracking-widest hover:text-blue-400 transition-colors">Instagram</a>
+                  <a href="https://github.com/lakshcode9" target="_blank" className="text-sm font-bold uppercase tracking-widest hover:text-blue-400 transition-colors">Github</a>
+                  <a href="https://instagram.com/lakshbuilds" target="_blank" className="text-sm font-bold uppercase tracking-widest hover:text-blue-400 transition-colors">Instagram</a>
                 </div>
               </div>
             </div>
@@ -109,7 +109,7 @@ export function Contact() {
             viewport={{ once: true }}
           >
             {!isSent ? (
-              <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-6" suppressHydrationWarning>
                 {error && (
                   <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs">
                     <AlertCircle className="w-4 h-4 shrink-0" />
@@ -122,6 +122,7 @@ export function Contact() {
                     type="text"
                     id="name"
                     required
+                    suppressHydrationWarning
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                     placeholder="Identify yourself..."
@@ -134,6 +135,7 @@ export function Contact() {
                     type="email"
                     id="email"
                     required
+                    suppressHydrationWarning
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     placeholder="email@example.com"
@@ -146,14 +148,16 @@ export function Contact() {
                     id="message"
                     required
                     rows={4}
+                    suppressHydrationWarning
                     value={formData.message}
                     onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
                     placeholder="What are we building?"
                     className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-white/10 resize-none text-white"
                   />
                 </div>
-                <Button 
+                <Button
                   disabled={isSubmitting}
+                  suppressHydrationWarning
                   className="rounded-xl h-12 bg-white text-black font-bold uppercase tracking-widest hover:bg-blue-500 hover:text-white transition-all overflow-hidden relative"
                 >
                   <span className={cn("transition-all duration-300 flex items-center gap-2", isSubmitting && "opacity-0")}>
@@ -180,7 +184,7 @@ export function Contact() {
                   <h3 className="text-2xl font-bold uppercase italic">Connection Established</h3>
                   <p className="text-sm text-blue-400/60 font-medium">Your request has been synchronized with the vault. Standby for response.</p>
                 </div>
-                <button 
+                <button
                   onClick={() => setIsSent(false)}
                   className="text-[10px] uppercase font-bold tracking-[0.2em] text-white/20 hover:text-white transition-colors"
                 >
