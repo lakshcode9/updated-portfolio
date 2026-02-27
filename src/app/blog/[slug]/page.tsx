@@ -37,7 +37,7 @@ export default async function BlogPostPage(props: Props) {
     }
 
     return (
-        <article className="min-h-screen bg-[#030303] text-white selection:bg-[#a3e635] selection:text-black">
+        <article className="font-[system-ui,-apple-system,BlinkMacSystemFont,'Segoe_UI',Roboto,sans-serif] tracking-normal min-h-screen bg-[#030303] text-white selection:bg-[#a3e635] selection:text-black">
             {/* Breadcrumbs Navigation */}
             <div className="fixed top-[88px] left-0 right-0 z-40 bg-gradient-to-b from-[#030303] to-transparent py-4 px-6 pointer-events-none md:block hidden">
                 <div className="max-w-4xl mx-auto flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-white/40 pointer-events-auto">
@@ -74,11 +74,11 @@ export default async function BlogPostPage(props: Props) {
                         Back to Archive
                     </Link>
 
-                    <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white">
+                    <h1 className="font-sans text-4xl md:text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-8 text-white uppercase">
                         {post.title}
                     </h1>
 
-                    <div className="flex flex-wrap items-center gap-6 text-white/50 text-sm font-medium tracking-wide">
+                    <div className="font-[system-ui,sans-serif] tracking-normal flex flex-wrap items-center gap-6 text-white/50 text-sm tracking-wide">
                         <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-[#a3e635]" />
                             <time dateTime={post.date}>
@@ -98,7 +98,7 @@ export default async function BlogPostPage(props: Props) {
             </header>
 
             {/* Main Content Body */}
-            <div className="max-w-3xl mx-auto px-6 py-12 md:py-16 relative">
+            <div className="font-[system-ui,sans-serif] tracking-normal max-w-3xl mx-auto px-6 py-12 md:py-16 relative">
                 <div className="prose prose-invert max-w-none md:prose-lg lg:prose-xl
           prose-p:text-white/70 prose-p:leading-relaxed prose-p:font-light
           prose-headings:font-bold prose-headings:text-white prose-headings:tracking-tight
