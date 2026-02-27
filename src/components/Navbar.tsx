@@ -11,6 +11,7 @@ const navItems = [
   { name: "Work", href: "/#work" },
   { name: "Systems", href: "/systems" },
   { name: "Sprint", href: "/sprint" },
+  { name: "Blog", href: "/blog" },
   { name: "Contact", href: "/#contact" },
 ]
 
@@ -29,7 +30,7 @@ export function Navbar() {
         <Link href="/" className="text-xl font-bold tracking-tighter hover:opacity-80 transition-opacity">
           LAKSH
         </Link>
-        
+
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-6">
           {navItems.map((item) => (
@@ -47,7 +48,7 @@ export function Navbar() {
         </div>
 
         {/* Mobile Hamburger */}
-        <button 
+        <button
           className="md:hidden text-foreground p-2 -mr-2 relative z-[1001]"
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle Menu"
@@ -70,7 +71,7 @@ export function Navbar() {
             className="fixed inset-0 bg-[#030303] z-[2000] md:hidden flex flex-col items-center justify-center p-6"
           >
             {/* Close button inside full screen menu */}
-            <button 
+            <button
               className="absolute top-6 right-6 p-2 text-white hover:opacity-70 transition-opacity"
               onClick={() => setIsOpen(false)}
             >
