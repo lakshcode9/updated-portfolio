@@ -3,7 +3,7 @@ import { getAllPosts } from '@/lib/blog';
 
 // The base URL of your application
 // Replace this with your actual production domain when you deploy
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lakshpujary.me';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lakshpujary.tech';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const posts = getAllPosts();

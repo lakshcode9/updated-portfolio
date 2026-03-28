@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Laksh | AI Strategy & Engineering",
     description: "Building intelligent systems that drive business value. From technical depth to strategic execution.",
-    url: "https://lakshpujary.me",
+    url: "https://lakshpujary.tech",
     siteName: "Laksh | AI Strategy & Engineering",
     images: [
       {

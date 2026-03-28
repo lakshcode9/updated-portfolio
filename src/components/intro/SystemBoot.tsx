@@ -57,7 +57,7 @@ export const SystemBoot: React.FC<SystemBootProps> = ({ onBootComplete }) => {
             transition={{ duration: 0.5 }}
           >
             <h1 className="text-3xl md:text-5xl font-medium tracking-tight text-white">
-              lakshpujary.me
+              lakshpujary.tech
             </h1>
             <motion.div 
               className="w-24 h-[2px] bg-white/30"
