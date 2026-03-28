@@ -37,7 +37,7 @@ The system is divided into three distinct autonomous modules:
 * **Result:** When I wake up, I have a curated intelligence briefing. No infinitely scrolling Twitter required.
 
 ### Module 2: The Inbound Lead Router
-* **Trigger:** A new email hits my specific `consulting@lakshpujary.tech` inbox.
+* **Trigger:** A new email hits my specific `info@lakshpujary.tech` inbox.
 * **Action:** The system parses the email body and sender domain.
 * **Reasoning:** GPT-4o evaluates the email against my ideal client profile (ICP). Is this a company doing $1M+ in revenue? Do they have a clear operational bottleneck? Is it a generic spam pitch?
 * **Execution:** 

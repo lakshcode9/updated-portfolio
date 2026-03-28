@@ -79,8 +79,8 @@ export function Contact() {
             <div className="flex flex-col gap-8">
               <div className="flex flex-col gap-2">
                 <span className="text-[10px] uppercase tracking-[0.4em] text-white/20 font-black">Electronic Mail</span>
-                <a href="mailto:lakshpoojary64@gmail.com" className="text-xl md:text-2xl font-bold hover:text-blue-400 transition-colors">
-                  lakshpoojary64@gmail.com
+                <a href="mailto:info@lakshpujary.tech" className="text-xl md:text-2xl font-bold hover:text-blue-400 transition-colors">
+                  info@lakshpujary.tech
                 </a>
               </div>
               <div className="flex flex-col gap-2">

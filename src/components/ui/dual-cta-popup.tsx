@@ -159,7 +159,7 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
 
                 {/* Footer */}
                 <p className="text-center text-xs text-muted-foreground mt-6">
-                  Not sure? <a href="mailto:lakshpoojary64@gmail.com" className="text-primary hover:underline">Email me</a> and let&apos;s figure it out together.
+                  Not sure? <a href="mailto:info@lakshpujary.tech" className="text-primary hover:underline">Email me</a> and let&apos;s figure it out together.
                 </p>
               </div>
             </div>
