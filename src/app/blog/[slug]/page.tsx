@@ -17,6 +17,9 @@ export async function generateMetadata(props: Props) {
     return {
         title: `${post.title} | Laksh`,
         description: post.description,
+        alternates: {
+            canonical: `/blog/${params.slug}`,
+        },
     };
 }
 

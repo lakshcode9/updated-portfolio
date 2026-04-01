@@ -15,13 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.8,
     }));
 
-    const rawBlogUrls = posts.map((post) => ({
-        url: `${BASE_URL}/blog/${post.slug}/raw`,
-        lastModified: new Date(post.date).toISOString(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.9, // Higher priority for AI crawlers
-    }));
-
     return [
         {
             url: `${BASE_URL}`,
@@ -36,6 +29,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.9,
         },
         ...blogUrls,
-        ...rawBlogUrls,
     ];
 }

@@ -19,8 +19,12 @@ import { Footer } from "@/components/Footer";
 import { TouchEffect } from "@/components/ui/touch-effect";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://lakshpujary.tech"),
   title: "Laksh | AI Strategy & Engineering",
   description: "Building intelligent systems that drive business value. From technical depth to strategic execution.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Laksh | AI Strategy & Engineering",
     description: "Building intelligent systems that drive business value. From technical depth to strategic execution.",

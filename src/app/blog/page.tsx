@@ -5,6 +5,9 @@ import { ArrowUpRight, Clock, Calendar } from 'lucide-react';
 export const metadata = {
     title: 'Blog | Laksh',
     description: 'Deep dives on artificial intelligence, systems, and scaling modern businesses.',
+    alternates: {
+        canonical: '/blog',
+    },
 };
 
 export default function BlogIndex() {

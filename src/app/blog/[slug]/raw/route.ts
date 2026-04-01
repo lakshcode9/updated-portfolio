@@ -16,6 +16,7 @@ export async function GET(
                 'Content-Type': 'text/plain; charset=utf-8',
                 'Cache-Control': 'public, max-age=3600, s-maxage=86400',
                 'Access-Control-Allow-Origin': '*',
+                'X-Robots-Tag': 'noindex, follow',
             },
         });
     } catch (error) {
