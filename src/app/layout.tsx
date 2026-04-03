@@ -6,6 +6,7 @@ import "./globals.css";
 const disketMono = localFont({
   src: "./fonts/Disket-Mono-Bold.ttf",
   variable: "--font-disket-mono",
+  display: "swap",
 });
 
 const bebasNeue = Bebas_Neue({
@@ -16,7 +17,17 @@ const bebasNeue = Bebas_Neue({
 
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { TouchEffect } from "@/components/ui/touch-effect";
+import dynamic from "next/dynamic";
+
+const TouchEffect = dynamic(() => import("@/components/ui/touch-effect").then(mod => mod.TouchEffect), {
+  ssr: false,
+});
+
+export const viewport = {
+  themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://lakshpujary.tech"),

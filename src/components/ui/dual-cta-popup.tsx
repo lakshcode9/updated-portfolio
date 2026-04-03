@@ -136,7 +136,7 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
 
                     <div className="flex flex-col gap-3 mt-2">
                       <Button 
-                        className="w-full rounded-full font-medium bg-blue-500 hover:bg-blue-600 group"
+                        className="w-full rounded-full font-medium bg-blue-600 hover:bg-blue-700 group"
                         asChild
                       >
                         <a href="https://autoikigai.systems" target="_blank" rel="noopener noreferrer">

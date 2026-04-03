@@ -12,6 +12,7 @@ interface HyperTextProps {
   text: string;
   className?: string;
   highlightWords?: string[];
+  as?: "div" | "h1" | "h2" | "h3";
 }
 
 interface WordProps {
@@ -158,6 +159,7 @@ export default function HyperTextParagraph({
   text,
   className = "",
   highlightWords = [],
+  as: Component = "div",
 }: HyperTextProps) {
   const [isParagraphHovered, setIsParagraphHovered] = useState(false);
 
@@ -167,7 +169,7 @@ export default function HyperTextParagraph({
   const clean = (w: string) => w.toLowerCase().replace(/[^a-z0-9]/g, "");
 
   return (
-    <div className={cn("leading-relaxed tracking-wide", className)}>
+    <Component className={cn("leading-relaxed tracking-wide", className)}>
       {words.map((word, i) => {
         const isHighlightable = highlightWords.some(
           (hw) => clean(hw) === clean(word)
@@ -187,6 +189,6 @@ export default function HyperTextParagraph({
           </React.Fragment>
         );
       })}
-    </div>
+    </Component>
   );
 }

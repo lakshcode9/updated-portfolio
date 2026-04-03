@@ -47,14 +47,14 @@ const PROJECTS: Project[] = [
     id: '04',
     name: 'WhatsApp Concierge',
     role: 'AI Customer Bot',
-    image: 'https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=1000&auto=format&fit=crop',
+    image: '/projects/whatsapp.png',
     description: 'Enterprise WhatsApp automation with custom LLMs and Meta Cloud API.'
   },
   {
     id: '05',
     name: 'Lead Gen Engine',
     role: 'Outbound Automation',
-    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1000&auto=format&fit=crop',
+    image: '/projects/leadgen.png',
     description: 'High-scale scraping and outreach pipelines for rapid B2B growth.'
   },
 ];

@@ -1,0 +1,10 @@
+last 2 versions
+> 1%
+not dead
+not op_mini all
+not android < 5
+not ie 11
+not chrome < 100
+not edge < 100
+not firefox < 100
+not safari < 15

@@ -49,6 +49,7 @@ export function Hero() {
             <HyperTextParagraph
               text={heroText}
               highlightWords={triggers}
+              as="h1"
               className="text-xl sm:text-2xl md:text-5xl font-normal text-foreground leading-[1.2] md:leading-tight uppercase tracking-wide drop-shadow-2xl text-center max-w-4xl"
             />
           </div>
