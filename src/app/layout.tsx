@@ -17,11 +17,7 @@ const bebasNeue = Bebas_Neue({
 
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import dynamic from "next/dynamic";
-
-const TouchEffect = dynamic(() => import("@/components/ui/touch-effect").then(mod => mod.TouchEffect), {
-  ssr: false,
-});
+import { TouchEffectWrapper as TouchEffect } from "@/components/ui/touch-effect-wrapper";
 
 export const viewport = {
   themeColor: "#000000",
