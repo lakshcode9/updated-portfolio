@@ -25,7 +25,7 @@ const PROJECTS: Project[] = [
     role: 'AI Automation Agency',
     image: '/projects/autoikigai.png',
     description: 'Reactivating old leads with smart AI outreach and automated CRM flows.',
-    url: 'https://autoikigai.systems'
+    url: 'https://autoikigai.space'
   },
   {
     id: '02',

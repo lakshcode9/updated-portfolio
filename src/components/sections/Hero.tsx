@@ -64,7 +64,7 @@ export function Hero() {
             <Link href="/mentorship">LEARN AI</Link>
           </Button>
           <Button size="lg" variant="outline" className="rounded-full px-8 h-12 text-xs font-bold border-white/10 transition-all hover:bg-white hover:text-black active:scale-95" asChild>
-            <a href="https://autoikigai.systems" target="_blank" rel="noopener noreferrer">FOR BUSINESSES</a>
+            <a href="https://autoikigai.space" target="_blank" rel="noopener noreferrer">FOR BUSINESSES</a>
           </Button>
         </div>
 

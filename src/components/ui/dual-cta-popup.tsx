@@ -139,7 +139,7 @@ export function DualCTAPopup({ triggerAfterMs = 5000, enabled = true }: DualCTAP
                         className="w-full rounded-full font-medium bg-blue-600 hover:bg-blue-700 group"
                         asChild
                       >
-                        <a href="https://autoikigai.systems" target="_blank" rel="noopener noreferrer">
+                        <a href="https://autoikigai.space" target="_blank" rel="noopener noreferrer">
                           Explore AutoIkigai
                           <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                         </a>

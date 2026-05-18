@@ -49,7 +49,7 @@ export default function Home() {
             </Link>
 
             {/* DOOR B: AGENCY (EXTERNAL LINK) */}
-            <a href="https://autoikigai.systems" target="_blank" rel="noopener noreferrer" className="flex-1 group">
+            <a href="https://autoikigai.space" target="_blank" rel="noopener noreferrer" className="flex-1 group">
                 <motion.div 
                     whileHover={{ y: -5 }}
                     className="h-full p-8 md:p-12 rounded-3xl bg-zinc-900/30 border border-white/5 hover:border-blue-500/30 hover:bg-blue-500/5 transition-all duration-300 flex flex-col justify-between gap-12 relative overflow-hidden"
