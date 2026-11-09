@@ -73,6 +73,13 @@ body {
   flex: none;
 }
 
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Long-form explainer text. */
 .prose-explainer {
   font-size: 1.0625rem;

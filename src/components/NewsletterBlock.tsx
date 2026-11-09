@@ -4,9 +4,9 @@ import { NewsletterForm } from "./NewsletterForm";
 export function NewsletterBlock({ id }: { id?: string }) {
   return (
     <section id={id} className="relative overflow-hidden rounded-xl bg-ink text-paper">
-      <div className="relative z-10 px-5 pt-8 pb-40 sm:px-10 sm:py-12 sm:pr-72">
+      <div className="relative z-10 px-5 py-7 sm:px-10 sm:py-12 sm:pr-72">
         <p className="kicker text-slate">Newsletter</p>
-        <h2 className="mt-3 max-w-md font-display text-3xl leading-tight font-bold tracking-tight sm:text-4xl">
+        <h2 className="mt-3 max-w-md font-display text-[1.75rem] leading-tight font-bold tracking-tight sm:text-4xl">
           New explainer? You hear <span className="mark">first</span>.
         </h2>
         <p className="mt-3 max-w-md text-paper/75">
@@ -21,8 +21,8 @@ export function NewsletterBlock({ id }: { id?: string }) {
         alt=""
         width={260}
         height={260}
-        className="absolute right-0 bottom-0 w-40 sm:w-64"
-        sizes="(min-width: 640px) 256px, 160px"
+        className="absolute right-0 bottom-0 hidden w-64 sm:block"
+        sizes="256px"
       />
     </section>
   );

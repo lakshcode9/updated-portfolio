@@ -26,6 +26,13 @@ export default function NewsletterPage() {
           <div className="mt-8">
             <NewsletterForm />
           </div>
+          <p className="mt-2 text-sm text-muted">
+            Prefer a feed reader?{" "}
+            <a href="/feed.xml" className="underline underline-offset-4 hover:text-signal">
+              Subscribe via RSS
+            </a>
+            .
+          </p>
         </div>
         <Image
           src="/avatar/thumbs-up.png"

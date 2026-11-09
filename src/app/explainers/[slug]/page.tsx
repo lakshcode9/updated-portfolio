@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CardRail } from "@/components/CardRail";
 import { ExplainerCard } from "@/components/ExplainerCard";
 import { Headline, plain } from "@/components/Headline";
 import { NewsletterBlock } from "@/components/NewsletterBlock";
@@ -128,12 +130,38 @@ export default async function ExplainerPage({ params }: Props) {
             <span>{e.readingMinutes} min read</span>
             <span>{e.pillarLabel}</span>
           </p>
+
+          {/* Phones, no embedded video: a compact link row instead of a full-height cover. */}
+          {!playable && e.instagram && (
+            <a
+              href={e.instagram}
+              className="mt-6 flex items-center gap-4 rounded-lg border border-line bg-paper-deep/60 p-3 transition hover:border-ink/30 lg:hidden"
+            >
+              <Image
+                src={e.cover}
+                alt=""
+                width={56}
+                height={100}
+                sizes="56px"
+                className="h-[100px] w-14 shrink-0 rounded object-cover ring-1 ring-line"
+              />
+              <span className="min-w-0 flex-1">
+                <span className="block font-medium">Watch the reel</span>
+                <span className="mt-0.5 block font-mono text-xs text-muted">
+                  {e.duration ? `${Math.round(e.duration)} s · ` : ""}Instagram
+                </span>
+              </span>
+              <span className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-signal px-4 text-sm font-medium text-ink">
+                Watch ↗
+              </span>
+            </a>
+          )}
         </header>
 
         {/* Without an embedded video the cover is only a picture, so keep it small on phones. */}
         <aside
-          className={`mx-auto w-full lg:sticky lg:top-24 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:max-w-[360px] lg:self-start ${
-            playable ? "max-w-[360px]" : "max-w-[240px]"
+          className={`mx-auto w-full max-w-[360px] lg:sticky lg:top-24 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:self-start ${
+            playable ? "" : "hidden lg:block"
           }`}
         >
           <ReelPlayer e={e} />
@@ -226,10 +254,12 @@ export default async function ExplainerPage({ params }: Props) {
           <h2 id="more" className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
             Watch next
           </h2>
-          <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 lg:gap-x-6">
-            {more.map((x) => (
-              <ExplainerCard key={x.slug} e={x} />
-            ))}
+          <div className="mt-5 sm:mt-6">
+            <CardRail label="Watch next">
+              {more.map((x) => (
+                <ExplainerCard key={x.slug} e={x} />
+              ))}
+            </CardRail>
           </div>
         </section>
       )}
