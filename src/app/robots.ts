@@ -1,15 +1,10 @@
-import { MetadataRoute } from 'next';
-
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lakshpujary.tech';
+import type { MetadataRoute } from "next";
+import { site } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-    return {
-        rules: {
-            userAgent: '*',
-            allow: '/',
-            // Prevent crawling of private/admin paths if you add them later
-            disallow: ['/api/', '/admin/'],
-        },
-        sitemap: `${BASE_URL}/sitemap.xml`,
-    };
+  return {
+    rules: { userAgent: "*", allow: "/" },
+    sitemap: `${site.url}/sitemap.xml`,
+    host: site.url,
+  };
 }

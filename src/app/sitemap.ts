@@ -1,33 +1,20 @@
-import { MetadataRoute } from 'next';
-import { getAllPosts } from '@/lib/blog';
-
-// The base URL of your application
-// Replace this with your actual production domain when you deploy
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lakshpujary.tech';
+import type { MetadataRoute } from "next";
+import { getExplainers } from "@/lib/explainers";
+import { site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const posts = getAllPosts();
-
-    const blogUrls = posts.map((post) => ({
-        url: `${BASE_URL}/blog/${post.slug}`,
-        lastModified: new Date(post.date).toISOString(),
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-    }));
-
-    return [
-        {
-            url: `${BASE_URL}`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'yearly',
-            priority: 1,
-        },
-        {
-            url: `${BASE_URL}/blog`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'daily',
-            priority: 0.9,
-        },
-        ...blogUrls,
-    ];
+  const explainers = getExplainers();
+  const latest = explainers[0]?.date;
+  return [
+    { url: site.url, lastModified: latest, priority: 1 },
+    { url: `${site.url}/explainers`, lastModified: latest, priority: 0.9 },
+    { url: `${site.url}/about`, priority: 0.5 },
+    { url: `${site.url}/newsletter`, priority: 0.6 },
+    ...explainers.map((e) => ({
+      url: `${site.url}/explainers/${e.slug}`,
+      lastModified: e.date,
+      priority: 0.8,
+      images: [`${site.url}${e.cover}`],
+    })),
+  ];
 }
