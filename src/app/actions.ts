@@ -4,6 +4,9 @@ export type SubscribeState = { status: "idle" | "ok" | "error"; message: string 
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const KIT = "https://api.kit.com/v4";
+// Kit form "Website signup (lakshpujary.tech)": double opt-in on, confirmed
+// subscribers land on /newsletter/confirmed.
+const DEFAULT_FORM_ID = "10165166";
 
 /**
  * Adds an email to the Kit (kit.com) form in KIT_FORM_ID, using Kit API v4.
@@ -25,7 +28,8 @@ export async function subscribe(_prev: SubscribeState, form: FormData): Promise<
   }
 
   const apiKey = process.env.KIT_API_KEY;
-  const formId = process.env.KIT_FORM_ID;
+  // The form ID isn't secret (Kit puts it in every embed). Env overrides it.
+  const formId = process.env.KIT_FORM_ID || DEFAULT_FORM_ID;
   if (!apiKey || !formId || !/^\d+$/.test(formId)) {
     console.error("Newsletter: KIT_API_KEY or KIT_FORM_ID is not set.");
     return { status: "error", message: "Signups aren't open yet. Try again soon." };
