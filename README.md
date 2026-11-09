@@ -38,8 +38,9 @@ npm run lint
 
 The home page, archive, sitemap, RSS feed and share image all update from that file.
 
-## Newsletter
+## Newsletter (Kit)
 
-The signup form posts to Kit (kit.com). Copy `.env.example` to `.env.local` and set
-`KIT_API_KEY` and `KIT_FORM_ID`, and set the same variables in Vercel. Without them the
-form shows "Signups aren't open yet".
+- Signups: the form posts to a server action (`src/app/actions.ts`) that adds the email to Kit form 10165166 via API v4. Double opt-in is on in Kit; confirmed people land on `/newsletter/confirmed`.
+- New explainer email: when a new `content/explainers/*.md` file lands on `main`, the GitHub Action "Newsletter draft" creates the email as a **draft** in Kit (`scripts/newsletter/draft.mjs`). Nothing is sent automatically: open Kit > Broadcasts, check it, send. Run it by hand from the Actions tab (input: slug) if needed.
+- Preview the email locally: `node scripts/newsletter/email.mjs <slug>`.
+- Secrets: `KIT_API_KEY` (Kit v4 key) in Vercel and as a GitHub repository secret. `KIT_FORM_ID` is optional (defaults to 10165166).
