@@ -4,7 +4,7 @@ export const site = {
   tagline: "AI, made visible.",
   description:
     "Short, sourced explainers on how AI actually works. One concept at a time, with every claim checked.",
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://lakshpujary.tech").replace(/\/$/, ""),
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.lakshpujary.tech").replace(/\/$/, ""),
   email: "info@lakshpujary.tech",
   links: [
     { label: "Instagram", handle: "@laksh.explains", href: "https://www.instagram.com/laksh.explains/" },
