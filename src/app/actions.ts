@@ -3,11 +3,15 @@
 export type SubscribeState = { status: "idle" | "ok" | "error"; message: string };
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const KIT = "https://api.kit.com/v4";
 
 /**
- * Adds an email to the Kit (kit.com) form set in KIT_FORM_ID. Kit sends the
- * confirmation email itself, so double opt-in and unsubscribe links are
- * handled there.
+ * Adds an email to the Kit (kit.com) form in KIT_FORM_ID, using Kit API v4.
+ *
+ * The subscriber is created as "inactive" first, then added to the form, so a
+ * form with double opt-in sends its confirmation email and the person only
+ * becomes active after confirming. (Creating them as "active" would skip
+ * consent.) Kit handles unsubscribe links and the confirmation email.
  */
 export async function subscribe(_prev: SubscribeState, form: FormData): Promise<SubscribeState> {
   // Honeypot: real people never see or fill this field.
@@ -27,15 +31,24 @@ export async function subscribe(_prev: SubscribeState, form: FormData): Promise<
     return { status: "error", message: "Signups aren't open yet. Try again soon." };
   }
 
+  const headers = { "Content-Type": "application/json", "X-Kit-Api-Key": apiKey };
+  const post = (path: string, body: object) =>
+    fetch(`${KIT}${path}`, { method: "POST", headers, body: JSON.stringify(body), signal: AbortSignal.timeout(8000) });
+
   try {
-    const res = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ api_key: apiKey, email, tags: [] }),
-      signal: AbortSignal.timeout(8000),
+    // 1. Upsert the subscriber. An existing subscriber keeps their state.
+    const created = await post("/subscribers", { email_address: email, state: "inactive" });
+    if (!created.ok) {
+      console.error("Newsletter: create subscriber failed", created.status, await created.text().catch(() => ""));
+      return { status: "error", message: "Something went wrong. Try again in a minute." };
+    }
+    // 2. Add them to the form. This is what triggers the confirmation email.
+    const added = await post(`/forms/${formId}/subscribers`, {
+      email_address: email,
+      referrer: "https://www.lakshpujary.tech/newsletter",
     });
-    if (!res.ok) {
-      console.error("Newsletter: Kit returned", res.status, await res.text().catch(() => ""));
+    if (!added.ok) {
+      console.error("Newsletter: add to form failed", added.status, await added.text().catch(() => ""));
       return { status: "error", message: "Something went wrong. Try again in a minute." };
     }
   } catch (err) {
