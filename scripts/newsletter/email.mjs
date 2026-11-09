@@ -30,6 +30,9 @@ const esc = (s = "") =>
 /** Headline with the *marked* word underlined in Signal Orange (border-bottom works in every client). */
 const headline = (text) => esc(text).replace(/\*([^*]+)\*/g, `<span style="border-bottom:4px solid ${C.signal};">$1</span>`);
 
+/** Public path of the email-size cover. The file itself is made at build time (covers.mjs). */
+export const emailCoverPath = (slug) => `/email/covers/${slug}.jpg`;
+
 /** Small JPEG of the cover for email (the original PNG is 1080x1920 and too heavy). */
 export async function ensureEmailCover(slug) {
   const src = path.join(ROOT, "public", "explainers", slug, "cover.png");

@@ -42,3 +42,6 @@ next-env.d.ts
 
 .vercel
 .env*.local
+
+# generated at build time by scripts/newsletter/covers.mjs
+/public/email/covers/

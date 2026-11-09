@@ -1,0 +1,67 @@
+# When a new explainer is pushed to main, create its newsletter email as a
+# DRAFT in Kit. Nothing is sent: Laksh reviews the draft in Kit and sends it.
+# Needs the repository secret KIT_API_KEY (Kit > Settings > Developer, v4 key).
+name: Newsletter draft
+
+on:
+  push:
+    branches: [main]
+    paths: ["content/explainers/*.md"]
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Explainer slug to draft (e.g. ai-948-exploits)"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: newsletter-draft
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find new explainers
+        id: slugs
+        env:
+          BEFORE: ${{ github.event.before }}
+          INPUT_SLUG: ${{ inputs.slug }}
+        run: |
+          if [ -n "$INPUT_SLUG" ]; then
+            echo "list=$INPUT_SLUG" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            echo "list=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Only newly added explainer files, not edits to existing ones.
+          list=$(git diff --name-only --diff-filter=A "$BEFORE" "$GITHUB_SHA" -- 'content/explainers/*.md' \
+            | sed -E 's#content/explainers/(.*)\.md#\1#' | tr '\n' ' ')
+          echo "New explainers: ${list:-none}"
+          echo "list=$list" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        if: steps.slugs.outputs.list != ''
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        if: steps.slugs.outputs.list != ''
+        run: npm ci --no-audit --no-fund
+
+      - name: Create Kit drafts
+        if: steps.slugs.outputs.list != ''
+        env:
+          KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
+          SLUGS: ${{ steps.slugs.outputs.list }}
+        run: node scripts/newsletter/draft.mjs $SLUGS
