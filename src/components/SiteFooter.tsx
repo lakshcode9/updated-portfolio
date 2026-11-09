@@ -3,6 +3,7 @@ import { site } from "@/lib/site";
 
 const siteLinks = [
   ["/explainers", "Explainers"],
+  ["/radar", "Radar"],
   ["/about", "About"],
   ["/newsletter", "Newsletter"],
   ["/feed.xml", "RSS"],

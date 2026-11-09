@@ -77,6 +77,18 @@ export default function Home() {
             ))}
           </CardRail>
         </div>
+        <Link
+          href="/radar"
+          className="mt-6 flex min-h-14 items-center justify-between gap-4 rounded-lg border border-line px-4 py-3 transition hover:border-ink/30 sm:mt-10"
+        >
+          <span>
+            <span className="kicker text-muted">Radar</span>
+            <span className="mt-1 block font-medium">What I&apos;m watching for the next one</span>
+          </span>
+          <span aria-hidden className="text-xl">
+            →
+          </span>
+        </Link>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 pt-14 sm:px-6 sm:pt-20" aria-labelledby="how">
