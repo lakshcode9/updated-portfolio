@@ -20,7 +20,11 @@ export type Explainer = {
   headline: string;
   kicker: string;
   description: string;
+  /** 40-60 word self-contained answer shown at the top ("In short"). */
+  summary?: string;
   date: string;
+  /** Last meaningful update, YYYY-MM-DD. Defaults to `date`. */
+  updated: string;
   pillar: PillarKey;
   pillarLabel: string;
   cover: string;
@@ -53,7 +57,9 @@ function parse(file: string): { meta: Explainer; body: string } {
     headline: data.headline ?? data.title,
     kicker: data.kicker,
     description: data.description,
+    summary: data.summary,
     date: new Date(data.date).toISOString().slice(0, 10),
+    updated: new Date(data.updated ?? data.date).toISOString().slice(0, 10),
     pillar,
     pillarLabel: pillars[pillar],
     cover: data.cover ?? `/explainers/${slug}/cover.png`,

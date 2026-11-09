@@ -57,7 +57,9 @@ export function NewsletterForm({ tone = "light" }: { tone?: "light" | "dark" }) 
       </div>
       <p
         role={state.status === "error" ? "alert" : undefined}
-        className={`mt-2 min-h-5 text-sm ${state.status === "error" ? "text-signal" : dark ? "text-slate" : "text-muted"}`}
+        className={`mt-2 min-h-5 text-sm ${
+          state.status === "error" ? (dark ? "text-signal" : "font-medium text-ink") : dark ? "text-slate" : "text-muted"
+        }`}
       >
         {state.status === "error" ? state.message : "One email when a new explainer is out. No spam."}
       </p>

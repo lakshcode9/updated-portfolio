@@ -3,6 +3,7 @@ title: "Tokenization: how AI reads your words"
 headline: "Text becomes *tokens*"
 kicker: "Tokenization"
 description: "A language model never sees your words. It sees a list of numbers called token IDs. Here's how text gets cut up, and why it matters."
+summary: "Tokenization is the step where text is cut into small pieces, called tokens, before a language model reads it. Each token is swapped for a number, its ID in the tokenizer's vocabulary, and that list of numbers is what the model receives. In English, one token is about three-quarters of a word."
 date: 2026-11-06
 pillar: llms
 duration: 43

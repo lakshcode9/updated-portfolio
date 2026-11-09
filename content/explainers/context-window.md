@@ -3,6 +3,7 @@ title: "Context windows: why AI forgets your chat"
 headline: "AI doesn't *remember* your chat"
 kicker: "Context window"
 description: "A model can only read so much text at once, and it re-reads the whole chat every time you hit send. That's why long chats start losing track of things."
+summary: "A context window is the amount of text, measured in tokens, that a language model can read at once, including its own reply. The model keeps no memory between messages, so the app sends the whole chat again every time. When a chat outgrows the window, older parts get dropped or summarised, which is why it seems to forget."
 date: 2026-11-07
 pillar: llms
 duration: 32

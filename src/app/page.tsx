@@ -87,7 +87,10 @@ export default function Home() {
             ],
           ].map(([n, t, d]) => (
             <li key={n} className="bg-paper p-5 sm:p-6">
-              <p className="font-mono text-sm text-signal">{n}</p>
+              <p className="font-mono text-sm font-medium text-ink">
+                <span className="mr-2 inline-block size-2 bg-signal align-middle" aria-hidden />
+                {n}
+              </p>
               <p className="mt-3 font-display text-xl font-semibold">{t}</p>
               <p className="mt-2 text-muted">{d}</p>
             </li>

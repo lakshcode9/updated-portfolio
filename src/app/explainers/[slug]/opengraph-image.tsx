@@ -3,7 +3,7 @@ import { brandCard, ogSize } from "@/lib/og";
 
 export const size = ogSize;
 export const contentType = "image/png";
-export const alt = "Explainer share card";
+export const alt = "Laksh | AI Explained explainer: title card with the reel cover";
 
 export function generateStaticParams() {
   return getExplainers().map((e) => ({ slug: e.slug }));

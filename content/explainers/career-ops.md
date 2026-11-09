@@ -3,6 +3,7 @@ title: "career-ops: the AI agent that read 740 job posts"
 headline: "His AI read *740* job posts"
 kicker: "career-ops"
 description: "One developer let an open-source AI agent score 740 job listings against his CV, applied to 68, and got the job. The tool never presses Submit for you."
+summary: "career-ops is an open-source AI agent that scores job listings from 1 to 5 against your CV. It tells you to skip weak fits and writes a tailored CV and cover letter draft for strong ones, but it never submits an application for you. Its author evaluated 740 listings, applied to 68, got 12 interviews and 1 offer."
 date: 2026-11-08
 pillar: agents
 duration: 37

@@ -23,7 +23,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: e.title,
     description: e.description,
     alternates: { canonical: `/explainers/${e.slug}` },
-    openGraph: { type: "article", title: e.title, description: e.description, publishedTime: e.date },
+    authors: [{ name: "Laksh", url: `${site.url}/about` }],
+    openGraph: {
+      type: "article",
+      title: e.title,
+      description: e.description,
+      publishedTime: e.date,
+      modifiedTime: e.updated,
+      authors: [`${site.url}/about`],
+      section: e.pillarLabel,
+    },
   };
 }
 
@@ -38,15 +47,21 @@ export default async function ExplainerPage({ params }: Props) {
   const url = `${site.url}/explainers/${e.slug}`;
   const playable = Boolean(e.youtube || e.video);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
+  const article = {
     "@type": "Article",
+    "@id": `${url}#article`,
     headline: e.title,
-    description: e.description,
+    description: e.summary ?? e.description,
     datePublished: e.date,
+    dateModified: e.updated,
     url,
-    image: `${site.url}${e.cover}`,
-    author: { "@type": "Person", name: "Laksh", url: site.url },
+    mainEntityOfPage: url,
+    inLanguage: "en",
+    image: [`${site.url}${e.cover}`, `${url}/opengraph-image`],
+    articleSection: e.pillarLabel,
+    author: { "@id": `${site.url}/#person` },
+    publisher: { "@id": `${site.url}/#person` },
+    isPartOf: { "@id": `${site.url}/#website` },
     citation: e.sources.map((s) => ({ "@type": "CreativeWork", name: s.title, url: s.url })),
     ...((e.youtube || e.video) && {
       video: {
@@ -61,6 +76,21 @@ export default async function ExplainerPage({ params }: Props) {
           : { contentUrl: e.video!.startsWith("http") ? e.video : `${site.url}${e.video}` }),
       },
     }),
+  };
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      article,
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+          { "@type": "ListItem", position: 2, name: "Explainers", item: `${site.url}/explainers` },
+          { "@type": "ListItem", position: 3, name: e.title, item: url },
+        ],
+      },
+    ],
   };
 
   return (
@@ -83,7 +113,18 @@ export default async function ExplainerPage({ params }: Props) {
           </h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-ink/80">{e.description}</p>
           <p className="mt-5 flex flex-wrap gap-x-5 gap-y-1 font-mono text-xs tracking-wider text-muted uppercase">
+            <span>
+              By{" "}
+              <Link href="/about" rel="author" className="underline decoration-ink/25 underline-offset-4 hover:text-signal">
+                Laksh
+              </Link>
+            </span>
             <time dateTime={e.date}>{formatDate(e.date)}</time>
+            {e.updated !== e.date && (
+              <span>
+                Updated <time dateTime={e.updated}>{formatDate(e.updated)}</time>
+              </span>
+            )}
             <span>{e.readingMinutes} min read</span>
             <span>{e.pillarLabel}</span>
           </p>
@@ -129,6 +170,15 @@ export default async function ExplainerPage({ params }: Props) {
             </a>
           )}
 
+          {e.summary && (
+            <section aria-labelledby="in-short" className="mb-10 max-w-2xl rounded-lg border border-line bg-paper-deep/60 p-5 sm:p-6">
+              <h2 id="in-short" className="kicker text-muted">
+                In short
+              </h2>
+              <p className="mt-3 text-[1.0625rem] leading-relaxed">{e.summary}</p>
+            </section>
+          )}
+
           <div className="prose-explainer max-w-2xl" dangerouslySetInnerHTML={{ __html: e.html }} />
 
           {e.sources.length > 0 && (
@@ -139,7 +189,7 @@ export default async function ExplainerPage({ params }: Props) {
               <ol className="mt-5 space-y-4">
                 {e.sources.map((s, i) => (
                   <li key={s.url} className="grid grid-cols-[2rem_1fr] gap-2">
-                    <span className="font-mono text-sm text-signal">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="font-mono text-sm font-medium text-ink">{String(i + 1).padStart(2, "0")}</span>
                     <div className="min-w-0">
                       <a
                         href={s.url}

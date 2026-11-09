@@ -54,7 +54,7 @@ export function ReelPlayer({ e }: { e: Explainer }) {
   return (
     <div className={frame}>
       {e.instagram ? (
-        <a href={e.instagram} className="group absolute inset-0" aria-label={`Watch ${e.title} on Instagram`}>
+        <a href={e.instagram} className="group absolute inset-0" aria-label={`Watch on Instagram: ${e.title}`}>
           {cover}
           <PlayBadge label="Watch on Instagram" />
         </a>
