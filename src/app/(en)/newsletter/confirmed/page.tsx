@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "You're in",
   description: "Subscription confirmed.",
   robots: { index: false, follow: true },
+  alternates: { canonical: "/newsletter/confirmed" },
 };
 
 export default function ConfirmedPage() {

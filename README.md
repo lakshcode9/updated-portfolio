@@ -38,6 +38,18 @@ npm run lint
 
 The home page, archive, sitemap, RSS feed and share image all update from that file.
 
+## Japanese section (/jp)
+
+Japanese editions of the explainers for the Japanese Instagram account (@laksh.explains.jp), at `/jp`, `/jp/explainers`, `/jp/explainers/<slug>` and `/jp/about`. Radar and the newsletter stay English; `/jp` shows a follow link instead of the signup form.
+
+To add a Japanese explainer:
+
+1. Copy the Japanese reel's cover (`exports/<slug>/jp/cover.png` in ai-visual-brand) to `public/explainers/<slug>/cover-ja.png`.
+2. Create `content/explainers-jp/<slug>.md` with the same slug and frontmatter as the English file, in Japanese, plus `cover: "/explainers/<slug>/cover-ja.png"`. Source titles stay as published. Add `instagram:` once the Japanese reel is posted.
+3. Keep Japanese files out of `content/explainers/`: the "Newsletter draft" GitHub Action watches that folder.
+
+hreflang links and the EN / JP switch pick up the pair automatically when both files share a slug (`src/lib/hreflang.ts`, `src/components/LangSwitch.tsx`).
+
 ## Newsletter (Kit)
 
 - Signups: the form posts to a server action (`src/app/actions.ts`) that adds the email to Kit form 10165166 via API v4. Double opt-in is on in Kit; confirmed people land on `/newsletter/confirmed`.

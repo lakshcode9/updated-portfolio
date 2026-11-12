@@ -1,0 +1,6 @@
+# Japanese explainer content goes here.
+# Each .md file should follow the same frontmatter format as content/explainers/
+# but with Japanese text for title, headline, kicker, description, summary, and body.
+#
+# Example filename: tokenization.md (same slug as English version if it's a translation)
+# Or unique slugs for Japan-only content.

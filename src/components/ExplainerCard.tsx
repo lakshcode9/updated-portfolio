@@ -3,9 +3,15 @@ import Link from "next/link";
 import type { Explainer } from "@/lib/explainers";
 import { Headline } from "./Headline";
 
-export function ExplainerCard({ e, priority = false }: { e: Explainer; priority?: boolean }) {
+type ExplainerCardProps = {
+  e: Explainer;
+  priority?: boolean;
+  basePath?: string;
+};
+
+export function ExplainerCard({ e, priority = false, basePath = "/explainers" }: ExplainerCardProps) {
   return (
-    <Link href={`/explainers/${e.slug}`} className="group block">
+    <Link href={`${basePath}/${e.slug}`} className="group block">
       <div className="relative aspect-[9/16] overflow-hidden rounded-md bg-paper-deep ring-1 ring-line transition duration-300 group-hover:-translate-y-1 group-hover:ring-ink/40">
         <Image
           src={e.cover}

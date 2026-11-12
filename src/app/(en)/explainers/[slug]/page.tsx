@@ -9,6 +9,8 @@ import { NewsletterBlock } from "@/components/NewsletterBlock";
 import { ReelPlayer } from "@/components/ReelPlayer";
 import { formatDate, getExplainer, getExplainers } from "@/lib/explainers";
 import { site } from "@/lib/site";
+import { getExplainersForLocale } from "@/lib/explainers-i18n";
+import { languages } from "@/lib/hreflang";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -24,7 +26,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: e.title,
     description: e.description,
-    alternates: { canonical: `/explainers/${e.slug}` },
+    alternates: {
+      canonical: `/explainers/${e.slug}`,
+      ...(getExplainersForLocale("ja").some((j) => j.slug === e.slug)
+        ? { languages: languages(`/explainers/${e.slug}`, `/jp/explainers/${e.slug}`) }
+        : {}),
+    },
     authors: [{ name: "Laksh", url: `${site.url}/about` }],
     openGraph: {
       type: "article",

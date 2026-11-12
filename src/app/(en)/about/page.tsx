@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { languages } from "@/lib/hreflang";
 import Image from "next/image";
 import Link from "next/link";
 import { site } from "@/lib/site";
@@ -6,7 +7,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "About",
   description: "Who makes Laksh | AI Explained, how each explainer is made, and what's coming next.",
-  alternates: { canonical: "/about" },
+  alternates: { canonical: "/about", languages: languages("/about", "/jp/about") },
 };
 
 // TODO(Laksh): add a few lines of your own story under "Hi, I'm Laksh".

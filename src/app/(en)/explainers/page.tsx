@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { languages } from "@/lib/hreflang";
 import { ExplainerCard } from "@/components/ExplainerCard";
 import { getExplainers } from "@/lib/explainers";
 import { pillars, type PillarKey } from "@/lib/site";
@@ -6,7 +7,7 @@ import { pillars, type PillarKey } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Explainers",
   description: "Every AI explainer: short videos with a written version and the sources behind each claim.",
-  alternates: { canonical: "/explainers" },
+  alternates: { canonical: "/explainers", languages: languages("/explainers", "/jp/explainers") },
 };
 
 export default function ExplainersPage() {

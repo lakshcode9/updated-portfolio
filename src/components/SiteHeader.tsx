@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { LangSwitch } from "@/components/LangSwitch";
+import { getExplainersForLocale } from "@/lib/explainers-i18n";
 
 const nav = [
   { href: "/explainers", label: "Explainers" },
@@ -7,6 +9,7 @@ const nav = [
 ];
 
 export function SiteHeader() {
+  const jaSlugs = getExplainersForLocale("ja").map((e) => e.slug);
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-paper/90 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:h-16 sm:px-6">
@@ -28,6 +31,15 @@ export function SiteHeader() {
                 </Link>
               </li>
             ))}
+            <li>
+              <LangSwitch
+                to="ja"
+                jaSlugs={jaSlugs}
+                className="inline-flex min-h-11 items-center px-2 font-mono text-xs text-muted transition-colors hover:text-signal max-[359px]:px-1 sm:px-3"
+                title="日本語版"
+                label="JP"
+              />
+            </li>
           </ul>
         </nav>
       </div>
