@@ -7,6 +7,7 @@ summary: "コンテキストウィンドウとは、言語モデルが一度に�
 date: 2026-11-07
 pillar: llms
 duration: 43
+instagram: "https://www.instagram.com/p/Df39x8sBG6r/"
 cover: "/explainers/context-window/cover-ja.png"
 coverAlt: "コンテキストウィンドウの解説のカバー: オレンジの枠の中に並ぶタイルと、こちらを指さすアバター。"
 sources:

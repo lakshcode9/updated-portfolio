@@ -7,7 +7,7 @@ summary: "新しいフォレンジック調査が、中国の最近のモデル�
 date: 2026-11-15
 pillar: systems
 duration: 52
-instagram: "https://www.instagram.com/reel/DfzcnEvquRW/"
+instagram: "https://www.instagram.com/p/Df39mf4K5yu/"
 cover: "/explainers/gpu-fingerprint/cover-ja.png"
 coverAlt: "GPUの指紋の解説のカバー: オレンジに光るコアを持つ黒いGPUチップと、その上に指紋を描くセルの壁、見出し「禁止チップの指紋」。"
 sources:
