@@ -28,7 +28,7 @@ Ever had a long AI chat where it suddenly forgets something you told it an hour 
 
 ## The model reads, it doesn't remember
 
-A language model can only take in so much text at once. That limit is its **context window**, and it's measured in [tokens](/explainers/tokenization). Anthropic describes it as the model's working memory: everything it can look at while it writes a reply, including the reply itself.
+A language model can only take in so much text at once. That limit is its **context window**, and it's measured in tokens. Anthropic describes it as the model's working memory: everything it can look at while it writes a reply, including the reply itself.
 
 Both sides of the chat use it up. Your messages count, and so do the model's answers.
 
