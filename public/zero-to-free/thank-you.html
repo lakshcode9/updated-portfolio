@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>You're in | Zero to Free</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#0f1013">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/zero-to-free/styles.css">
+  <style>
+    .ty { min-height: calc(100vh - 64px); display: flex; align-items: center; padding: 64px 0; }
+    .ty-card { max-width: 640px; margin: 0 auto; background: #1b1d22; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; text-align: center; box-shadow: 0 40px 100px rgba(255, 90, 61, 0.12); }
+    .ty-card img { width: 100%; }
+    .ty-body { padding: 36px 32px 40px; }
+    .ty-body h1 { font-size: clamp(34px, 6vw, 52px); margin: 10px 0 14px; }
+    .ty-body p { color: #c7cbd2; margin-bottom: 18px; }
+    .ty-body .btn { margin: 8px 0 18px; }
+    .state { display: none; }
+    .state.on { display: block; }
+    .pid { display: flex; gap: 10px; margin: 18px 0 8px; }
+    .pid input { flex: 1; min-width: 0; background: #15171b; border: 1px solid var(--line); color: var(--paper); border-radius: 10px; padding: 14px; font: 15px "IBM Plex Mono", monospace; }
+    .pid button { background: var(--ink-3); color: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 0 18px; font: 600 15px Inter, sans-serif; cursor: pointer; }
+    .steps-mini { text-align: left; margin: 10px auto 0; max-width: 420px; padding-left: 20px; color: #c7cbd2; }
+    .steps-mini li { margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/zero-to-free">Zero to <span>Free</span></a>
+  </div>
+</header>
+<main>
+  <section class="ty">
+    <div class="wrap">
+      <div class="ty-card">
+        <img src="/zero-to-free/covers/home.png" alt="" width="1500" height="600">
+        <div class="ty-body">
+          <span class="mono">Payment received</span>
+          <h1>You're in. <span class="accent">Welcome.</span></h1>
+
+          <div class="state on" id="checking">
+            <p>Getting your kit ready&hellip;</p>
+          </div>
+
+          <div class="state" id="ready">
+            <p>Your kit is ready. Open it, then click <b>Duplicate</b> (top right) to copy it into your own free Notion account.</p>
+            <a class="btn btn-big" id="kit-link" href="#" target="_blank" rel="noopener">Open my kit <span class="arrow">&rarr;</span></a>
+            <ol class="steps-mini">
+              <li>Click <b>Duplicate</b> in Notion</li>
+              <li>Open <i>00 Start Here</i></li>
+              <li>Tick Day 1 in <i>04 The 30-Day Plan</i></li>
+            </ol>
+            <p class="fine">We've also emailed this link to you. Keep that email: it's your permanent access.</p>
+          </div>
+
+          <div class="state" id="email">
+            <p>Your access link is on its way to the email you paid with. It usually arrives within a few minutes. Check your spam folder too.</p>
+            <p class="muted">Want it right now? Paste your Razorpay payment ID (starts with <span class="mono" style="text-transform:none">pay_</span>, it's in your Razorpay receipt):</p>
+            <form class="pid" id="pid-form">
+              <input id="pid" placeholder="pay_XXXXXXXXXXXXXX" autocomplete="off" spellcheck="false">
+              <button type="submit">Get kit</button>
+            </form>
+            <p class="fine" id="pid-msg"></p>
+            <p class="fine">Still stuck? Email <a href="mailto:info@lakshpujary.tech">info@lakshpujary.tech</a> with your payment ID and we'll send your link within 24 hours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+(function () {
+  var show = function (id) {
+    document.querySelectorAll(".state").forEach(function (s) { s.classList.toggle("on", s.id === id); });
+  };
+  function check(pid, fromForm) {
+    return fetch("/api/zero-to-free/access?payment_id=" + encodeURIComponent(pid), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : { ok: false }; })
+      .then(function (d) {
+        if (d.ok && d.url) {
+          document.getElementById("kit-link").href = d.url;
+          show("ready");
+        } else {
+          show("email");
+          if (fromForm) document.getElementById("pid-msg").textContent = "We couldn't find a completed kit payment with that ID. Check it and try again.";
+        }
+      })
+      .catch(function () { show("email"); });
+  }
+  var q = new URLSearchParams(location.search);
+  var pid = q.get("razorpay_payment_id") || q.get("payment_id");
+  if (pid) check(pid, false); else show("email");
+  document.getElementById("pid-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = document.getElementById("pid").value.trim();
+    if (v) check(v, true);
+  });
+})();
+</script>
+</body>
+</html>

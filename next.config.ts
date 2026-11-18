@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: "/zero-to-free", destination: "/zero-to-free/index.html" },
-      { source: "/zero-to-free/:page(contact|terms|privacy|refund|delivery)", destination: "/zero-to-free/:page.html" },
+      { source: "/zero-to-free/:page(contact|terms|privacy|refund|delivery|thank-you)", destination: "/zero-to-free/:page.html" },
     ];
   },
 };
