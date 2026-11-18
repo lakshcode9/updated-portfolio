@@ -133,16 +133,17 @@ section { padding: 110px 0; position: relative; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 0 0 rgba(255, 90, 61, 0.7); animation: ping 1.8s infinite; }
 @keyframes ping { 70% { box-shadow: 0 0 0 10px rgba(255, 90, 61, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 90, 61, 0); } }
 .hero h1 .line { display: block; overflow: hidden; }
-.hero h1 .line > span { display: inline-block; transform: translateY(110%); animation: rise 0.9s cubic-bezier(.2,.8,.2,1) forwards; }
-.hero h1 .line:nth-child(2) > span { animation-delay: 0.15s; }
-@keyframes rise { to { transform: translateY(0); } }
+.hero h1 .line > span { display: inline-block; }
+html.js .hero h1 .line > span { transform: translateY(110%); transition: transform 0.9s cubic-bezier(.2,.8,.2,1); }
+html.js .hero h1 .line:nth-child(2) > span { transition-delay: 0.15s; }
+html.js body.go .hero h1 .line > span { transform: none; }
 .hero p.lead { font-size: clamp(18px, 2vw, 22px); color: #d3d6dc; margin: 26px 0 36px; max-width: 540px; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
 .trust { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 26px; font-size: 14px; color: var(--slate); }
 .trust span::before { content: "\2713  "; color: var(--orange); }
-.fade-in { opacity: 0; animation: fade 0.8s ease forwards; }
-.d1 { animation-delay: 0.35s; } .d2 { animation-delay: 0.5s; } .d3 { animation-delay: 0.65s; }
-@keyframes fade { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+html.js .fade-in { opacity: 0; transform: translateY(14px); transition: opacity 0.8s ease, transform 0.8s ease; }
+html.js body.go .fade-in { opacity: 1; transform: none; }
+.d1 { transition-delay: 0.35s; } .d2 { transition-delay: 0.5s; } .d3 { transition-delay: 0.65s; }
 
 /* Ticker */
 .ticker { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--ink-0); overflow: hidden; padding: 18px 0; }
@@ -300,8 +301,8 @@ details p { margin-top: 12px; color: #c7cbd2; }
 .buybar .btn { padding: 12px 18px; font-size: 15px; }
 
 /* Reveal */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.2,.8,.2,1); }
-.reveal.in { opacity: 1; transform: none; }
+html.js .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.2,.8,.2,1); }
+html.js .reveal.in { opacity: 1; transform: none; }
 
 /* Footer */
 footer { border-top: 1px solid var(--line); padding: 40px 0 110px; font-size: 14px; color: var(--slate); }
@@ -350,5 +351,5 @@ footer a:hover { color: var(--paper); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .hero h1 .line > span, .fade-in, .reveal { transform: none; opacity: 1; }
+  html.js .hero h1 .line > span, html.js .fade-in, html.js .reveal { transform: none !important; opacity: 1 !important; }
 }

@@ -15,6 +15,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://lakshpujary.tech/zero-to-free/img/og.png">
   <meta name="theme-color" content="#0f1013">
+  <script>document.documentElement.classList.add("js")</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -310,6 +311,10 @@
 <script>
 (function () {
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Hero entrance: transitions end visible even if the browser throttles them
+  requestAnimationFrame(function () { requestAnimationFrame(function () { document.body.classList.add("go"); }); });
+  setTimeout(function () { document.body.classList.add("go"); }, 300);
 
   // Reveal on scroll
   var io = new IntersectionObserver(function (entries) {
