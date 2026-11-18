@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
   async redirects() {
     return oldRoutes.map((source) => ({ source, destination: "/", permanent: true }));
   },
+  // Zero to Free sales site: static files in public/zero-to-free.
+  async rewrites() {
+    return [
+      { source: "/zero-to-free", destination: "/zero-to-free/index.html" },
+      { source: "/zero-to-free/:page(contact|terms|privacy|refund|delivery)", destination: "/zero-to-free/:page.html" },
+    ];
+  },
 };
 
 export default nextConfig;
