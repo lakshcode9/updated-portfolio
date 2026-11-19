@@ -135,7 +135,7 @@ Need help? Reply or write to <a href="mailto:info@lakshpujary.tech" style="color
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json", "Idempotency-Key": `ztf-${paymentId}` },
     body: JSON.stringify({
       from,
       to: [to],
