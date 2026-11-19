@@ -353,3 +353,13 @@ footer a:hover { color: var(--paper); }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html.js .hero h1 .line > span, html.js .fade-in, html.js .reveal { transform: none !important; opacity: 1 !important; }
 }
+
+/* Email capture before checkout */
+.em-modal { position: fixed; inset: 0; z-index: 60; background: rgba(10, 11, 13, 0.75); backdrop-filter: blur(6px); display: grid; place-items: center; padding: 16px; }
+.em-modal[hidden] { display: none; }
+.em-card { position: relative; width: 100%; max-width: 440px; background: #1b1d22; border: 1px solid rgba(255, 90, 61, 0.4); border-radius: 18px; padding: 32px 26px; text-align: center; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6); }
+.em-card h3 { font-size: 26px; margin: 10px 0 6px; }
+.em-card input { width: 100%; margin: 18px 0 4px; background: #15171b; border: 1px solid var(--line); color: var(--paper); border-radius: 10px; padding: 15px; font: 16px Inter, sans-serif; }
+.em-card input:focus { outline: none; border-color: var(--orange); }
+.em-card .btn { width: 100%; justify-content: center; margin-top: 8px; }
+.em-x { position: absolute; top: 10px; right: 14px; background: none; border: 0; color: var(--slate); font-size: 26px; cursor: pointer; }

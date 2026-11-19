@@ -390,6 +390,19 @@
 })();
 </script>
 
+<div class="em-modal" id="em-modal" hidden>
+  <form class="em-card" id="em-form">
+    <button type="button" class="em-x" id="em-x" aria-label="Close">&times;</button>
+    <span class="mono">Zero to Free &middot; &#8377;199</span>
+    <h3>Where should we send your kit?</h3>
+    <p class="muted">Your access link goes to this email right after payment.</p>
+    <input type="email" id="em-input" required placeholder="you@example.com" autocomplete="email">
+    <p class="fine" id="em-err" style="color:var(--orange)"></p>
+    <button type="submit" class="btn btn-big" id="em-go">Continue to payment <span class="arrow">&rarr;</span></button>
+    <p class="fine">Secure payment by Razorpay: UPI, cards, netbanking.</p>
+  </form>
+</div>
+
 <script>
 // Razorpay Checkout: every .js-buy button opens the payment popup on this page.
 (function () {
@@ -403,39 +416,43 @@
       document.head.appendChild(s);
     });
   }
-  function buy(e) {
+  var modal = document.getElementById("em-modal"), form = document.getElementById("em-form"),
+      input = document.getElementById("em-input"), err = document.getElementById("em-err"), go = document.getElementById("em-go");
+  function openModal(e) { e.preventDefault(); err.textContent = ""; modal.hidden = false; setTimeout(function () { input.focus(); }, 30); loadCheckout().catch(function () {}); }
+  function closeModal() { modal.hidden = true; }
+  document.getElementById("em-x").addEventListener("click", closeModal);
+  modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
     if (loading) return;
-    loading = true;
-    var btn = e.currentTarget, label = btn.innerHTML;
-    btn.innerHTML = "Opening checkout&hellip;";
-    Promise.all([fetch("/api/zero-to-free/order", { method: "POST" }).then(function (r) { return r.json(); }), loadCheckout()])
-      .then(function (res) {
-        var o = res[0];
-        if (!o.ok) throw new Error("order");
-        var rzp = new window.Razorpay({
-          key: o.key,
-          order_id: o.order_id,
-          amount: o.amount,
-          currency: o.currency,
-          name: "Zero to Free",
-          description: "The AI Engineer Kit",
-          image: "https://lakshpujary.tech/zero-to-free/img/laptop-typing.png",
-          theme: { color: "#FF5A3D" },
-          handler: function (r) {
-            location.href = "/zero-to-free/thank-you?razorpay_payment_id=" + encodeURIComponent(r.razorpay_payment_id) +
-              "&razorpay_order_id=" + encodeURIComponent(r.razorpay_order_id) +
-              "&razorpay_signature=" + encodeURIComponent(r.razorpay_signature);
-          }
-        });
-        rzp.open();
-      })
-      .catch(function () {
-        alert("Checkout couldn't open right now. Please try again in a minute, or email info@lakshpujary.tech.");
-      })
-      .then(function () { loading = false; btn.innerHTML = label; });
-  }
-  document.querySelectorAll(".js-buy").forEach(function (b) { b.addEventListener("click", buy); });
+    var email = input.value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = "Please enter a valid email."; return; }
+    loading = true; var label = go.innerHTML; go.innerHTML = "Opening checkout&hellip;";
+    Promise.all([
+      fetch("/api/zero-to-free/order", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email }) }).then(function (r) { return r.json(); }),
+      loadCheckout()
+    ]).then(function (res) {
+      var o = res[0];
+      if (!o.ok) throw new Error(o.error || "order");
+      closeModal();
+      new window.Razorpay({
+        key: o.key, order_id: o.order_id, amount: o.amount, currency: o.currency,
+        name: "Zero to Free", description: "The AI Engineer Kit",
+        image: "https://lakshpujary.tech/zero-to-free/img/laptop-typing.png",
+        prefill: { email: o.email },
+        notes: { email: o.email },
+        theme: { color: "#FF5A3D" },
+        handler: function (r) {
+          location.href = "/zero-to-free/thank-you?razorpay_payment_id=" + encodeURIComponent(r.razorpay_payment_id) +
+            "&razorpay_order_id=" + encodeURIComponent(r.razorpay_order_id) +
+            "&razorpay_signature=" + encodeURIComponent(r.razorpay_signature);
+        }
+      }).open();
+    }).catch(function (x) {
+      err.textContent = x && x.message === "email" ? "Please enter a valid email." : "Checkout couldn't open. Try again in a minute, or email info@lakshpujary.tech.";
+    }).then(function () { loading = false; go.innerHTML = label; });
+  });
+  document.querySelectorAll(".js-buy").forEach(function (b) { b.addEventListener("click", openModal); });
 })();
 </script>
 

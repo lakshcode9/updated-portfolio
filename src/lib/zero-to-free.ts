@@ -10,6 +10,8 @@ export type RazorpayPayment = {
   currency: string;
   status: string;
   email?: string | null;
+  order_id?: string | null;
+  notes?: Record<string, string> | null;
 };
 
 export function isValidSignature(rawBody: string, signature: string | null, secret: string): boolean {
@@ -45,7 +47,7 @@ export async function fetchPayment(paymentId: string): Promise<RazorpayPayment |
 }
 
 // Creates a Razorpay order for one kit. Checkout on the sales page pays this order.
-export async function createOrder(): Promise<{ id: string; amount: number; currency: string } | null> {
+export async function createOrder(email: string): Promise<{ id: string; amount: number; currency: string } | null> {
   const auth = razorpayAuth();
   if (!auth) return null;
   const res = await fetch("https://api.razorpay.com/v1/orders", {
@@ -55,7 +57,7 @@ export async function createOrder(): Promise<{ id: string; amount: number; curre
       amount: KIT_PRICE_PAISE,
       currency: "INR",
       receipt: `ztf_${Date.now()}`,
-      notes: { product: "zero-to-free" },
+      notes: { product: "zero-to-free", email },
     }),
     cache: "no-store",
   });
@@ -106,4 +108,17 @@ export async function sendKitEmail(to: string, paymentId: string): Promise<boole
     }),
   });
   return res.ok;
+}
+
+export async function fetchOrderEmail(orderId: string): Promise<string | null> {
+  const auth = razorpayAuth();
+  if (!auth || !/^order_[A-Za-z0-9]+$/.test(orderId)) return null;
+  const res = await fetch(`https://api.razorpay.com/v1/orders/${orderId}`, { headers: { Authorization: auth }, cache: "no-store" });
+  if (!res.ok) return null;
+  const o = (await res.json()) as { notes?: Record<string, string> | null };
+  return o.notes?.email || null;
+}
+
+export function isEmail(v: unknown): v is string {
+  return typeof v === "string" && v.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
