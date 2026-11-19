@@ -80,7 +80,7 @@ export async function sendKitEmail(to: string, paymentId: string): Promise<boole
   const apiKey = process.env.RESEND_API_KEY;
   const link = kitUrl();
   if (!apiKey || !link) return false;
-  const from = process.env.ZTF_FROM_EMAIL || "Laksh <kit@lakshpujary.tech>";
+  const from = process.env.ZTF_FROM_EMAIL || "Laksh <kit@updates.lakshpujary.tech>";
 
   const img = "https://lakshpujary.tech/zero-to-free";
   const step = (n: string, t: string, d: string) => `<tr><td style="padding:0 0 12px"><table width="100%" cellpadding="0" cellspacing="0" style="background:#16181c;border:1px solid #2a2e36;border-radius:12px"><tr>
