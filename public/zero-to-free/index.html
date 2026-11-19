@@ -30,7 +30,7 @@
       <a href="#story">Story</a>
       <a href="#inside">What's inside</a>
       <a href="#faq">FAQ</a>
-      <a class="btn btn-small" href="#pricing">Get the kit &middot; &#8377;199</a>
+      <a class="btn btn-small js-buy" href="#pricing">Get the kit &middot; &#8377;199</a>
     </nav>
   </div>
 </header>
@@ -47,7 +47,7 @@
         </h1>
         <p class="lead fade-in d1">The no-degree playbook to get paid as an AI engineer, then turn that income into the freedom to build your own thing.</p>
         <div class="hero-cta fade-in d2">
-          <a class="btn btn-big" href="#pricing">Get the kit for &#8377;199 <span class="arrow">&rarr;</span></a>
+          <a class="btn btn-big js-buy" href="#pricing">Get the kit for &#8377;199 <span class="arrow">&rarr;</span></a>
           <a class="btn btn-ghost" href="#preview">See inside</a>
         </div>
         <div class="trust fade-in d3">
@@ -236,7 +236,7 @@
             <li>Instant access link after payment</li>
             <li>Free updates to the kit</li>
           </ul>
-          <a class="btn btn-big" id="buy" href="contact.html">Get the kit for &#8377;199 <span class="arrow">&rarr;</span></a>
+          <a class="btn btn-big js-buy" id="buy" href="#pricing">Get the kit for &#8377;199 <span class="arrow">&rarr;</span></a>
           <div class="pay-row"><span>UPI</span><span>CARDS</span><span>NETBANKING</span><span>RAZORPAY SECURE</span></div>
           <p class="fine">Digital product, instant access. All sales final. Price includes all applicable taxes.</p>
         </div>
@@ -283,7 +283,7 @@
       <div class="reveal">
         <h2>Your first paycheck doesn't have to be the start of a trap.</h2>
         <p>It can be the first step out.</p>
-        <a class="btn btn-big" href="#pricing">Get Zero to Free &middot; &#8377;199 <span class="arrow">&rarr;</span></a>
+        <a class="btn btn-big js-buy" href="#pricing">Get Zero to Free &middot; &#8377;199 <span class="arrow">&rarr;</span></a>
       </div>
     </div>
   </section>
@@ -292,7 +292,7 @@
 
 <div class="buybar" id="buybar">
   <div><strong>&#8377;199</strong><small>Zero to Free &middot; instant access</small></div>
-  <a class="btn" href="#pricing">Get the kit <span class="arrow">&rarr;</span></a>
+  <a class="btn js-buy" href="#pricing">Get the kit <span class="arrow">&rarr;</span></a>
 </div>
 
 <footer>
@@ -387,6 +387,55 @@
   function update() { bar.classList.toggle("show", pastHero && !atPricing); }
   new IntersectionObserver(function (e) { pastHero = !e[0].isIntersecting; update(); }).observe(hero);
   new IntersectionObserver(function (e) { atPricing = e[0].isIntersecting; update(); }, { threshold: 0.2 }).observe(pricing);
+})();
+</script>
+
+<script>
+// Razorpay Checkout: every .js-buy button opens the payment popup on this page.
+(function () {
+  var loading = false;
+  function loadCheckout() {
+    return new Promise(function (resolve, reject) {
+      if (window.Razorpay) return resolve();
+      var s = document.createElement("script");
+      s.src = "https://checkout.razorpay.com/v1/checkout.js";
+      s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+  function buy(e) {
+    e.preventDefault();
+    if (loading) return;
+    loading = true;
+    var btn = e.currentTarget, label = btn.innerHTML;
+    btn.innerHTML = "Opening checkout&hellip;";
+    Promise.all([fetch("/api/zero-to-free/order", { method: "POST" }).then(function (r) { return r.json(); }), loadCheckout()])
+      .then(function (res) {
+        var o = res[0];
+        if (!o.ok) throw new Error("order");
+        var rzp = new window.Razorpay({
+          key: o.key,
+          order_id: o.order_id,
+          amount: o.amount,
+          currency: o.currency,
+          name: "Zero to Free",
+          description: "The AI Engineer Kit",
+          image: "https://lakshpujary.tech/zero-to-free/img/laptop-typing.png",
+          theme: { color: "#FF5A3D" },
+          handler: function (r) {
+            location.href = "/zero-to-free/thank-you?razorpay_payment_id=" + encodeURIComponent(r.razorpay_payment_id) +
+              "&razorpay_order_id=" + encodeURIComponent(r.razorpay_order_id) +
+              "&razorpay_signature=" + encodeURIComponent(r.razorpay_signature);
+          }
+        });
+        rzp.open();
+      })
+      .catch(function () {
+        alert("Checkout couldn't open right now. Please try again in a minute, or email info@lakshpujary.tech.");
+      })
+      .then(function () { loading = false; btn.innerHTML = label; });
+  }
+  document.querySelectorAll(".js-buy").forEach(function (b) { b.addEventListener("click", buy); });
 })();
 </script>
 

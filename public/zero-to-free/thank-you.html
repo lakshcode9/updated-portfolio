@@ -78,7 +78,9 @@
     document.querySelectorAll(".state").forEach(function (s) { s.classList.toggle("on", s.id === id); });
   };
   function check(pid, fromForm) {
-    return fetch("/api/zero-to-free/access?payment_id=" + encodeURIComponent(pid), { cache: "no-store" })
+    var url = "/api/zero-to-free/access?payment_id=" + encodeURIComponent(pid);
+    if (!fromForm && oid && sig) url += "&order_id=" + encodeURIComponent(oid) + "&signature=" + encodeURIComponent(sig);
+    return fetch(url, { cache: "no-store" })
       .then(function (r) { return r.ok ? r.json() : { ok: false }; })
       .then(function (d) {
         if (d.ok && d.url) {
@@ -93,6 +95,7 @@
   }
   var q = new URLSearchParams(location.search);
   var pid = q.get("razorpay_payment_id") || q.get("payment_id");
+  var oid = q.get("razorpay_order_id"), sig = q.get("razorpay_signature");
   if (pid) check(pid, false); else show("email");
   document.getElementById("pid-form").addEventListener("submit", function (e) {
     e.preventDefault();

@@ -21,20 +21,53 @@ export function isValidSignature(rawBody: string, signature: string | null, secr
 }
 
 // A payment unlocks the kit only if it is captured, in INR, and at least the kit price.
-export function isKitPurchase(p: RazorpayPayment): boolean {
-  return p.status === "captured" && p.currency === "INR" && p.amount >= KIT_PRICE_PAISE;
+export function isKitPurchase(p: RazorpayPayment, allowAuthorized = false): boolean {
+  const okStatus = p.status === "captured" || (allowAuthorized && p.status === "authorized");
+  return okStatus && p.currency === "INR" && p.amount >= KIT_PRICE_PAISE;
+}
+
+function razorpayAuth(): string | null {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!keyId || !keySecret) return null;
+  return "Basic " + Buffer.from(`${keyId}:${keySecret}`).toString("base64");
 }
 
 export async function fetchPayment(paymentId: string): Promise<RazorpayPayment | null> {
-  const keyId = process.env.RAZORPAY_KEY_ID;
-  const keySecret = process.env.RAZORPAY_KEY_SECRET;
-  if (!keyId || !keySecret || !/^pay_[A-Za-z0-9]+$/.test(paymentId)) return null;
+  const auth = razorpayAuth();
+  if (!auth || !/^pay_[A-Za-z0-9]+$/.test(paymentId)) return null;
   const res = await fetch(`https://api.razorpay.com/v1/payments/${paymentId}`, {
-    headers: { Authorization: "Basic " + Buffer.from(`${keyId}:${keySecret}`).toString("base64") },
+    headers: { Authorization: auth },
     cache: "no-store",
   });
   if (!res.ok) return null;
   return (await res.json()) as RazorpayPayment;
+}
+
+// Creates a Razorpay order for one kit. Checkout on the sales page pays this order.
+export async function createOrder(): Promise<{ id: string; amount: number; currency: string } | null> {
+  const auth = razorpayAuth();
+  if (!auth) return null;
+  const res = await fetch("https://api.razorpay.com/v1/orders", {
+    method: "POST",
+    headers: { Authorization: auth, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      amount: KIT_PRICE_PAISE,
+      currency: "INR",
+      receipt: `ztf_${Date.now()}`,
+      notes: { product: "zero-to-free" },
+    }),
+    cache: "no-store",
+  });
+  if (!res.ok) return null;
+  return (await res.json()) as { id: string; amount: number; currency: string };
+}
+
+// Checkout handler signature: HMAC-SHA256(order_id + "|" + payment_id, key_secret).
+export function isValidCheckoutSignature(orderId: string, paymentId: string, signature: string): boolean {
+  const secret = process.env.RAZORPAY_KEY_SECRET;
+  if (!secret || !orderId || !paymentId || !signature) return false;
+  return isValidSignature(`${orderId}|${paymentId}`, signature, secret);
 }
 
 export function kitUrl(): string | null {
